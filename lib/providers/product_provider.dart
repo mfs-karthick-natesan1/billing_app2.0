@@ -248,25 +248,45 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
+  /// Decrements stock for [productId] by [quantity].
+  ///
+  /// Throws [StateError] if the resulting stock would be negative.
   void decrementStock(String productId, double quantity, {String? batchId}) {
     final index = _products.indexWhere((p) => p.id == productId);
-    if (index != -1) {
-      if (batchId != null) {
-        final batchIndex = _products[index].batches.indexWhere(
-          (b) => b.id == batchId,
+    if (index == -1) return;
+
+    final product = _products[index];
+    final qty = quantity.toInt();
+
+    if (batchId != null) {
+      final batchIndex = product.batches.indexWhere((b) => b.id == batchId);
+      if (batchIndex == -1) {
+        throw StateError(
+          'Batch "$batchId" not found for product "${product.name}".',
         );
-        if (batchIndex != -1) {
-          _products[index].batches[batchIndex].stockQuantity -=
-              quantity.toInt();
-          _products[index].stockQuantity = _products[index].totalBatchStock;
-        }
-      } else {
-        _products[index].stockQuantity -= quantity.toInt();
       }
-      dbService?.saveProducts([_products[index]]);
-      _onChanged?.call();
-      notifyListeners();
+      final batch = product.batches[batchIndex];
+      if (batch.stockQuantity < qty) {
+        throw StateError(
+          'Insufficient batch stock for "${product.name}" '
+          '(batch: ${batch.stockQuantity}, requested: $qty).',
+        );
+      }
+      batch.stockQuantity -= qty;
+      product.stockQuantity = product.totalBatchStock;
+    } else {
+      if (product.stockQuantity < qty) {
+        throw StateError(
+          'Insufficient stock for "${product.name}" '
+          '(available: ${product.stockQuantity}, requested: $qty).',
+        );
+      }
+      product.stockQuantity -= qty;
     }
+
+    dbService?.saveProducts([product]);
+    _onChanged?.call();
+    notifyListeners();
   }
 
   // Stock adjustments
