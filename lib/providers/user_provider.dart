@@ -10,8 +10,21 @@ import '../services/permission_service.dart';
 class UserProvider extends ChangeNotifier {
   static const int defaultAutoLockMinutes = 5;
 
+  /// Progressive lockout: threshold → lockout duration.
+  static const Map<int, Duration> _lockoutPolicy = {
+    3: Duration(seconds: 30),
+    5: Duration(minutes: 5),
+    10: Duration(minutes: 60),
+  };
+
   final List<AppUser> _users = [];
   final VoidCallback? _onChanged;
+
+  /// Tracks failed PIN attempts per user ID.
+  final Map<String, int> _failedAttempts = {};
+
+  /// Tracks when a user's lockout expires.
+  final Map<String, DateTime> _lockoutUntil = {};
 
   AppUser? _currentUser;
   bool _isLocked;
@@ -265,8 +278,44 @@ class UserProvider extends ChangeNotifier {
     return loginByUserId(userMatches.first.id, pin);
   }
 
+  /// Returns the remaining lockout duration for [userId], or null if not locked.
+  Duration? getLockoutRemaining(String userId) {
+    final until = _lockoutUntil[userId];
+    if (until == null) return null;
+    final remaining = until.difference(DateTime.now());
+    if (remaining.isNegative) {
+      _lockoutUntil.remove(userId);
+      return null;
+    }
+    return remaining;
+  }
+
+  /// Returns the number of failed attempts for [userId].
+  int getFailedAttempts(String userId) => _failedAttempts[userId] ?? 0;
+
+  void _recordFailedAttempt(String userId) {
+    final attempts = (_failedAttempts[userId] ?? 0) + 1;
+    _failedAttempts[userId] = attempts;
+
+    // Apply the longest matching lockout threshold.
+    Duration? lockout;
+    for (final entry in _lockoutPolicy.entries) {
+      if (attempts >= entry.key) lockout = entry.value;
+    }
+    if (lockout != null) {
+      _lockoutUntil[userId] = DateTime.now().add(lockout);
+    }
+  }
+
+  void _clearFailedAttempts(String userId) {
+    _failedAttempts.remove(userId);
+    _lockoutUntil.remove(userId);
+  }
+
   bool loginByUserId(String userId, String pin) {
     if (_singleUserMode) return true;
+
+    if (getLockoutRemaining(userId) != null) return false;
 
     final index = _users.indexWhere(
       (user) => user.id == userId && user.isActive,
@@ -275,9 +324,11 @@ class UserProvider extends ChangeNotifier {
 
     final user = _users[index];
     if (user.pinHash != hashPin(pin, phone: user.phone)) {
+      _recordFailedAttempt(userId);
       return false;
     }
 
+    _clearFailedAttempts(userId);
     final updated = user.copyWith(lastLoginAt: DateTime.now());
     _users[index] = updated;
     _currentUser = updated;
@@ -306,9 +357,14 @@ class UserProvider extends ChangeNotifier {
     if (_singleUserMode) return true;
     final user = _currentUser;
     if (user == null) return false;
+
+    if (getLockoutRemaining(user.id) != null) return false;
+
     if (hashPin(pin, phone: user.phone) != user.pinHash) {
+      _recordFailedAttempt(user.id);
       return false;
     }
+    _clearFailedAttempts(user.id);
     _isLocked = false;
     notifyListeners();
     return true;

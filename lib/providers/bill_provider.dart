@@ -575,8 +575,10 @@ class BillProvider extends ChangeNotifier {
   }
 
   /// Reloads bills from Supabase in-place without a full app restart.
-  Future<void> syncFromDb() async {
-    if (dbService == null) return;
+  ///
+  /// Returns `null` on success, or an error message string on failure.
+  Future<String?> syncFromDb() async {
+    if (dbService == null) return null;
     try {
       final bills = await dbService!.loadBills();
       // Sort newest-first so dedup always keeps the most recent bill per number
@@ -592,8 +594,17 @@ class BillProvider extends ChangeNotifier {
         _bills.map((b) => b.billNumber).toList(),
       );
       notifyListeners();
-    } catch (_) {
-      // Sync failed — keep in-memory data unchanged
+      return null;
+    } on FormatException catch (e) {
+      debugPrint('BillReady: syncFromDb parse error: $e');
+      return 'Data sync failed: could not parse server response.';
+    } catch (e) {
+      debugPrint('BillReady: syncFromDb error: $e');
+      final msg = e.toString().toLowerCase();
+      if (msg.contains('auth') || msg.contains('jwt') || msg.contains('token')) {
+        return 'Session expired. Please sign in again.';
+      }
+      return 'Sync failed. Please check your connection and try again.';
     }
   }
 
