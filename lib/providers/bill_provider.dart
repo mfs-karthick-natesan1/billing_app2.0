@@ -598,11 +598,9 @@ class BillProvider extends ChangeNotifier {
   }
 
   void deleteBill(String billNumber) {
-    final bill = _bills.firstWhere(
-      (b) => b.billNumber == billNumber,
-      orElse: () => _bills.first,
-    );
-    _bills.removeWhere((b) => b.billNumber == billNumber);
+    final index = _bills.indexWhere((b) => b.billNumber == billNumber);
+    if (index == -1) return;
+    final bill = _bills.removeAt(index);
     dbService?.deleteRecord('bills', bill.id);
     _onChanged?.call();
     notifyListeners();
