@@ -71,6 +71,21 @@ class BillProvider extends ChangeNotifier {
   String? get activeVehicleModel => _activeVehicleModel;
   String? get activeKmReading => _activeKmReading;
 
+  void _resetActiveState() {
+    _editingBill = null;
+    _activeLineItems = [];
+    _discountAmount = 0;
+    _discountIsPercent = true;
+    _discountValue = 0;
+    _activeCustomer = null;
+    _activeDiagnosis = null;
+    _activeVisitNotes = null;
+    _activeVehicleReg = null;
+    _activeVehicleMake = null;
+    _activeVehicleModel = null;
+    _activeKmReading = null;
+  }
+
   bool get isEditMode => _editingBill != null;
   String? get editingBillNumber => _editingBill?.billNumber;
 
@@ -420,18 +435,7 @@ class BillProvider extends ChangeNotifier {
       final idx = _bills.indexWhere((b) => b.id == _editingBill!.id);
       if (idx != -1) _bills[idx] = updatedBill;
       pendingSave = dbService?.saveBills([updatedBill]);
-      _editingBill = null;
-      _activeLineItems = [];
-      _discountAmount = 0;
-      _discountIsPercent = true;
-      _discountValue = 0;
-      _activeCustomer = null;
-      _activeDiagnosis = null;
-      _activeVisitNotes = null;
-      _activeVehicleReg = null;
-      _activeVehicleMake = null;
-      _activeVehicleModel = null;
-      _activeKmReading = null;
+      _resetActiveState();
       _onChanged?.call();
       notifyListeners();
       return updatedBill;
@@ -509,17 +513,7 @@ class BillProvider extends ChangeNotifier {
     }
 
     // Reset active bill
-    _activeLineItems = [];
-    _discountAmount = 0;
-    _discountIsPercent = true;
-    _discountValue = 0;
-    _activeCustomer = null;
-    _activeDiagnosis = null;
-    _activeVisitNotes = null;
-    _activeVehicleReg = null;
-    _activeVehicleMake = null;
-    _activeVehicleModel = null;
-    _activeKmReading = null;
+    _resetActiveState();
     _onChanged?.call();
     notifyListeners();
 
@@ -527,30 +521,13 @@ class BillProvider extends ChangeNotifier {
   }
 
   void clearActiveBill() {
-    _editingBill = null;
-    _activeLineItems = [];
-    _discountAmount = 0;
-    _discountIsPercent = true;
-    _discountValue = 0;
-    _activeCustomer = null;
-    _activeDiagnosis = null;
-    _activeVisitNotes = null;
-    _activeVehicleReg = null;
-    _activeVehicleMake = null;
-    _activeVehicleModel = null;
-    _activeKmReading = null;
+    _resetActiveState();
     notifyListeners();
   }
 
   void clearAllBills() {
     _bills.clear();
-    _activeLineItems = [];
-    _discountAmount = 0;
-    _discountIsPercent = true;
-    _discountValue = 0;
-    _activeCustomer = null;
-    _activeDiagnosis = null;
-    _activeVisitNotes = null;
+    _resetActiveState();
     _billNumberService.hydrateFromExistingBills(const []);
     _onChanged?.call();
     notifyListeners();
@@ -560,13 +537,7 @@ class BillProvider extends ChangeNotifier {
     _bills
       ..clear()
       ..addAll(bills);
-    _activeLineItems = [];
-    _discountAmount = 0;
-    _discountIsPercent = true;
-    _discountValue = 0;
-    _activeCustomer = null;
-    _activeDiagnosis = null;
-    _activeVisitNotes = null;
+    _resetActiveState();
     _billNumberService.hydrateFromExistingBills(
       bills.map((bill) => bill.billNumber).toList(),
     );

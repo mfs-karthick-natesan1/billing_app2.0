@@ -6,6 +6,9 @@ class ReturnLineItem {
   final double refundAmount;
   final String? batchId;
   final String? batchNumber;
+  final double cgstAmount;
+  final double sgstAmount;
+  final double igstAmount;
 
   ReturnLineItem({
     required this.productId,
@@ -15,6 +18,9 @@ class ReturnLineItem {
     double? refundAmount,
     this.batchId,
     this.batchNumber,
+    this.cgstAmount = 0,
+    this.sgstAmount = 0,
+    this.igstAmount = 0,
   }) : refundAmount = refundAmount ?? (quantityReturned * pricePerUnit);
 
   Map<String, dynamic> toJson() {
@@ -26,6 +32,9 @@ class ReturnLineItem {
       'refundAmount': refundAmount,
       'batchId': batchId,
       'batchNumber': batchNumber,
+      'cgstAmount': cgstAmount,
+      'sgstAmount': sgstAmount,
+      'igstAmount': igstAmount,
     };
   }
 
@@ -38,6 +47,9 @@ class ReturnLineItem {
       refundAmount: _asDouble(json['refundAmount']),
       batchId: json['batchId'] as String?,
       batchNumber: json['batchNumber'] as String?,
+      cgstAmount: _asDouble(json['cgstAmount']),
+      sgstAmount: _asDouble(json['sgstAmount']),
+      igstAmount: _asDouble(json['igstAmount']),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,22 @@ import 'services/supabase_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Global Flutter error handler (render / framework errors)
+  FlutterError.onError = (FlutterErrorDetails details) {
+    debugPrint('FlutterError: ${details.exceptionAsString()}');
+    debugPrint(details.stack.toString());
+    // Forward to the default handler so the red error screen still shows in
+    // debug mode.
+    FlutterError.presentError(details);
+  };
+
+  // Global handler for errors in async code / Isolates
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    debugPrint('Unhandled error: $error\n$stack');
+    return true; // mark as handled so the app doesn't crash
+  };
+
   await SupabaseService.initialize();
   runApp(const _AppRoot());
 }

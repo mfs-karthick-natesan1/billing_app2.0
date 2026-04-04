@@ -233,7 +233,11 @@ class ReportService {
         revenue: monthBills.fold(0, (s, b) => s + b.grandTotal),
         expenses: monthExpenses.fold(0, (s, e) => s + e.amount),
       ));
-      cursor = DateTime(cursor.year, cursor.month + 1, 1);
+      // Dart's DateTime handles month overflow (13 → Jan next year), but
+      // be explicit to avoid confusion.
+      final nextMonth = cursor.month == 12 ? 1 : cursor.month + 1;
+      final nextYear = cursor.month == 12 ? cursor.year + 1 : cursor.year;
+      cursor = DateTime(nextYear, nextMonth, 1);
     }
     return result;
   }

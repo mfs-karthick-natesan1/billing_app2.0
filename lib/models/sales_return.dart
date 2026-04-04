@@ -12,6 +12,9 @@ class SalesReturn {
   final String? customerName;
   final List<ReturnLineItem> items;
   final double totalRefundAmount;
+  final double totalCgst;
+  final double totalSgst;
+  final double totalIgst;
   final RefundMode refundMode;
   final String? notes;
   final String? createdBy;
@@ -25,13 +28,22 @@ class SalesReturn {
     this.customerName,
     required this.items,
     double? totalRefundAmount,
+    double? totalCgst,
+    double? totalSgst,
+    double? totalIgst,
     required this.refundMode,
     this.notes,
     this.createdBy,
   }) : id = id ?? const Uuid().v4(),
        date = date ?? DateTime.now(),
        totalRefundAmount = totalRefundAmount ??
-           items.fold(0.0, (sum, item) => sum + item.refundAmount);
+           items.fold(0.0, (sum, item) => sum + item.refundAmount),
+       totalCgst = totalCgst ??
+           items.fold(0.0, (sum, item) => sum + item.cgstAmount),
+       totalSgst = totalSgst ??
+           items.fold(0.0, (sum, item) => sum + item.sgstAmount),
+       totalIgst = totalIgst ??
+           items.fold(0.0, (sum, item) => sum + item.igstAmount);
 
   Map<String, dynamic> toJson() {
     return {
@@ -43,6 +55,9 @@ class SalesReturn {
       'customerName': customerName,
       'items': items.map((item) => item.toJson()).toList(),
       'totalRefundAmount': totalRefundAmount,
+      'totalCgst': totalCgst,
+      'totalSgst': totalSgst,
+      'totalIgst': totalIgst,
       'refundMode': refundMode.name,
       'notes': notes,
       'createdBy': createdBy,
@@ -63,6 +78,9 @@ class SalesReturn {
           .map(ReturnLineItem.fromJson)
           .toList(),
       totalRefundAmount: _asDouble(json['totalRefundAmount']),
+      totalCgst: _asDouble(json['totalCgst']),
+      totalSgst: _asDouble(json['totalSgst']),
+      totalIgst: _asDouble(json['totalIgst']),
       refundMode: _refundModeFromString(json['refundMode'] as String?),
       notes: json['notes'] as String?,
       createdBy: json['createdBy'] as String?,
