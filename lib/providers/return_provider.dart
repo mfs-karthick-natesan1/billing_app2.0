@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../models/bill.dart';
 import '../models/sales_return.dart';
 import '../services/db_service.dart';
 
@@ -40,7 +41,42 @@ class ReturnProvider extends ChangeNotifier {
     return '$fy/RET-$number';
   }
 
-  void addReturn(SalesReturn salesReturn) {
+  /// Adds a return after validating that returned quantities don't exceed the
+  /// original bill quantities (accounting for previous returns).
+  ///
+  /// Pass [originalBill] so the provider can cross-check line-item quantities.
+  /// Throws [StateError] if any item exceeds the returnable quantity.
+  void addReturn(SalesReturn salesReturn, {Bill? originalBill}) {
+    if (originalBill != null) {
+      for (final item in salesReturn.items) {
+        // Find matching line item in original bill
+        final billItem = originalBill.lineItems
+            .cast<dynamic>()
+            .firstWhere(
+              (li) => li.product.id == item.productId,
+              orElse: () => null,
+            );
+        if (billItem == null) {
+          throw StateError(
+            'Product "${item.productName}" not found in original bill '
+            '${originalBill.billNumber}.',
+          );
+        }
+        final alreadyReturned = getReturnedQuantity(
+          originalBill.id,
+          item.productId,
+        );
+        final maxReturnable = billItem.quantity - alreadyReturned;
+        if (item.quantityReturned > maxReturnable) {
+          throw StateError(
+            'Return quantity (${item.quantityReturned}) for '
+            '"${item.productName}" exceeds returnable quantity '
+            '($maxReturnable).',
+          );
+        }
+      }
+    }
+
     _returns.add(salesReturn);
     dbService?.saveSalesReturns([salesReturn]);
     _onChanged?.call();

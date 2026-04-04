@@ -29,25 +29,52 @@ class DbService {
 
   SupabaseClient get _client => SupabaseService.client;
 
+  // ── Retry helper ────────────────────────────────────────────────────────────
+
+  /// Retries [operation] up to [maxAttempts] times with exponential backoff
+  /// (1 s, 2 s, 4 s). Rethrows the last error if all attempts fail.
+  static Future<T> _retryWithBackoff<T>(
+    Future<T> Function() operation, {
+    int maxAttempts = 3,
+  }) async {
+    var delay = const Duration(seconds: 1);
+    for (var attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        return await operation();
+      } catch (e) {
+        if (attempt >= maxAttempts) rethrow;
+        await Future<void>.delayed(delay);
+        delay *= 2;
+      }
+    }
+    // Unreachable — the loop always returns or rethrows.
+    throw StateError('_retryWithBackoff: unreachable');
+  }
+
   // ── Generic helpers ─────────────────────────────────────────────────────────
 
   Future<void> _upsert(String table, List<Map<String, dynamic>> rows) async {
     if (rows.isEmpty) return;
     // .select() forces Supabase to throw on RLS violations instead of silently
     // doing nothing (upsert without .select() can return 0 rows with no error).
-    await _client.from(table).upsert(rows).select();
+    await _retryWithBackoff(
+      () => _client.from(table).upsert(rows).select(),
+    );
   }
 
   Future<List<Map<String, dynamic>>> _selectAll(String table) async {
-    final rows = await _client
-        .from(table)
-        .select('data')
-        .eq('business_id', businessId);
-    return rows
-        .map(
-          (r) => (r['data'] as Map<String, dynamic>?) ?? <String, dynamic>{},
-        )
-        .toList();
+    return _retryWithBackoff(() async {
+      final rows = await _client
+          .from(table)
+          .select('data')
+          .eq('business_id', businessId);
+      return rows
+          .map(
+            (r) =>
+                (r['data'] as Map<String, dynamic>?) ?? <String, dynamic>{},
+          )
+          .toList();
+    });
   }
 
   List<Map<String, dynamic>> _toRows<T>(
