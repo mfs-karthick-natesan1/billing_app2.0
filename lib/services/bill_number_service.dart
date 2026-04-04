@@ -1,3 +1,5 @@
+import 'supabase_service.dart';
+
 class BillNumberService {
   int _counter = 0;
   String? _currentFy;
@@ -14,6 +16,35 @@ class BillNumberService {
     return '$startYear-${endYear.toString().padLeft(2, '0')}';
   }
 
+  /// Generates a bill number using the Supabase `get_next_bill_number` RPC,
+  /// which atomically sequences numbers per business and financial year.
+  /// Falls back to the local in-memory counter when offline or businessId is
+  /// unavailable.
+  Future<String> generateBillNumberAsync({
+    required String? businessId,
+    String prefix = 'INV',
+  }) async {
+    if (businessId != null) {
+      try {
+        final result = await SupabaseService.client.rpc(
+          'get_next_bill_number',
+          params: {
+            'p_business_id': businessId,
+            'p_prefix': prefix,
+          },
+        );
+        if (result is String && result.isNotEmpty) {
+          return result;
+        }
+      } catch (_) {
+        // Offline or RPC unavailable — fall through to local fallback
+      }
+    }
+    return generateBillNumber(prefix: prefix);
+  }
+
+  /// Local fallback: generates a bill number using an in-memory counter.
+  /// Used when offline or when businessId is not available.
   String generateBillNumber({String prefix = 'INV'}) {
     final fy = currentFinancialYear;
     if (_currentFy != fy) {

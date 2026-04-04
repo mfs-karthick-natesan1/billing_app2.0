@@ -1,4 +1,5 @@
 import 'package:uuid/uuid.dart';
+import '../core/utils/json_helpers.dart';
 
 enum JobStatus {
   received,
@@ -50,8 +51,8 @@ class JobLineItem {
   final String id;
   final JobLineItemType type;
   final String description;
-  double quantity;
-  double unitPrice;
+  final double quantity;
+  final double unitPrice;
 
   JobLineItem({
     String? id,
@@ -62,6 +63,21 @@ class JobLineItem {
   }) : id = id ?? const Uuid().v4();
 
   double get total => quantity * unitPrice;
+
+  JobLineItem copyWith({
+    JobLineItemType? type,
+    String? description,
+    double? quantity,
+    double? unitPrice,
+  }) {
+    return JobLineItem(
+      id: id,
+      type: type ?? this.type,
+      description: description ?? this.description,
+      quantity: quantity ?? this.quantity,
+      unitPrice: unitPrice ?? this.unitPrice,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -78,8 +94,8 @@ class JobLineItem {
       id: json['id'] as String?,
       type: _typeFromString(json['type'] as String?),
       description: json['description'] as String? ?? '',
-      quantity: _asDouble(json['quantity'], fallback: 1),
-      unitPrice: _asDouble(json['unitPrice']),
+      quantity: JsonHelpers.asDouble(json['quantity'], fallback: 1),
+      unitPrice: JsonHelpers.asDouble(json['unitPrice']),
     );
   }
 
@@ -88,13 +104,6 @@ class JobLineItem {
       if (t.name == value) return t;
     }
     return JobLineItemType.part;
-  }
-
-  static double _asDouble(dynamic v, {double fallback = 0}) {
-    if (v is double) return v;
-    if (v is int) return v.toDouble();
-    if (v is String) return double.tryParse(v) ?? fallback;
-    return fallback;
   }
 }
 

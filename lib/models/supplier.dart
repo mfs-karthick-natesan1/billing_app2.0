@@ -1,4 +1,5 @@
 import 'package:uuid/uuid.dart';
+import '../core/utils/json_helpers.dart';
 
 class Supplier {
   final String id;
@@ -7,7 +8,7 @@ class Supplier {
   final String? gstin;
   final String? address;
   final List<String> productCategories;
-  double outstandingPayable;
+  final double outstandingPayable;
   final String? notes;
   final bool isActive;
   final DateTime createdAt;
@@ -76,17 +77,10 @@ class Supplier {
               ?.map((e) => e as String)
               .toList() ??
           const [],
-      outstandingPayable: _asDouble(json['outstandingPayable']),
+      outstandingPayable: JsonHelpers.asDouble(json['outstandingPayable']),
       notes: json['notes'] as String?,
       isActive: json['isActive'] as bool? ?? true,
       createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
     );
-  }
-
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
   }
 }

@@ -1,29 +1,17 @@
 import 'customer.dart';
-import '../constants/app_strings.dart';
+import 'payment_method.dart';
+import '../core/utils/json_helpers.dart';
 
-enum PaymentMode { cash, upi, credit, split }
+export 'payment_method.dart';
+
+// Backward-compatible alias so existing code using PaymentMode continues to work.
+typedef PaymentMode = PaymentMethod;
+
+// Re-export PaymentMethodX members as PaymentModeX for backward compat.
+// All existing references like `mode.isCredit`, `mode.isCash`, etc. work via
+// PaymentMethodX extension on PaymentMethod (= PaymentMode).
 
 enum CreditType { full, partial }
-
-extension PaymentModeX on PaymentMode {
-  String get label {
-    switch (this) {
-      case PaymentMode.cash:
-        return AppStrings.cash;
-      case PaymentMode.upi:
-        return AppStrings.upi;
-      case PaymentMode.credit:
-        return AppStrings.creditUdhar;
-      case PaymentMode.split:
-        return 'Split';
-    }
-  }
-
-  bool get isCredit => this == PaymentMode.credit;
-  bool get isCash => this == PaymentMode.cash;
-  bool get isSplit => this == PaymentMode.split;
-  bool get isPaidNonCredit => this != PaymentMode.credit;
-}
 
 class PaymentInfo {
   final PaymentMode mode;
@@ -58,22 +46,18 @@ class PaymentInfo {
 
   factory PaymentInfo.fromJson(Map<String, dynamic> json) {
     return PaymentInfo(
-      mode: _paymentModeFromString(json['mode'] as String?),
+      mode: PaymentMethodX.fromString(json['mode'] as String?),
       creditType: _creditTypeFromString(json['creditType'] as String?),
-      amountReceived: _asDouble(json['amountReceived']),
-      creditAmount: _asDouble(json['creditAmount']),
+      amountReceived: JsonHelpers.asDouble(json['amountReceived']),
+      creditAmount: JsonHelpers.asDouble(json['creditAmount']),
       customer: _customerFromJson(json['customer']),
-      splitCashAmount: json['splitCashAmount'] != null ? _asDouble(json['splitCashAmount']) : null,
-      splitUpiAmount: json['splitUpiAmount'] != null ? _asDouble(json['splitUpiAmount']) : null,
+      splitCashAmount: json['splitCashAmount'] != null
+          ? JsonHelpers.asDouble(json['splitCashAmount'])
+          : null,
+      splitUpiAmount: json['splitUpiAmount'] != null
+          ? JsonHelpers.asDouble(json['splitUpiAmount'])
+          : null,
     );
-  }
-
-  static PaymentMode _paymentModeFromString(String? value) {
-    if (value == null) return PaymentMode.cash;
-    for (final mode in PaymentMode.values) {
-      if (mode.name == value) return mode;
-    }
-    return PaymentMode.cash;
   }
 
   static CreditType? _creditTypeFromString(String? value) {
@@ -92,12 +76,5 @@ class PaymentInfo {
       return Customer.fromJson(value.cast<String, dynamic>());
     }
     return null;
-  }
-
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
   }
 }

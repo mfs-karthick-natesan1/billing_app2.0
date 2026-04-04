@@ -1,4 +1,5 @@
 import 'package:uuid/uuid.dart';
+import '../core/utils/json_helpers.dart';
 
 class CustomerVehicle {
   final String id;
@@ -52,8 +53,8 @@ class Customer {
   final String id;
   final String name;
   final String? phone;
-  double outstandingBalance;
-  double advanceBalance;
+  final double outstandingBalance;
+  final double advanceBalance;
   final DateTime createdAt;
   final int? age;
   final String? gender;
@@ -140,16 +141,16 @@ class Customer {
       id: json['id'] as String?,
       name: json['name'] as String? ?? '',
       phone: json['phone'] as String?,
-      outstandingBalance: _asDouble(json['outstandingBalance']),
-      advanceBalance: _asDouble(json['advanceBalance']),
+      outstandingBalance: JsonHelpers.asDouble(json['outstandingBalance']),
+      advanceBalance: JsonHelpers.asDouble(json['advanceBalance']),
       createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
-      age: _nullableInt(json['age']),
+      age: JsonHelpers.nullableInt(json['age']),
       gender: json['gender'] as String?,
       gstin: json['gstin'] as String?,
       bloodGroup: json['bloodGroup'] as String?,
       allergies: json['allergies'] as String?,
       medicalNotes: json['medicalNotes'] as String?,
-      defaultDiscountPercent: _asDouble(json['defaultDiscountPercent']),
+      defaultDiscountPercent: JsonHelpers.asDouble(json['defaultDiscountPercent']),
       vehicles: _vehicleList(json['vehicles']),
     );
   }
@@ -160,20 +161,5 @@ class Customer {
         .whereType<Map>()
         .map((m) => CustomerVehicle.fromJson(m.cast<String, dynamic>()))
         .toList();
-  }
-
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
-  }
-
-  static int? _nullableInt(dynamic value) {
-    if (value == null) return null;
-    if (value is int) return value;
-    if (value is double) return value.toInt();
-    if (value is String) return int.tryParse(value);
-    return null;
   }
 }

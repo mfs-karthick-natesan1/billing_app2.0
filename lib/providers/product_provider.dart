@@ -154,9 +154,13 @@ class ProductProvider extends ChangeNotifier {
   void addBatch(String productId, ProductBatch batch) {
     final index = _products.indexWhere((p) => p.id == productId);
     if (index != -1) {
-      _products[index].batches.add(batch);
-      _products[index].stockQuantity = _products[index].totalBatchStock;
-      dbService?.saveProducts([_products[index]]);
+      final newBatches = [..._products[index].batches, batch];
+      final updated = _products[index].copyWith(
+        batches: newBatches,
+        stockQuantity: newBatches.fold<int>(0, (sum, b) => sum + b.stockQuantity),
+      );
+      _products[index] = updated;
+      dbService?.saveProducts([updated]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -165,25 +169,31 @@ class ProductProvider extends ChangeNotifier {
   void updateBatch(String productId, ProductBatch updatedBatch) {
     final index = _products.indexWhere((p) => p.id == productId);
     if (index != -1) {
-      final batchIndex = _products[index].batches.indexWhere(
-        (b) => b.id == updatedBatch.id,
+      final newBatches = _products[index].batches
+          .map((b) => b.id == updatedBatch.id ? updatedBatch : b)
+          .toList();
+      final updated = _products[index].copyWith(
+        batches: newBatches,
+        stockQuantity: newBatches.fold<int>(0, (sum, b) => sum + b.stockQuantity),
       );
-      if (batchIndex != -1) {
-        _products[index].batches[batchIndex] = updatedBatch;
-        _products[index].stockQuantity = _products[index].totalBatchStock;
-        dbService?.saveProducts([_products[index]]);
-        _onChanged?.call();
-        notifyListeners();
-      }
+      _products[index] = updated;
+      dbService?.saveProducts([updated]);
+      _onChanged?.call();
+      notifyListeners();
     }
   }
 
   void deleteBatch(String productId, String batchId) {
     final index = _products.indexWhere((p) => p.id == productId);
     if (index != -1) {
-      _products[index].batches.removeWhere((b) => b.id == batchId);
-      _products[index].stockQuantity = _products[index].totalBatchStock;
-      dbService?.saveProducts([_products[index]]);
+      final newBatches =
+          _products[index].batches.where((b) => b.id != batchId).toList();
+      final updated = _products[index].copyWith(
+        batches: newBatches,
+        stockQuantity: newBatches.fold<int>(0, (sum, b) => sum + b.stockQuantity),
+      );
+      _products[index] = updated;
+      dbService?.saveProducts([updated]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -241,8 +251,11 @@ class ProductProvider extends ChangeNotifier {
   void incrementStock(String productId, double quantity) {
     final index = _products.indexWhere((p) => p.id == productId);
     if (index != -1) {
-      _products[index].stockQuantity += quantity.toInt();
-      dbService?.saveProducts([_products[index]]);
+      final updated = _products[index].copyWith(
+        stockQuantity: _products[index].stockQuantity + quantity.toInt(),
+      );
+      _products[index] = updated;
+      dbService?.saveProducts([updated]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -256,11 +269,10 @@ class ProductProvider extends ChangeNotifier {
 
     final product = _products[index];
     final qty = quantity.toInt();
+    Product updated;
 
     if (batchId != null) {
-      final batchIndex = product.batches.indexWhere(
-        (b) => b.id == batchId,
-      );
+      final batchIndex = product.batches.indexWhere((b) => b.id == batchId);
       if (batchIndex == -1) {
         throw StateError(
           'Batch $batchId not found for product ${product.name}. '
@@ -275,8 +287,15 @@ class ProductProvider extends ChangeNotifier {
           'available ${batch.stockQuantity}, requested $qty',
         );
       }
-      product.batches[batchIndex].stockQuantity -= qty;
-      product.stockQuantity = product.totalBatchStock;
+      final newBatches = product.batches
+          .map((b) => b.id == batchId
+              ? b.copyWith(stockQuantity: b.stockQuantity - qty)
+              : b)
+          .toList();
+      updated = product.copyWith(
+        batches: newBatches,
+        stockQuantity: newBatches.fold<int>(0, (sum, b) => sum + b.stockQuantity),
+      );
     } else {
       if (product.stockQuantity < qty) {
         throw StateError(
@@ -284,10 +303,13 @@ class ProductProvider extends ChangeNotifier {
           'available ${product.stockQuantity}, requested $qty',
         );
       }
-      product.stockQuantity -= qty;
+      updated = product.copyWith(
+        stockQuantity: product.stockQuantity - qty,
+      );
     }
 
-    dbService?.saveProducts([product]);
+    _products[index] = updated;
+    dbService?.saveProducts([updated]);
     _onChanged?.call();
     notifyListeners();
   }
@@ -296,9 +318,12 @@ class ProductProvider extends ChangeNotifier {
   void adjustStock(StockAdjustment adjustment) {
     final index = _products.indexWhere((p) => p.id == adjustment.productId);
     if (index != -1) {
-      _products[index].stockQuantity = adjustment.newStock.toInt();
+      final updated = _products[index].copyWith(
+        stockQuantity: adjustment.newStock.toInt(),
+      );
+      _products[index] = updated;
       _adjustments.add(adjustment);
-      dbService?.saveProducts([_products[index]]);
+      dbService?.saveProducts([updated]);
       _onChanged?.call();
       notifyListeners();
     }

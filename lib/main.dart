@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,26 +35,42 @@ import 'services/local_storage_service.dart';
 import 'services/notification_service.dart';
 import 'services/supabase_service.dart';
 
+// Sentry DSN — pass via --dart-define=SENTRY_DSN=https://... at build time.
+const _sentryDsn = String.fromEnvironment('SENTRY_DSN');
+
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = _sentryDsn.isEmpty ? '' : _sentryDsn;
+      options.tracesSampleRate = kDebugMode ? 0.0 : 0.2;
+      options.environment = kDebugMode ? 'debug' : 'production';
+      // Breadcrumbs for navigation and HTTP requests are on by default.
+    },
+    appRunner: () async {
+      WidgetsFlutterBinding.ensureInitialized();
 
-  // Global Flutter error handler (render / framework errors)
-  FlutterError.onError = (FlutterErrorDetails details) {
-    debugPrint('FlutterError: ${details.exceptionAsString()}');
-    debugPrint(details.stack.toString());
-    // Forward to the default handler so the red error screen still shows in
-    // debug mode.
-    FlutterError.presentError(details);
-  };
+      // Global Flutter error handler (render / framework errors)
+      FlutterError.onError = (FlutterErrorDetails details) {
+        debugPrint('FlutterError: ${details.exceptionAsString()}');
+        debugPrint(details.stack.toString());
+        Sentry.captureException(
+          details.exception,
+          stackTrace: details.stack,
+        );
+        FlutterError.presentError(details);
+      };
 
-  // Global handler for errors in async code / Isolates
-  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    debugPrint('Unhandled error: $error\n$stack');
-    return true; // mark as handled so the app doesn't crash
-  };
+      // Global handler for errors in async code / Isolates
+      PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+        debugPrint('Unhandled error: $error\n$stack');
+        unawaited(Sentry.captureException(error, stackTrace: stack));
+        return true;
+      };
 
-  await SupabaseService.initialize();
-  runApp(const _AppRoot());
+      await SupabaseService.initialize();
+      runApp(const _AppRoot());
+    },
+  );
 }
 
 /// Root widget — rebuilt (via setState) each time AppBootstrap.restart() is
@@ -234,7 +251,8 @@ Future<Widget> _bootstrap() async {
   billProvider = BillProvider(
     initialBills: initialState.bills,
     onChanged: schedulePersist,
-  )..dbService = dbService;
+  )..dbService = dbService
+   ..businessId = AuthService.businessId;
   customerProvider = CustomerProvider(
     initialCustomers: initialState.customers,
     initialPaymentEntries: initialState.customerPaymentEntries,

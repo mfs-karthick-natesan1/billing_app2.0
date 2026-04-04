@@ -1,5 +1,6 @@
 import 'package:uuid/uuid.dart';
 import 'return_line_item.dart';
+import '../core/utils/json_helpers.dart';
 
 enum RefundMode { cash, creditToAccount, exchange }
 
@@ -77,10 +78,10 @@ class SalesReturn {
           .whereType<Map<String, dynamic>>()
           .map(ReturnLineItem.fromJson)
           .toList(),
-      totalRefundAmount: _asDouble(json['totalRefundAmount']),
-      totalCgst: _asDouble(json['totalCgst']),
-      totalSgst: _asDouble(json['totalSgst']),
-      totalIgst: _asDouble(json['totalIgst']),
+      totalRefundAmount: JsonHelpers.asDouble(json['totalRefundAmount']),
+      totalCgst: JsonHelpers.asDouble(json['totalCgst']),
+      totalSgst: JsonHelpers.asDouble(json['totalSgst']),
+      totalIgst: JsonHelpers.asDouble(json['totalIgst']),
       refundMode: _refundModeFromString(json['refundMode'] as String?),
       notes: json['notes'] as String?,
       createdBy: json['createdBy'] as String?,
@@ -95,10 +96,4 @@ class SalesReturn {
     return RefundMode.cash;
   }
 
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
-  }
 }

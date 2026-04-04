@@ -1,3 +1,5 @@
+import '../core/utils/json_helpers.dart';
+
 class ReturnLineItem {
   final String productId;
   final String productName;
@@ -42,21 +44,15 @@ class ReturnLineItem {
     return ReturnLineItem(
       productId: json['productId'] as String? ?? '',
       productName: json['productName'] as String? ?? '',
-      quantityReturned: _asDouble(json['quantityReturned']),
-      pricePerUnit: _asDouble(json['pricePerUnit']),
-      refundAmount: _asDouble(json['refundAmount']),
+      quantityReturned: JsonHelpers.asDouble(json['quantityReturned']),
+      pricePerUnit: JsonHelpers.asDouble(json['pricePerUnit']),
+      refundAmount: JsonHelpers.asDouble(json['refundAmount']),
       batchId: json['batchId'] as String?,
       batchNumber: json['batchNumber'] as String?,
-      cgstAmount: _asDouble(json['cgstAmount']),
-      sgstAmount: _asDouble(json['sgstAmount']),
-      igstAmount: _asDouble(json['igstAmount']),
+      cgstAmount: JsonHelpers.asDouble(json['cgstAmount']),
+      sgstAmount: JsonHelpers.asDouble(json['sgstAmount']),
+      igstAmount: JsonHelpers.asDouble(json['igstAmount']),
     );
   }
 
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
-  }
 }

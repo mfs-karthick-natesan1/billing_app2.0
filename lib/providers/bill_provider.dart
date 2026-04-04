@@ -8,6 +8,7 @@ import '../models/payment_info.dart';
 import '../services/bill_number_service.dart';
 import '../services/db_service.dart';
 import '../services/gst_calculator.dart';
+import '../services/supabase_service.dart';
 import '../providers/product_provider.dart';
 import '../providers/customer_provider.dart';
 
@@ -19,6 +20,7 @@ class BillProvider extends ChangeNotifier {
   final VoidCallback? _onChanged;
   DbService? dbService;
   Future<void>? pendingSave;
+  String? businessId;
 
   // Edit mode
   Bill? _editingBill;
@@ -243,7 +245,9 @@ class BillProvider extends ChangeNotifier {
       (i) => i.product.id == product.id,
     );
     if (existing != -1) {
-      _activeLineItems[existing].quantity += product.quantityStep;
+      _activeLineItems[existing] = _activeLineItems[existing].copyWith(
+        quantity: _activeLineItems[existing].quantity + product.quantityStep,
+      );
     } else {
       // Determine discount: customer default takes priority over product default
       final discount = (_activeCustomer?.defaultDiscountPercent ?? 0) > 0
@@ -297,15 +301,18 @@ class BillProvider extends ChangeNotifier {
 
   void updateLineDiscount(int index, double discountPercent) {
     if (index >= 0 && index < _activeLineItems.length) {
-      _activeLineItems[index].discountPercent =
-          discountPercent.clamp(0, 100);
+      _activeLineItems[index] = _activeLineItems[index].copyWith(
+        discountPercent: discountPercent.clamp(0, 100),
+      );
       notifyListeners();
     }
   }
 
   void updateQuantity(int index, double newQuantity) {
     if (index >= 0 && index < _activeLineItems.length && newQuantity > 0) {
-      _activeLineItems[index].quantity = newQuantity;
+      _activeLineItems[index] = _activeLineItems[index].copyWith(
+        quantity: newQuantity,
+      );
       _recalculateDiscount();
       notifyListeners();
     }
@@ -313,7 +320,9 @@ class BillProvider extends ChangeNotifier {
 
   void updateSerialIds(int index, List<String> ids) {
     if (index >= 0 && index < _activeLineItems.length) {
-      _activeLineItems[index].serialNumberIds = List.from(ids);
+      _activeLineItems[index] = _activeLineItems[index].copyWith(
+        serialNumberIds: List.from(ids),
+      );
       notifyListeners();
     }
   }
@@ -345,14 +354,16 @@ class BillProvider extends ChangeNotifier {
     _activeCustomer = customer;
     // Apply customer discount to all existing line items
     if (customer != null && customer.defaultDiscountPercent > 0) {
-      for (final item in _activeLineItems) {
-        item.discountPercent = customer.defaultDiscountPercent;
-      }
+      _activeLineItems = _activeLineItems
+          .map((item) =>
+              item.copyWith(discountPercent: customer.defaultDiscountPercent))
+          .toList();
     } else if (customer == null) {
       // Revert to product defaults when customer is cleared
-      for (final item in _activeLineItems) {
-        item.discountPercent = item.product.defaultDiscountPercent;
-      }
+      _activeLineItems = _activeLineItems
+          .map((item) =>
+              item.copyWith(discountPercent: item.product.defaultDiscountPercent))
+          .toList();
     }
     _recalculateDiscount();
     notifyListeners();
@@ -517,6 +528,143 @@ class BillProvider extends ChangeNotifier {
     _onChanged?.call();
     notifyListeners();
 
+    return bill;
+  }
+
+  /// Async version of [completeBill] that uses the `complete_bill` Supabase RPC
+  /// for atomic server-side execution (bill save + stock + credit + bill count).
+  /// Falls back to the synchronous local path when offline or RPC is unavailable.
+  Future<Bill> completeBillAsync({
+    required PaymentInfo paymentInfo,
+    required bool gstEnabled,
+    required ProductProvider productProvider,
+    required CustomerProvider customerProvider,
+    String billPrefix = 'INV',
+    bool isInterState = false,
+    double advanceUsed = 0,
+  }) async {
+    // Edit mode: use synchronous path (no server number generation needed)
+    if (_editingBill != null) {
+      return completeBill(
+        paymentInfo: paymentInfo,
+        gstEnabled: gstEnabled,
+        productProvider: productProvider,
+        customerProvider: customerProvider,
+        billPrefix: billPrefix,
+        isInterState: isInterState,
+        advanceUsed: advanceUsed,
+      );
+    }
+
+    // Try to get a server-side bill number first
+    final billNumber = await _billNumberService.generateBillNumberAsync(
+      businessId: businessId,
+      prefix: billPrefix,
+    );
+
+    final bill = Bill(
+      billNumber: billNumber,
+      lineItems: List.from(_activeLineItems),
+      subtotal: activeSubtotal,
+      discount: _discountAmount,
+      billDiscountPercent: _discountIsPercent ? _discountValue : 0,
+      totalLineDiscount: activeTotalLineDiscount,
+      cgst: gstEnabled ? activeCgst(isInterState: isInterState) : 0,
+      sgst: gstEnabled ? activeSgst(isInterState: isInterState) : 0,
+      igst: gstEnabled ? activeIgst(isInterState: isInterState) : 0,
+      grandTotal: activeGrandTotal(isInterState: isInterState),
+      isInterState: isInterState,
+      paymentMode: paymentInfo.mode,
+      amountReceived: paymentInfo.amountReceived,
+      creditAmount: paymentInfo.creditAmount,
+      customer: paymentInfo.customer,
+      splitCashAmount: paymentInfo.splitCashAmount,
+      splitUpiAmount: paymentInfo.splitUpiAmount,
+      diagnosis: _activeDiagnosis,
+      visitNotes: _activeVisitNotes,
+      vehicleReg: _activeVehicleReg,
+      vehicleMake: _activeVehicleMake,
+      vehicleModel: _activeVehicleModel,
+      kmReading: _activeKmReading,
+      advanceUsed: advanceUsed,
+    );
+
+    _bills.add(bill);
+
+    // Build stock changes payload for RPC
+    final stockChanges = _activeLineItems
+        .where((item) => !item.product.isService)
+        .map((item) => {
+              'productId': item.product.id,
+              if (item.batch != null) 'batchId': item.batch!.id,
+              'qty': item.quantity.toInt(),
+            })
+        .toList();
+
+    // Credit payload
+    final creditPayload = paymentInfo.mode == PaymentMode.credit &&
+            paymentInfo.customer != null
+        ? {'customerId': paymentInfo.customer!.id, 'amount': paymentInfo.creditAmount}
+        : null;
+
+    // Try atomic server RPC; fall back to individual saves on failure
+    bool rpcSucceeded = false;
+    if (businessId != null) {
+      try {
+        await SupabaseService.client.rpc(
+          'complete_bill',
+          params: {
+            'p_business_id': businessId,
+            'p_bill': bill.toJson(),
+            'p_stock_changes': stockChanges,
+            if (creditPayload != null) 'p_credit': creditPayload,
+            'p_prefix': billPrefix,
+            'p_use_server_bill_number': false, // already got number above
+          },
+        );
+        rpcSucceeded = true;
+      } catch (_) {
+        // Offline or RPC error — fall through to individual saves
+      }
+    }
+
+    if (!rpcSucceeded) {
+      pendingSave = dbService?.saveBills([bill]);
+    }
+
+    // Update local state regardless (for instant UI)
+    for (final item in _activeLineItems) {
+      if (!item.product.isService) {
+        productProvider.decrementStock(
+          item.product.id,
+          item.quantity,
+          batchId: item.batch?.id,
+        );
+      }
+    }
+    if (paymentInfo.mode == PaymentMode.credit && paymentInfo.customer != null) {
+      customerProvider.addCredit(
+        paymentInfo.customer!.id,
+        paymentInfo.creditAmount,
+      );
+    }
+    if (_activeVehicleReg != null &&
+        _activeVehicleReg!.isNotEmpty &&
+        paymentInfo.customer != null) {
+      customerProvider.upsertVehicle(
+        paymentInfo.customer!.id,
+        CustomerVehicle(
+          reg: _activeVehicleReg!,
+          make: _activeVehicleMake,
+          model: _activeVehicleModel,
+          lastKmReading: _activeKmReading,
+        ),
+      );
+    }
+
+    _resetActiveState();
+    _onChanged?.call();
+    notifyListeners();
     return bill;
   }
 

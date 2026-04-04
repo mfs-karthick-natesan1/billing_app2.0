@@ -1,15 +1,16 @@
 import 'product.dart';
 import 'product_batch.dart';
+import '../core/utils/json_helpers.dart';
 
 class LineItem {
   final Product product;
-  double quantity;
+  final double quantity;
   final ProductBatch? batch;
   final double gstRate;
   final bool gstInclusivePrice;
-  double discountPercent;
+  final double discountPercent;
   // IDs of SerialNumber records being sold on this line (only for tracked products)
-  List<String> serialNumberIds;
+  final List<String> serialNumberIds;
 
   LineItem({
     required this.product,
@@ -22,6 +23,26 @@ class LineItem {
   }) : gstRate = gstRate ?? product.gstRate,
        gstInclusivePrice = gstInclusivePrice ?? product.gstInclusivePrice,
        serialNumberIds = serialNumberIds ?? [];
+
+  LineItem copyWith({
+    Product? product,
+    double? quantity,
+    ProductBatch? batch,
+    double? gstRate,
+    bool? gstInclusivePrice,
+    double? discountPercent,
+    List<String>? serialNumberIds,
+  }) {
+    return LineItem(
+      product: product ?? this.product,
+      quantity: quantity ?? this.quantity,
+      batch: batch ?? this.batch,
+      gstRate: gstRate ?? this.gstRate,
+      gstInclusivePrice: gstInclusivePrice ?? this.gstInclusivePrice,
+      discountPercent: discountPercent ?? this.discountPercent,
+      serialNumberIds: serialNumberIds ?? List.from(this.serialNumberIds),
+    );
+  }
 
   /// Line discount amount (flat Rs).
   double get lineDiscountAmount => subtotal * discountPercent / 100;
@@ -82,14 +103,14 @@ class LineItem {
     final product = _productFromJson(json['product']);
     return LineItem(
       product: product,
-      quantity: _asDouble(json['quantity'], fallback: 1),
+      quantity: JsonHelpers.asDouble(json['quantity'], fallback: 1),
       batch: _batchFromJson(json['batch']),
       gstRate: json.containsKey('gstRate')
-          ? _asDouble(json['gstRate'])
+          ? JsonHelpers.asDouble(json['gstRate'])
           : product.gstRate,
       gstInclusivePrice: json['gstInclusivePrice'] as bool? ??
           product.gstInclusivePrice,
-      discountPercent: _asDouble(json['discountPercent']),
+      discountPercent: JsonHelpers.asDouble(json['discountPercent']),
       serialNumberIds: (json['serialNumberIds'] as List<dynamic>? ?? [])
           .whereType<String>()
           .toList(),
@@ -114,12 +135,5 @@ class LineItem {
       return ProductBatch.fromJson(value.cast<String, dynamic>());
     }
     return null;
-  }
-
-  static double _asDouble(dynamic value, {double fallback = 0}) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? fallback;
-    return fallback;
   }
 }

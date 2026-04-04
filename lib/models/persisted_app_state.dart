@@ -14,6 +14,7 @@ import 'stock_adjustment.dart';
 import 'supplier.dart';
 import 'table_order.dart';
 import 'app_user.dart';
+import '../core/utils/json_helpers.dart';
 
 class PersistedAppState {
   final int schemaVersion;
@@ -131,7 +132,7 @@ class PersistedAppState {
         _mapOrNull(json['businessConfig']) ?? const <String, dynamic>{};
 
     return PersistedAppState(
-      schemaVersion: _asInt(json['schemaVersion'], fallback: 1),
+      schemaVersion: JsonHelpers.asInt(json['schemaVersion'], fallback: 1),
       savedAt: DateTime.tryParse(json['savedAt'] as String? ?? ''),
       businessConfig: BusinessConfig.fromJson(businessConfigJson),
       products: rawProducts
@@ -197,7 +198,7 @@ class PersistedAppState {
       currentUserId: json['currentUserId'] as String?,
       singleUserMode: json['singleUserMode'] as bool? ?? true,
       requirePinOnOpen: json['requirePinOnOpen'] as bool? ?? true,
-      autoLockMinutes: _asInt(json['autoLockMinutes'], fallback: 5),
+      autoLockMinutes: JsonHelpers.asInt(json['autoLockMinutes'], fallback: 5),
       tableOrders: rawTableOrders
           .map(_mapOrNull)
           .whereType<Map<String, dynamic>>()
@@ -214,13 +215,6 @@ class PersistedAppState {
           .map(SerialNumber.fromJson)
           .toList(),
     );
-  }
-
-  static int _asInt(dynamic value, {int fallback = 0}) {
-    if (value is int) return value;
-    if (value is double) return value.toInt();
-    if (value is String) return int.tryParse(value) ?? fallback;
-    return fallback;
   }
 
   static Map<String, dynamic>? _mapOrNull(dynamic value) {

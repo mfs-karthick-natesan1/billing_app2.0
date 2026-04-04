@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 import 'customer.dart';
 import 'line_item.dart';
+import '../core/utils/json_helpers.dart';
 
 enum QuotationStatus { draft, sent, approved, rejected, expired, converted }
 
@@ -189,12 +190,12 @@ class Quotation {
       vehicleMake: json['vehicleMake'] as String?,
       vehicleModel: json['vehicleModel'] as String?,
       kmReading: json['kmReading'] as String?,
-      subtotal: _asDouble(json['subtotal']),
-      discount: _asDouble(json['discount']),
-      cgst: _asDouble(json['cgst']),
-      sgst: _asDouble(json['sgst']),
-      igst: _asDouble(json['igst']),
-      grandTotal: _asDouble(json['grandTotal']),
+      subtotal: JsonHelpers.asDouble(json['subtotal']),
+      discount: JsonHelpers.asDouble(json['discount']),
+      cgst: JsonHelpers.asDouble(json['cgst']),
+      sgst: JsonHelpers.asDouble(json['sgst']),
+      igst: JsonHelpers.asDouble(json['igst']),
+      grandTotal: JsonHelpers.asDouble(json['grandTotal']),
       isInterState: json['isInterState'] as bool? ?? false,
     );
   }
@@ -219,10 +220,4 @@ class Quotation {
     return LineItem.fromJson(const <String, dynamic>{});
   }
 
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
-  }
 }

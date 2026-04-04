@@ -1,26 +1,16 @@
 import 'package:uuid/uuid.dart';
 
 import '../constants/app_strings.dart';
+import '../core/utils/json_helpers.dart';
 import 'expense_category.dart';
+import 'payment_method.dart';
 
-enum ExpensePaymentMode { cash, upi, bankTransfer, credit }
+export 'payment_method.dart';
+
+// Backward-compatible alias so existing code using ExpensePaymentMode continues to work.
+typedef ExpensePaymentMode = PaymentMethod;
 
 enum RecurringFrequency { daily, weekly, monthly, yearly }
-
-extension ExpensePaymentModeX on ExpensePaymentMode {
-  String get label {
-    switch (this) {
-      case ExpensePaymentMode.cash:
-        return AppStrings.cash;
-      case ExpensePaymentMode.upi:
-        return AppStrings.upi;
-      case ExpensePaymentMode.bankTransfer:
-        return AppStrings.bankTransfer;
-      case ExpensePaymentMode.credit:
-        return AppStrings.credit;
-    }
-  }
-}
 
 extension RecurringFrequencyX on RecurringFrequency {
   String get label {
@@ -187,13 +177,13 @@ class Expense {
   factory Expense.fromJson(Map<String, dynamic> json) {
     return Expense(
       id: json['id'] as String?,
-      amount: _asDouble(json['amount']),
+      amount: JsonHelpers.asDouble(json['amount']),
       category: expenseCategoryFromString(json['category'] as String?),
       customCategoryName: json['customCategoryName'] as String?,
       customCategoryIconKey: json['customCategoryIconKey'] as String?,
       description: json['description'] as String?,
       date: DateTime.tryParse(json['date'] as String? ?? ''),
-      paymentMode: _paymentModeFromString(json['paymentMode'] as String?),
+      paymentMode: PaymentMethodX.fromString(json['paymentMode'] as String?),
       receiptImagePath: json['receiptImagePath'] as String?,
       vendorName: json['vendorName'] as String?,
       isRecurring: json['isRecurring'] as bool? ?? false,
@@ -207,21 +197,6 @@ class Expense {
           ? DateTime.tryParse(json['lastCreatedAt'] as String)
           : null,
     );
-  }
-
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
-  }
-
-  static ExpensePaymentMode _paymentModeFromString(String? value) {
-    if (value == null) return ExpensePaymentMode.cash;
-    for (final mode in ExpensePaymentMode.values) {
-      if (mode.name == value) return mode;
-    }
-    return ExpensePaymentMode.cash;
   }
 
   static RecurringFrequency? _recurringFromString(String? value) {

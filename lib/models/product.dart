@@ -1,5 +1,6 @@
 import 'package:uuid/uuid.dart';
 import 'product_batch.dart';
+import '../core/utils/json_helpers.dart';
 
 class Product {
   static const _unset = Object();
@@ -8,7 +9,7 @@ class Product {
   final String name;
   final String? barcode;
   final double sellingPrice;
-  int stockQuantity;
+  final int stockQuantity;
   final String? category;
   final String unit;
   final String? customUomLabel;
@@ -192,64 +193,33 @@ class Product {
     return Product(
       id: json['id'] as String?,
       name: json['name'] as String? ?? '',
-      barcode: _nullableString(json['barcode']),
-      sellingPrice: _asDouble(json['sellingPrice']),
-      stockQuantity: _asInt(json['stockQuantity']),
+      barcode: JsonHelpers.nullableString(json['barcode']),
+      sellingPrice: JsonHelpers.asDouble(json['sellingPrice']),
+      stockQuantity: JsonHelpers.asInt(json['stockQuantity']),
       category: json['category'] as String?,
       unit: json['unit'] as String? ?? 'pcs',
-      customUomLabel: _nullableString(json['customUomLabel']),
-      minQuantity: _asDouble(json['minQuantity'], fallback: 1.0),
-      quantityStep: _asDouble(json['quantityStep'], fallback: 1.0),
-      hsnCode: _nullableString(json['hsnCode']),
-      gstRate: _asDouble(json['gstRate']),
+      customUomLabel: JsonHelpers.nullableString(json['customUomLabel']),
+      minQuantity: JsonHelpers.asDouble(json['minQuantity'], fallback: 1.0),
+      quantityStep: JsonHelpers.asDouble(json['quantityStep'], fallback: 1.0),
+      hsnCode: JsonHelpers.nullableString(json['hsnCode']),
+      gstRate: JsonHelpers.asDouble(json['gstRate']),
       gstInclusivePrice: json['gstInclusivePrice'] as bool? ?? false,
-      gstSlabPercent: _asInt(json['gstSlabPercent']),
-      lowStockThreshold: _asInt(json['lowStockThreshold'], fallback: 10),
+      gstSlabPercent: JsonHelpers.asInt(json['gstSlabPercent']),
+      lowStockThreshold: JsonHelpers.asInt(json['lowStockThreshold'], fallback: 10),
       createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
       batches: batchJson
           .whereType<Map<String, dynamic>>()
           .map(ProductBatch.fromJson)
           .toList(),
       isService: json['isService'] as bool? ?? false,
-      durationMinutes: _nullableInt(json['durationMinutes']),
-      reorderLevel: _nullableDouble(json['reorderLevel']),
-      reorderQuantity: _nullableDouble(json['reorderQuantity']),
-      preferredSupplierId: _nullableString(json['preferredSupplierId']),
-      costPrice: _asDouble(json['costPrice']),
-      defaultDiscountPercent: _asDouble(json['defaultDiscountPercent']),
-      imageUrl: _nullableString(json['imageUrl']),
+      durationMinutes: JsonHelpers.nullableInt(json['durationMinutes']),
+      reorderLevel: JsonHelpers.nullableDouble(json['reorderLevel']),
+      reorderQuantity: JsonHelpers.nullableDouble(json['reorderQuantity']),
+      preferredSupplierId: JsonHelpers.nullableString(json['preferredSupplierId']),
+      costPrice: JsonHelpers.asDouble(json['costPrice']),
+      defaultDiscountPercent: JsonHelpers.asDouble(json['defaultDiscountPercent']),
+      imageUrl: JsonHelpers.nullableString(json['imageUrl']),
       trackSerialNumbers: json['trackSerialNumbers'] as bool? ?? false,
     );
-  }
-
-  static double _asDouble(dynamic value, {double fallback = 0}) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? fallback;
-    return fallback;
-  }
-
-  static int _asInt(dynamic value, {int fallback = 0}) {
-    if (value is int) return value;
-    if (value is double) return value.toInt();
-    if (value is String) return int.tryParse(value) ?? fallback;
-    return fallback;
-  }
-
-  static int? _nullableInt(dynamic value) {
-    if (value == null) return null;
-    return _asInt(value);
-  }
-
-  static double? _nullableDouble(dynamic value) {
-    if (value == null) return null;
-    return _asDouble(value);
-  }
-
-  static String? _nullableString(dynamic value) {
-    if (value == null) return null;
-    if (value is! String) return null;
-    final trimmed = value.trim();
-    return trimmed.isEmpty ? null : trimmed;
   }
 }

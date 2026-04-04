@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 import 'payment_info.dart';
 import 'purchase_line_item.dart';
+import '../core/utils/json_helpers.dart';
 
 class PurchaseEntry {
   final String id;
@@ -56,26 +57,12 @@ class PurchaseEntry {
           .whereType<Map<String, dynamic>>()
           .map(PurchaseLineItem.fromJson)
           .toList(),
-      totalAmount: _asDouble(json['totalAmount']),
-      paymentMode: _paymentModeFromString(json['paymentMode'] as String?),
+      totalAmount: JsonHelpers.asDouble(json['totalAmount']),
+      paymentMode: PaymentMethodX.fromString(json['paymentMode'] as String?),
       invoiceNumber: json['invoiceNumber'] as String?,
       notes: json['notes'] as String?,
       createdBy: json['createdBy'] as String?,
     );
   }
 
-  static PaymentMode _paymentModeFromString(String? value) {
-    if (value == null) return PaymentMode.cash;
-    for (final mode in PaymentMode.values) {
-      if (mode.name == value) return mode;
-    }
-    return PaymentMode.cash;
-  }
-
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
-  }
 }

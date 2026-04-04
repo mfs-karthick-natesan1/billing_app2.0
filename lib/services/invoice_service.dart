@@ -149,6 +149,8 @@ class InvoiceService {
         return 'Credit (Udhar)';
       case PaymentMode.split:
         return 'Split (Cash + UPI)';
+      case PaymentMode.bankTransfer:
+        return 'Bank Transfer';
     }
   }
 }

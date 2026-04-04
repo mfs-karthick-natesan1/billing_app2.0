@@ -47,8 +47,10 @@ class SerialNumberProvider extends ChangeNotifier {
     for (final id in serialNumberIds) {
       final idx = _records.indexWhere((s) => s.id == id);
       if (idx >= 0) {
-        _records[idx].status = SerialNumberStatus.sold;
-        _records[idx].billId = billId;
+        _records[idx] = _records[idx].copyWith(
+          status: SerialNumberStatus.sold,
+          billId: billId,
+        );
       }
     }
     notifyListeners();
@@ -56,11 +58,11 @@ class SerialNumberProvider extends ChangeNotifier {
   }
 
   void returnFromBill(String billId) {
-    for (final s in _records) {
-      if (s.billId == billId && s.status == SerialNumberStatus.sold) {
-        s.status = SerialNumberStatus.returned;
-      }
-    }
+    _records = _records
+        .map((s) => s.billId == billId && s.status == SerialNumberStatus.sold
+            ? s.copyWith(status: SerialNumberStatus.returned)
+            : s)
+        .toList();
     notifyListeners();
     _onChanged?.call();
   }

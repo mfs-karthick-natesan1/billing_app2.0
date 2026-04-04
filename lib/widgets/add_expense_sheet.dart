@@ -387,7 +387,9 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                 Wrap(
                   spacing: AppSpacing.small,
                   runSpacing: AppSpacing.small,
-                  children: ExpensePaymentMode.values.map((mode) {
+                  children: ExpensePaymentMode.values
+                      .where((mode) => mode.applicableForExpenses)
+                      .map((mode) {
                     final selected = _paymentMode == mode;
                     return InkWell(
                       onTap: () => setState(() => _paymentMode = mode),

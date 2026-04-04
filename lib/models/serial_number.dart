@@ -7,9 +7,9 @@ class SerialNumber {
   final String productId;
   final String productName;
   final String number;
-  SerialNumberStatus status;
+  final SerialNumberStatus status;
   final String? purchaseEntryId;
-  String? billId;
+  final String? billId;
   final DateTime createdAt;
 
   SerialNumber({
@@ -23,6 +23,22 @@ class SerialNumber {
     DateTime? createdAt,
   }) : id = id ?? const Uuid().v4(),
        createdAt = createdAt ?? DateTime.now();
+
+  SerialNumber copyWith({
+    SerialNumberStatus? status,
+    String? billId,
+  }) {
+    return SerialNumber(
+      id: id,
+      productId: productId,
+      productName: productName,
+      number: number,
+      status: status ?? this.status,
+      purchaseEntryId: purchaseEntryId,
+      billId: billId ?? this.billId,
+      createdAt: createdAt,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     'id': id,

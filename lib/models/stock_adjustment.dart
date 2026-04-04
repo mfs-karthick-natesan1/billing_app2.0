@@ -1,4 +1,5 @@
 import 'package:uuid/uuid.dart';
+import '../core/utils/json_helpers.dart';
 
 enum StockAdjustmentReason {
   damage,
@@ -75,9 +76,9 @@ class StockAdjustment {
       id: json['id'] as String?,
       productId: json['productId'] as String? ?? '',
       productName: json['productName'] as String? ?? '',
-      previousStock: _asDouble(json['previousStock']),
-      newStock: _asDouble(json['newStock']),
-      adjustmentQty: _asDouble(json['adjustmentQty']),
+      previousStock: JsonHelpers.asDouble(json['previousStock']),
+      newStock: JsonHelpers.asDouble(json['newStock']),
+      adjustmentQty: JsonHelpers.asDouble(json['adjustmentQty']),
       reason: _reasonFromString(json['reason'] as String?),
       notes: json['notes'] as String?,
       date: DateTime.tryParse(json['date'] as String? ?? ''),
@@ -93,10 +94,4 @@ class StockAdjustment {
     return StockAdjustmentReason.other;
   }
 
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
-  }
 }

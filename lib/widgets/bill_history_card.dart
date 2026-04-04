@@ -20,12 +20,14 @@ class BillHistoryCard extends StatelessWidget {
       PaymentMode.upi => AppColors.primaryLight(0.12),
       PaymentMode.credit => AppColors.errorLight(0.10),
       PaymentMode.split => AppColors.success.withValues(alpha: 0.12),
+      PaymentMode.bankTransfer => AppColors.muted.withValues(alpha: 0.10),
     };
     final chipColor = switch (mode) {
       PaymentMode.cash => AppColors.muted,
       PaymentMode.upi => AppColors.primary,
       PaymentMode.credit => AppColors.error,
       PaymentMode.split => AppColors.success,
+      PaymentMode.bankTransfer => AppColors.muted,
     };
 
     return InkWell(

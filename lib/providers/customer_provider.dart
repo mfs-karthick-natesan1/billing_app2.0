@@ -68,7 +68,9 @@ class CustomerProvider extends ChangeNotifier {
   void addCredit(String customerId, double amount) {
     final index = _customers.indexWhere((c) => c.id == customerId);
     if (index != -1) {
-      _customers[index].outstandingBalance += amount;
+      _customers[index] = _customers[index].copyWith(
+        outstandingBalance: _customers[index].outstandingBalance + amount,
+      );
       dbService?.saveCustomers([_customers[index]]);
       _onChanged?.call();
       notifyListeners();
@@ -78,7 +80,9 @@ class CustomerProvider extends ChangeNotifier {
   void addAdvance(String customerId, double amount) {
     final index = _customers.indexWhere((c) => c.id == customerId);
     if (index != -1 && amount > 0) {
-      _customers[index].advanceBalance += amount;
+      _customers[index] = _customers[index].copyWith(
+        advanceBalance: _customers[index].advanceBalance + amount,
+      );
       dbService?.saveCustomers([_customers[index]]);
       _onChanged?.call();
       notifyListeners();
@@ -88,8 +92,10 @@ class CustomerProvider extends ChangeNotifier {
   void deductAdvance(String customerId, double amount) {
     final index = _customers.indexWhere((c) => c.id == customerId);
     if (index != -1 && amount > 0) {
-      _customers[index].advanceBalance =
-          (_customers[index].advanceBalance - amount).clamp(0, double.infinity);
+      _customers[index] = _customers[index].copyWith(
+        advanceBalance: (_customers[index].advanceBalance - amount)
+            .clamp(0, double.infinity),
+      );
       dbService?.saveCustomers([_customers[index]]);
       _onChanged?.call();
       notifyListeners();
@@ -107,10 +113,11 @@ class CustomerProvider extends ChangeNotifier {
   }) {
     final index = _customers.indexWhere((c) => c.id == customerId);
     if (index != -1) {
-      _customers[index].outstandingBalance -= amount;
-      if (_customers[index].outstandingBalance < 0) {
-        _customers[index].outstandingBalance = 0;
-      }
+      final newBalance =
+          (_customers[index].outstandingBalance - amount).clamp(0.0, double.infinity);
+      _customers[index] = _customers[index].copyWith(
+        outstandingBalance: newBalance,
+      );
       final entry = CustomerPaymentEntry(
         customerId: customerId,
         amount: amount,

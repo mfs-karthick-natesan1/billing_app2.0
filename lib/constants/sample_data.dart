@@ -1328,7 +1328,10 @@ class SampleData {
           ? (grandTotal - amountReceived).clamp(0.0, grandTotal)
           : 0.0;
       if (creditAmount > 0) {
-        customer.outstandingBalance += creditAmount;
+        final customerIdx = index % customers.length;
+        customers[customerIdx] = customers[customerIdx].copyWith(
+          outstandingBalance: customers[customerIdx].outstandingBalance + creditAmount,
+        );
       }
 
       final billDate = _buildTimestamp(

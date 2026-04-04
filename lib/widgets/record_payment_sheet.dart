@@ -180,7 +180,9 @@ class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
             const SizedBox(height: AppSpacing.small),
             Wrap(
               spacing: AppSpacing.small,
-              children: SettlementPaymentMode.values.map((mode) {
+              children: SettlementPaymentMode.values
+                  .where((mode) => mode.applicableForSettlements)
+                  .map((mode) {
                 final selected = _paymentMode == mode;
                 return InkWell(
                   onTap: () => setState(() => _paymentMode = mode),

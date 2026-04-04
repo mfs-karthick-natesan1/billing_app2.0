@@ -54,7 +54,9 @@ class TableOrderProvider extends ChangeNotifier {
     );
     final updatedItems = List<LineItem>.from(order.items);
     if (existingIdx >= 0) {
-      updatedItems[existingIdx].quantity += item.quantity;
+      updatedItems[existingIdx] = updatedItems[existingIdx].copyWith(
+        quantity: updatedItems[existingIdx].quantity + item.quantity,
+      );
     } else {
       updatedItems.add(item);
     }
@@ -85,7 +87,7 @@ class TableOrderProvider extends ChangeNotifier {
     if (quantity <= 0) {
       updatedItems.removeAt(itemIdx);
     } else {
-      updatedItems[itemIdx].quantity = quantity;
+      updatedItems[itemIdx] = updatedItems[itemIdx].copyWith(quantity: quantity);
     }
     _orders[idx] = order.copyWith(items: updatedItems);
     dbService?.saveTableOrders([_orders[idx]]);

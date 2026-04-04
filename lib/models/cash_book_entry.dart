@@ -1,4 +1,5 @@
 import 'package:uuid/uuid.dart';
+import '../core/utils/json_helpers.dart';
 
 enum CashEntryType { cashIn, cashOut }
 
@@ -56,7 +57,7 @@ class CashBookManualEntry {
   factory CashBookManualEntry.fromJson(Map<String, dynamic> json) {
     return CashBookManualEntry(
       id: json['id'] as String?,
-      amount: _asDouble(json['amount']),
+      amount: JsonHelpers.asDouble(json['amount']),
       description: json['description'] as String? ?? '',
       type: _entryTypeFromString(json['type'] as String?),
       category: json['category'] as String?,
@@ -71,13 +72,6 @@ class CashBookManualEntry {
       if (type.name == value) return type;
     }
     return CashEntryType.cashIn;
-  }
-
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
   }
 }
 
@@ -185,16 +179,16 @@ class CashBookDay {
   factory CashBookDay.fromJson(Map<String, dynamic> json) {
     return CashBookDay(
       date: DateTime.tryParse(json['date'] as String? ?? '') ?? DateTime.now(),
-      openingBalance: _asDouble(json['openingBalance']),
+      openingBalance: JsonHelpers.asDouble(json['openingBalance']),
       openingBalanceOverridden:
           json['openingBalanceOverridden'] as bool? ?? false,
-      cashSales: _asDouble(json['cashSales']),
-      cashReceived: _asDouble(json['cashReceived']),
+      cashSales: JsonHelpers.asDouble(json['cashSales']),
+      cashReceived: JsonHelpers.asDouble(json['cashReceived']),
       otherCashIn: _entryList(json['otherCashIn']),
-      cashExpenses: _asDouble(json['cashExpenses']),
-      cashPaidToSuppliers: _asDouble(json['cashPaidToSuppliers']),
+      cashExpenses: JsonHelpers.asDouble(json['cashExpenses']),
+      cashPaidToSuppliers: JsonHelpers.asDouble(json['cashPaidToSuppliers']),
       otherCashOut: _entryList(json['otherCashOut']),
-      closingBalance: _asDouble(json['closingBalance']),
+      closingBalance: JsonHelpers.asDouble(json['closingBalance']),
       notes: json['notes'] as String?,
       isClosed: json['isClosed'] as bool? ?? false,
       closedAt: DateTime.tryParse(json['closedAt'] as String? ?? ''),
@@ -217,12 +211,6 @@ class CashBookDay {
     return null;
   }
 
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
-  }
 }
 
 class CashBookDayBreakdown {

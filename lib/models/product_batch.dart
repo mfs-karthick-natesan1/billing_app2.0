@@ -1,11 +1,12 @@
 import 'package:uuid/uuid.dart';
+import '../core/utils/json_helpers.dart';
 
 class ProductBatch {
   final String id;
   final String productId;
   final String batchNumber;
   final DateTime expiryDate;
-  int stockQuantity;
+  final int stockQuantity;
   final DateTime createdAt;
 
   ProductBatch({
@@ -57,15 +58,8 @@ class ProductBatch {
       expiryDate:
           DateTime.tryParse(json['expiryDate'] as String? ?? '') ??
           DateTime.now(),
-      stockQuantity: _asInt(json['stockQuantity']),
+      stockQuantity: JsonHelpers.asInt(json['stockQuantity']),
       createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
     );
-  }
-
-  static int _asInt(dynamic value) {
-    if (value is int) return value;
-    if (value is double) return value.toInt();
-    if (value is String) return int.tryParse(value) ?? 0;
-    return 0;
   }
 }

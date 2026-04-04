@@ -1,21 +1,12 @@
 import 'package:uuid/uuid.dart';
 
-import '../constants/app_strings.dart';
+import '../core/utils/json_helpers.dart';
+import 'payment_method.dart';
 
-enum SettlementPaymentMode { cash, upi, bankTransfer }
+export 'payment_method.dart';
 
-extension SettlementPaymentModeX on SettlementPaymentMode {
-  String get label {
-    switch (this) {
-      case SettlementPaymentMode.cash:
-        return AppStrings.cash;
-      case SettlementPaymentMode.upi:
-        return AppStrings.upi;
-      case SettlementPaymentMode.bankTransfer:
-        return AppStrings.bankTransfer;
-    }
-  }
-}
+// Backward-compatible alias so existing code using SettlementPaymentMode continues to work.
+typedef SettlementPaymentMode = PaymentMethod;
 
 class CustomerPaymentEntry {
   final String id;
@@ -76,27 +67,12 @@ class CustomerPaymentEntry {
     return CustomerPaymentEntry(
       id: json['id'] as String?,
       customerId: json['customerId'] as String? ?? '',
-      amount: _asDouble(json['amount']),
-      paymentMode: _paymentModeFromString(json['paymentMode'] as String?),
+      amount: JsonHelpers.asDouble(json['amount']),
+      paymentMode: PaymentMethodX.fromString(json['paymentMode'] as String?),
       recordedAt: DateTime.tryParse(json['recordedAt'] as String? ?? ''),
       recordedBy: json['recordedBy'] as String?,
       notes: json['notes'] as String?,
       billReference: json['billReference'] as String?,
     );
-  }
-
-  static SettlementPaymentMode _paymentModeFromString(String? value) {
-    if (value == null) return SettlementPaymentMode.cash;
-    for (final mode in SettlementPaymentMode.values) {
-      if (mode.name == value) return mode;
-    }
-    return SettlementPaymentMode.cash;
-  }
-
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
   }
 }

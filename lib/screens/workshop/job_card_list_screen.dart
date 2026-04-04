@@ -4,7 +4,6 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_spacing.dart';
 import '../../constants/app_strings.dart';
 import '../../constants/app_typography.dart';
-import '../../models/business_config.dart';
 import '../../models/job_card.dart';
 import '../../providers/business_config_provider.dart';
 import '../../providers/job_card_provider.dart';

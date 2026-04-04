@@ -2,6 +2,7 @@ import 'package:uuid/uuid.dart';
 import 'line_item.dart';
 import 'customer.dart';
 import 'payment_info.dart';
+import '../core/utils/json_helpers.dart';
 
 class Bill {
   final String id;
@@ -106,18 +107,18 @@ class Bill {
       id: json['id'] as String?,
       billNumber: json['billNumber'] as String? ?? '',
       lineItems: lineItemJson.map(_lineItemFromJson).toList(),
-      subtotal: _asDouble(json['subtotal']),
-      discount: _asDouble(json['discount']),
-      billDiscountPercent: _asDouble(json['billDiscountPercent']),
-      totalLineDiscount: _asDouble(json['totalLineDiscount']),
-      cgst: _asDouble(json['cgst']),
-      sgst: _asDouble(json['sgst']),
-      igst: _asDouble(json['igst']),
-      grandTotal: _asDouble(json['grandTotal']),
+      subtotal: JsonHelpers.asDouble(json['subtotal']),
+      discount: JsonHelpers.asDouble(json['discount']),
+      billDiscountPercent: JsonHelpers.asDouble(json['billDiscountPercent']),
+      totalLineDiscount: JsonHelpers.asDouble(json['totalLineDiscount']),
+      cgst: JsonHelpers.asDouble(json['cgst']),
+      sgst: JsonHelpers.asDouble(json['sgst']),
+      igst: JsonHelpers.asDouble(json['igst']),
+      grandTotal: JsonHelpers.asDouble(json['grandTotal']),
       isInterState: json['isInterState'] as bool? ?? false,
-      paymentMode: _paymentModeFromString(json['paymentMode'] as String?),
-      amountReceived: _asDouble(json['amountReceived']),
-      creditAmount: _asDouble(json['creditAmount']),
+      paymentMode: PaymentMethodX.fromString(json['paymentMode'] as String?),
+      amountReceived: JsonHelpers.asDouble(json['amountReceived']),
+      creditAmount: JsonHelpers.asDouble(json['creditAmount']),
       customer: _customerFromJson(json['customer']),
       timestamp: DateTime.tryParse(json['timestamp'] as String? ?? ''),
       diagnosis: json['diagnosis'] as String?,
@@ -126,9 +127,13 @@ class Bill {
       vehicleMake: json['vehicleMake'] as String?,
       vehicleModel: json['vehicleModel'] as String?,
       kmReading: json['kmReading'] as String?,
-      splitCashAmount: json['splitCashAmount'] != null ? _asDouble(json['splitCashAmount']) : null,
-      splitUpiAmount: json['splitUpiAmount'] != null ? _asDouble(json['splitUpiAmount']) : null,
-      advanceUsed: _asDouble(json['advanceUsed']),
+      splitCashAmount: json['splitCashAmount'] != null
+          ? JsonHelpers.asDouble(json['splitCashAmount'])
+          : null,
+      splitUpiAmount: json['splitUpiAmount'] != null
+          ? JsonHelpers.asDouble(json['splitUpiAmount'])
+          : null,
+      advanceUsed: JsonHelpers.asDouble(json['advanceUsed']),
     );
   }
 
@@ -152,18 +157,4 @@ class Bill {
     return null;
   }
 
-  static PaymentMode _paymentModeFromString(String? value) {
-    if (value == null) return PaymentMode.cash;
-    for (final mode in PaymentMode.values) {
-      if (mode.name == value) return mode;
-    }
-    return PaymentMode.cash;
-  }
-
-  static double _asDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0;
-    return 0;
-  }
 }

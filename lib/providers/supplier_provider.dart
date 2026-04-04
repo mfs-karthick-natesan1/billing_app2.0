@@ -107,7 +107,9 @@ class SupplierProvider extends ChangeNotifier {
   void addPayable(String supplierId, double amount) {
     final index = _suppliers.indexWhere((s) => s.id == supplierId);
     if (index != -1) {
-      _suppliers[index].outstandingPayable += amount;
+      _suppliers[index] = _suppliers[index].copyWith(
+        outstandingPayable: _suppliers[index].outstandingPayable + amount,
+      );
       dbService?.saveSuppliers([_suppliers[index]]);
       _onChanged?.call();
       notifyListeners();
@@ -117,10 +119,11 @@ class SupplierProvider extends ChangeNotifier {
   void recordPayment(String supplierId, double amount) {
     final index = _suppliers.indexWhere((s) => s.id == supplierId);
     if (index != -1) {
-      _suppliers[index].outstandingPayable -= amount;
-      if (_suppliers[index].outstandingPayable < 0) {
-        _suppliers[index].outstandingPayable = 0;
-      }
+      final newPayable =
+          (_suppliers[index].outstandingPayable - amount).clamp(0.0, double.infinity);
+      _suppliers[index] = _suppliers[index].copyWith(
+        outstandingPayable: newPayable,
+      );
       dbService?.saveSuppliers([_suppliers[index]]);
       _onChanged?.call();
       notifyListeners();

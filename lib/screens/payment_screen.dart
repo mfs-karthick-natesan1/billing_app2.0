@@ -8,6 +8,7 @@ import '../constants/app_strings.dart';
 import '../constants/app_typography.dart';
 import '../constants/formatters.dart';
 import '../models/customer.dart';
+import '../models/bill.dart';
 import '../models/payment_info.dart';
 import '../providers/bill_provider.dart';
 import '../providers/business_config_provider.dart';
@@ -617,6 +618,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
         );
         return;
 
+      case PaymentMode.bankTransfer:
+        _finishBill(
+          context,
+          PaymentInfo(
+            mode: PaymentMode.bankTransfer,
+            amountReceived: grandTotal,
+            customer:
+                _selectedCustomer ??
+                context.read<BillProvider>().activeCustomer,
+          ),
+        );
+        return;
+
       case PaymentMode.credit:
         if (_selectedCustomer == null) {
           setState(() => _customerError = AppStrings.customerRequired);
@@ -663,7 +677,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  void _finishBill(BuildContext context, PaymentInfo paymentInfo) {
+  Future<void> _finishBill(BuildContext context, PaymentInfo paymentInfo) async {
     final billProvider = context.read<BillProvider>();
     final productProvider = context.read<ProductProvider>();
     final customerProvider = context.read<CustomerProvider>();
@@ -671,36 +685,38 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final gstEnabled = businessConfig.gstEnabled;
     final isInterState = businessConfig.isInterState;
 
+    // Client-side pre-check (fast path); server enforces authoritatively in RPC
     if (!billProvider.isEditMode) {
       final subscriptionProvider = context.read<SubscriptionProvider>();
       if (!subscriptionProvider.canAddBill) {
         final max = subscriptionProvider.maxBillsPerMonth;
-        showDialog<void>(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text('Bill Limit Reached'),
-            content: Text(
-              'You have used all $max bills allowed this month on your current plan. '
-              'Upgrade to continue creating bills.',
+        if (context.mounted) {
+          showDialog<void>(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: const Text('Bill Limit Reached'),
+              content: Text(
+                'You have used all $max bills allowed this month on your current plan. '
+                'Upgrade to continue creating bills.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                FilledButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/subscription');
+                  },
+                  child: const Text('Upgrade'),
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              FilledButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/subscription');
-                },
-                child: const Text('Upgrade'),
-              ),
-            ],
-          ),
-        );
+          );
+        }
         return;
       }
-      subscriptionProvider.incrementBillCount();
     }
 
     final customer = billProvider.activeCustomer ?? paymentInfo.customer ?? _selectedCustomer;
@@ -714,23 +730,43 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     final isEdit = billProvider.isEditMode;
 
-    final bill = billProvider.completeBill(
-      paymentInfo: paymentInfo,
-      gstEnabled: gstEnabled,
-      productProvider: productProvider,
-      customerProvider: customerProvider,
-      billPrefix: businessConfig.billPrefix,
-      isInterState: isInterState,
-      advanceUsed: advanceUsed,
-    );
+    Bill bill;
+    try {
+      bill = await billProvider.completeBillAsync(
+        paymentInfo: paymentInfo,
+        gstEnabled: gstEnabled,
+        productProvider: productProvider,
+        customerProvider: customerProvider,
+        billPrefix: businessConfig.billPrefix,
+        isInterState: isInterState,
+        advanceUsed: advanceUsed,
+      );
+    } catch (e) {
+      if (context.mounted) {
+        final msg = e.toString().contains('SUBSCRIPTION_LIMIT_EXCEEDED')
+            ? 'Monthly bill limit reached. Please upgrade your plan.'
+            : 'Failed to save bill. Please try again.';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg)),
+        );
+      }
+      return;
+    }
+
+    // Refresh subscription counter from server
+    if (!isEdit && context.mounted) {
+      context.read<SubscriptionProvider>().incrementBillCount();
+    }
 
     // Mark serial numbers as sold
     final allSerialIds = bill.lineItems
         .expand((item) => item.serialNumberIds)
         .toList();
-    if (allSerialIds.isNotEmpty) {
+    if (allSerialIds.isNotEmpty && context.mounted) {
       context.read<SerialNumberProvider>().assignToBill(allSerialIds, bill.id);
     }
+
+    if (!context.mounted) return;
 
     if (isEdit) {
       Navigator.popUntil(context, (route) => route.settings.name == '/home' || route.isFirst);
