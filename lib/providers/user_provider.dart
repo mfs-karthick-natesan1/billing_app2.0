@@ -9,9 +9,17 @@ import '../services/permission_service.dart';
 
 class UserProvider extends ChangeNotifier {
   static const int defaultAutoLockMinutes = 5;
+  static const int _maxFailedAttempts = 5;
+  static const Duration _lockoutDuration = Duration(minutes: 5);
 
   final List<AppUser> _users = [];
   final VoidCallback? _onChanged;
+
+  /// Tracks consecutive failed PIN attempts per user-id (or phone).
+  final Map<String, int> _failedAttempts = {};
+
+  /// Timestamp when the lockout expires per user-id (or phone).
+  final Map<String, DateTime> _lockoutUntil = {};
 
   AppUser? _currentUser;
   bool _isLocked;
@@ -265,8 +273,19 @@ class UserProvider extends ChangeNotifier {
     return loginByUserId(userMatches.first.id, pin);
   }
 
+  /// Returns the number of remaining login attempts for [key], or 0 if locked.
+  int remainingAttempts(String key) {
+    if (_isLockedOut(key)) return 0;
+    return _maxFailedAttempts - (_failedAttempts[key] ?? 0);
+  }
+
+  /// Whether [key] (user-id) is currently locked out due to too many failures.
+  bool isAccountLockedOut(String key) => _isLockedOut(key);
+
   bool loginByUserId(String userId, String pin) {
     if (_singleUserMode) return true;
+
+    if (_isLockedOut(userId)) return false;
 
     final index = _users.indexWhere(
       (user) => user.id == userId && user.isActive,
@@ -275,9 +294,11 @@ class UserProvider extends ChangeNotifier {
 
     final user = _users[index];
     if (user.pinHash != hashPin(pin, phone: user.phone)) {
+      _recordFailedAttempt(userId);
       return false;
     }
 
+    _clearFailedAttempts(userId);
     final updated = user.copyWith(lastLoginAt: DateTime.now());
     _users[index] = updated;
     _currentUser = updated;
@@ -306,9 +327,14 @@ class UserProvider extends ChangeNotifier {
     if (_singleUserMode) return true;
     final user = _currentUser;
     if (user == null) return false;
+
+    if (_isLockedOut(user.id)) return false;
+
     if (hashPin(pin, phone: user.phone) != user.pinHash) {
+      _recordFailedAttempt(user.id);
       return false;
     }
+    _clearFailedAttempts(user.id);
     _isLocked = false;
     notifyListeners();
     return true;
@@ -351,6 +377,31 @@ class UserProvider extends ChangeNotifier {
       '#374151',
     ];
     return palette[seed.hashCode.abs() % palette.length];
+  }
+
+  // --- Rate-limiting helpers ---
+
+  bool _isLockedOut(String key) {
+    final until = _lockoutUntil[key];
+    if (until == null) return false;
+    if (DateTime.now().isBefore(until)) return true;
+    // Lockout expired — reset
+    _lockoutUntil.remove(key);
+    _failedAttempts.remove(key);
+    return false;
+  }
+
+  void _recordFailedAttempt(String key) {
+    final count = (_failedAttempts[key] ?? 0) + 1;
+    _failedAttempts[key] = count;
+    if (count >= _maxFailedAttempts) {
+      _lockoutUntil[key] = DateTime.now().add(_lockoutDuration);
+    }
+  }
+
+  void _clearFailedAttempts(String key) {
+    _failedAttempts.remove(key);
+    _lockoutUntil.remove(key);
   }
 
   void _persistAndNotify() {
