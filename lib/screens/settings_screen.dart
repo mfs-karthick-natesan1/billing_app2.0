@@ -68,6 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _enableAdvancePayment = false;
   InvoiceShareFormat _defaultWhatsappFormat = InvoiceShareFormat.text;
   InvoicePageSize _defaultInvoicePageSize = InvoicePageSize.a5;
+  AppThemeMode _appThemeMode = AppThemeMode.system;
   bool _requirePinOnOpen = true;
   int _autoLockMinutes = 5;
   bool _notifLowStock = true;
@@ -118,6 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _enableAdvancePayment = config.enableAdvancePayment;
     _defaultWhatsappFormat = config.defaultWhatsappFormat;
     _defaultInvoicePageSize = config.defaultInvoicePageSize;
+    _appThemeMode = config.appThemeMode;
     _notifLowStock = config.notifLowStock;
     _notifExpiry = config.notifExpiry;
     _notifCreditDue = config.notifCreditDue;
@@ -536,7 +538,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ]),
                 ]),
 
-                // ── 8. App Info Card ───────────────────────────────
+                // ── 8. Appearance Card ─────────────────────────────
+                _card(Icons.palette_outlined, 'Appearance', [
+                  Text('App Theme', style: AppTypography.label.copyWith(color: AppColors.muted)),
+                  const SizedBox(height: AppSpacing.small),
+                  SegmentedButton<AppThemeMode>(
+                    segments: const [
+                      ButtonSegment(value: AppThemeMode.light, label: Text('Light'), icon: Icon(Icons.light_mode_outlined, size: 16)),
+                      ButtonSegment(value: AppThemeMode.system, label: Text('System'), icon: Icon(Icons.brightness_auto_outlined, size: 16)),
+                      ButtonSegment(value: AppThemeMode.dark, label: Text('Dark'), icon: Icon(Icons.dark_mode_outlined, size: 16)),
+                    ],
+                    selected: {_appThemeMode},
+                    onSelectionChanged: (s) => setState(() => _appThemeMode = s.first),
+                    style: ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                ]),
+
+                // ── 9. App Info Card ───────────────────────────────
                 _card(Icons.info_outline, AppStrings.appInfoSection, [
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                     Text(AppStrings.appName, style: AppTypography.body.copyWith(fontWeight: FontWeight.bold)),
@@ -871,6 +892,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ? _upiIdController.text.trim()
           : null,
       tableCount: int.tryParse(_tableCountController.text.trim()) ?? 10,
+      appThemeMode: _appThemeMode,
     );
     configProvider.updateLogo(_logoBase64);
 

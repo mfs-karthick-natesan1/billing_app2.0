@@ -1,5 +1,7 @@
 enum BusinessType { general, pharmacy, salon, clinic, jewellery, restaurant, workshop, mobileShop }
 
+enum AppThemeMode { system, light, dark }
+
 enum InvoicePageSize { a5, a4 }
 
 enum InvoiceShareFormat { text, pdf, image }
@@ -31,6 +33,9 @@ class BusinessConfig {
   // Restaurant settings
   final int tableCount;
   final List<String>? tableLabels;
+
+  // Appearance
+  final AppThemeMode appThemeMode;
 
   // Force update: minimum build number required to run the app
   final int minBuildNumber;
@@ -78,6 +83,7 @@ class BusinessConfig {
     this.notifEodReminder = true,
     this.notifEodHour = 21,
     this.notifEodMinute = 0,
+    this.appThemeMode = AppThemeMode.system,
     this.minBuildNumber = 0,
   });
 
@@ -151,6 +157,7 @@ class BusinessConfig {
     bool? notifEodReminder,
     int? notifEodHour,
     int? notifEodMinute,
+    AppThemeMode? appThemeMode,
   }) {
     return BusinessConfig(
       businessName: businessName ?? this.businessName,
@@ -190,6 +197,7 @@ class BusinessConfig {
       notifEodReminder: notifEodReminder ?? this.notifEodReminder,
       notifEodHour: notifEodHour ?? this.notifEodHour,
       notifEodMinute: notifEodMinute ?? this.notifEodMinute,
+      appThemeMode: appThemeMode ?? this.appThemeMode,
       minBuildNumber: minBuildNumber,
     );
   }
@@ -228,6 +236,7 @@ class BusinessConfig {
       'notifEodReminder': notifEodReminder,
       'notifEodHour': notifEodHour,
       'notifEodMinute': notifEodMinute,
+      'appThemeMode': appThemeMode.name,
       'minBuildNumber': minBuildNumber,
     };
   }
@@ -275,6 +284,10 @@ class BusinessConfig {
       notifEodReminder: json['notifEodReminder'] as bool? ?? true,
       notifEodHour: json['notifEodHour'] as int? ?? 21,
       notifEodMinute: json['notifEodMinute'] as int? ?? 0,
+      appThemeMode: AppThemeMode.values.firstWhere(
+        (e) => e.name == (json['appThemeMode'] as String?),
+        orElse: () => AppThemeMode.system,
+      ),
       minBuildNumber: json['minBuildNumber'] as int? ?? 0,
     );
   }

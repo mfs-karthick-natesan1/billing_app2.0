@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'constants/app_colors.dart';
+import 'providers/business_config_provider.dart';
 import 'screens/add_edit_product_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/signup_screen.dart';
@@ -36,9 +38,13 @@ class BillReadyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.select<BusinessConfigProvider, ThemeMode>(
+      (p) => p.themeMode,
+    );
     return MaterialApp(
       title: 'BillReady',
       debugShowCheckedModeBanner: false,
+      themeMode: themeMode,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
@@ -55,6 +61,15 @@ class BillReadyApp extends StatelessWidget {
           surfaceTintColor: AppColors.surface,
           elevation: 0,
         ),
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          brightness: Brightness.dark,
+        ),
+        fontFamily: 'Roboto',
+        appBarTheme: const AppBarTheme(elevation: 0),
       ),
       routes: {
         '/': (_) => const SplashScreen(),

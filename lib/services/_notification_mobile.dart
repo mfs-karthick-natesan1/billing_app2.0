@@ -10,7 +10,15 @@ final _plugin = FlutterLocalNotificationsPlugin();
 Future<void> initializePlugin() async {
   tz.initializeTimeZones();
   const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-  const initSettings = InitializationSettings(android: androidSettings);
+  const iosSettings = DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+  );
+  const initSettings = InitializationSettings(
+    android: androidSettings,
+    iOS: iosSettings,
+  );
   await _plugin.initialize(initSettings);
 }
 
@@ -28,6 +36,11 @@ Future<void> showNotification({
       _channelName,
       importance: Importance.defaultImportance,
       priority: Priority.defaultPriority,
+    ),
+    iOS: DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
     ),
   );
   await _plugin.show(id, title, body, details, payload: payload);
@@ -63,6 +76,11 @@ Future<void> scheduleEodReminder({
         _channelName,
         importance: Importance.high,
         priority: Priority.high,
+      ),
+      iOS: DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
       ),
     ),
     androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,

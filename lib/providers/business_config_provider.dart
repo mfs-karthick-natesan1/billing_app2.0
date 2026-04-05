@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 import '../models/business_config.dart';
 import '../services/db_service.dart';
 
@@ -27,6 +28,14 @@ class BusinessConfigProvider extends ChangeNotifier {
   bool get isRestaurant => _config.businessType == BusinessType.restaurant;
   bool get isWorkshop => _config.businessType == BusinessType.workshop;
   bool get isMobileShop => _config.businessType == BusinessType.mobileShop;
+  AppThemeMode get appThemeMode => _config.appThemeMode;
+
+  ThemeMode get themeMode => switch (_config.appThemeMode) {
+    AppThemeMode.light => ThemeMode.light,
+    AppThemeMode.dark => ThemeMode.dark,
+    AppThemeMode.system => ThemeMode.system,
+  };
+
   String? get upiId => _config.upiId;
   int get tableCount => _config.tableCount;
   List<String>? get tableLabels => _config.tableLabels;
@@ -113,6 +122,7 @@ class BusinessConfigProvider extends ChangeNotifier {
     int? tableCount,
     List<String>? tableLabels,
     bool? enableAdvancePayment,
+    AppThemeMode? appThemeMode,
   }) {
     _config = _config.copyWith(
       businessName: businessName,
@@ -145,6 +155,7 @@ class BusinessConfigProvider extends ChangeNotifier {
       tableCount: tableCount,
       tableLabels: tableLabels,
       enableAdvancePayment: enableAdvancePayment,
+      appThemeMode: appThemeMode,
     );
     dbService?.saveConfig(_config);
     _onChanged?.call();
