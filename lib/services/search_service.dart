@@ -8,7 +8,7 @@ class SearchService {
     String query, {
     int limit = 5,
   }) {
-    if (query.length < 2) return [];
+    if (query.length < 1) return [];
     final lowerQuery = query.toLowerCase();
     return products
         .where(
@@ -27,7 +27,7 @@ class SearchService {
   }) {
     var result = products.toList();
 
-    if (searchQuery != null && searchQuery.length >= 2) {
+    if (searchQuery != null && searchQuery.length >= 1) {
       final lowerQuery = searchQuery.toLowerCase();
       result = result
           .where(

@@ -21,13 +21,21 @@ class JobCardListScreen extends StatefulWidget {
 
 class _JobCardListScreenState extends State<JobCardListScreen> {
   JobStatus? _filter;
+  String _query = '';
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<JobCardProvider>();
-    final jobs = _filter == null
-        ? provider.jobCards
-        : provider.getByStatus(_filter!);
+    final jobs = _query.length >= 2
+        ? provider.searchJobCards(_query, status: _filter)
+        : (_filter == null ? provider.jobCards : provider.getByStatus(_filter!));
 
     return Scaffold(
       appBar: const AppTopBar(title: AppStrings.jobsTitle),
@@ -65,6 +73,42 @@ class _JobCardListScreenState extends State<JobCardListScreen> {
                       ),
                     ),
               ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.medium,
+              vertical: AppSpacing.small,
+            ),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (v) => setState(() => _query = v),
+              decoration: InputDecoration(
+                hintText: AppStrings.searchJobCards,
+                prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                suffixIcon: _query.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear, color: AppColors.muted),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _query = '');
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                  borderSide: BorderSide(
+                    color: AppColors.muted.withValues(alpha: 0.2),
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                  borderSide: BorderSide(
+                    color: AppColors.muted.withValues(alpha: 0.2),
+                  ),
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              ),
             ),
           ),
           // Job card list

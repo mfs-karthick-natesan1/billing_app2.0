@@ -48,7 +48,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   }
 
   void _onChanged(String query) {
-    if (query.length >= 2) {
+    if (query.length >= 1) {
       setState(() {
         _results = widget.onSearch(query);
         _showResults = true;

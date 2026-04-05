@@ -25,6 +25,14 @@ class QuotationListScreen extends StatefulWidget {
 
 class _QuotationListScreenState extends State<QuotationListScreen> {
   QuotationFilter _filter = QuotationFilter.all;
+  String _query = '';
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,37 +87,87 @@ class _QuotationListScreenState extends State<QuotationListScreen> {
               ],
             ),
           ),
-          const SizedBox(height: AppSpacing.small),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.medium,
+              vertical: AppSpacing.small,
+            ),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (v) => setState(() => _query = v),
+              decoration: InputDecoration(
+                hintText: AppStrings.searchQuotations,
+                prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                suffixIcon: _query.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear, color: AppColors.muted),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _query = '');
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                  borderSide: BorderSide(
+                    color: AppColors.muted.withValues(alpha: 0.2),
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                  borderSide: BorderSide(
+                    color: AppColors.muted.withValues(alpha: 0.2),
+                  ),
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
           // Quotation list
           Expanded(
-            child: provider.quotations.isEmpty
-                ? const EmptyState(
-                    icon: Icons.description_outlined,
-                    title: AppStrings.noQuotations,
-                    description: AppStrings.noQuotationsDesc,
-                  )
-                : filtered.isEmpty
-                    ? const EmptyState(
-                        icon: Icons.search_off,
-                        title: AppStrings.noQuotations,
-                        description: AppStrings.noQuotationsDesc,
-                      )
-                    : ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.medium,
-                          vertical: AppSpacing.small,
+            child: RefreshIndicator(
+              color: AppColors.primary,
+              onRefresh: () => provider.syncFromDb(),
+              child: provider.quotations.isEmpty
+                  ? ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: const [
+                        EmptyState(
+                          icon: Icons.description_outlined,
+                          title: AppStrings.noQuotations,
+                          description: AppStrings.noQuotationsDesc,
                         ),
-                        itemCount: filtered.length,
-                        separatorBuilder: (context, index) => const Divider(height: 1),
-                        itemBuilder: (context, index) {
-                          final quotation = filtered[index];
-                          return _QuotationCard(
-                            quotation: quotation,
-                            onTap: () =>
-                                QuotationDetailSheet.show(context, quotation),
-                          );
-                        },
-                      ),
+                      ],
+                    )
+                  : filtered.isEmpty
+                      ? ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: const [
+                            EmptyState(
+                              icon: Icons.search_off,
+                              title: AppStrings.noQuotations,
+                              description: AppStrings.noQuotationsDesc,
+                            ),
+                          ],
+                        )
+                      : ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.medium,
+                            vertical: AppSpacing.small,
+                          ),
+                          itemCount: filtered.length,
+                          separatorBuilder: (context, index) => const Divider(height: 1),
+                          itemBuilder: (context, index) {
+                            final quotation = filtered[index];
+                            return _QuotationCard(
+                              quotation: quotation,
+                              onTap: () =>
+                                  QuotationDetailSheet.show(context, quotation),
+                            );
+                          },
+                        ),
+            ),
           ),
         ],
       ),
@@ -130,20 +188,24 @@ class _QuotationListScreenState extends State<QuotationListScreen> {
   }
 
   List<Quotation> _getFiltered(QuotationProvider provider) {
+    List<Quotation> base;
     switch (_filter) {
       case QuotationFilter.all:
-        final all = provider.quotations.toList()
+        base = provider.quotations.toList()
           ..sort((a, b) => b.date.compareTo(a.date));
-        return all;
       case QuotationFilter.active:
-        return provider.getActiveQuotations();
+        base = provider.getActiveQuotations();
       case QuotationFilter.sent:
-        return provider.getByStatus(QuotationStatus.sent);
+        base = provider.getByStatus(QuotationStatus.sent);
       case QuotationFilter.approved:
-        return provider.getByStatus(QuotationStatus.approved);
+        base = provider.getByStatus(QuotationStatus.approved);
       case QuotationFilter.expired:
-        return provider.getExpiredQuotations();
+        base = provider.getExpiredQuotations();
     }
+    if (_query.length < 2) return base;
+    return provider.searchQuotations(_query)
+        .where((q) => base.any((b) => b.id == q.id))
+        .toList();
   }
 }
 

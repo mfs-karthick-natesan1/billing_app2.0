@@ -115,7 +115,7 @@ void main() {
       expect(find.text('Sugar 1kg'), findsNothing);
     });
 
-    testWidgets('typing 1 char shows no results', (tester) async {
+    testWidgets('typing 1 char shows matching results', (tester) async {
       _setLargeScreen(tester);
       addTearDown(tester.view.reset);
 
@@ -131,8 +131,8 @@ void main() {
       await tester.enterText(find.byType(TextField).first, 'R');
       await tester.pump();
 
-      // Search only activates at 2+ chars
-      expect(find.text('Rice 5kg'), findsNothing);
+      // Search activates at 1+ char
+      expect(find.text('Rice 5kg'), findsOneWidget);
     });
 
     testWidgets('selecting product from search adds it to bill', (

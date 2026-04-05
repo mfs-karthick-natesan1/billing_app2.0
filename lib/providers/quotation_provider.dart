@@ -132,6 +132,19 @@ class QuotationProvider extends ChangeNotifier {
     return count;
   }
 
+  List<Quotation> searchQuotations(String query) {
+    if (query.length < 2) return _sortedByDate(_quotations);
+    final lower = query.toLowerCase();
+    return _sortedByDate(
+      _quotations.where(
+        (q) =>
+            q.quotationNumber.toLowerCase().contains(lower) ||
+            (q.customerName?.toLowerCase().contains(lower) ?? false) ||
+            (q.customer?.name.toLowerCase().contains(lower) ?? false),
+      ),
+    );
+  }
+
   void clearAllData() {
     _quotations.clear();
     _persistAndNotify();
@@ -146,5 +159,23 @@ class QuotationProvider extends ChangeNotifier {
   void _persistAndNotify() {
     _onChanged?.call();
     notifyListeners();
+  }
+
+  Future<String?> syncFromDb() async {
+    if (dbService == null) return null;
+    try {
+      final quotations = await dbService!.loadQuotations();
+      _quotations
+        ..clear()
+        ..addAll(quotations);
+      notifyListeners();
+      return null;
+    } on Exception catch (e) {
+      final msg = e.toString();
+      if (msg.contains('AuthException') || msg.contains('JWT')) {
+        return 'Sync failed: session expired. Please log in again.';
+      }
+      return 'Sync failed: please check your internet connection.';
+    }
   }
 }

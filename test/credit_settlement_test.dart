@@ -202,7 +202,7 @@ void main() {
       final history = provider.getPaymentHistory(customerId);
       expect(history.length, 3);
       final modes = history.map((h) => h.paymentMode).toSet();
-      expect(modes, containsAll(SettlementPaymentMode.values));
+      expect(modes, containsAll({SettlementPaymentMode.cash, SettlementPaymentMode.upi, SettlementPaymentMode.bankTransfer}));
     });
 
     test('multiple partial settlements reduce balance correctly', () {

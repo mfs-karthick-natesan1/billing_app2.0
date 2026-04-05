@@ -15,6 +15,22 @@ import '_notification_mobile.dart'
 class NotificationService {
   static bool _initialized = false;
 
+  /// In-memory rate limiting: maps notification key → last sent time.
+  /// Prevents the same notification type from firing more than once per
+  /// [_minIntervalHours] hours in a single app session.
+  static final Map<String, DateTime> _lastSent = {};
+  static const int _minIntervalHours = 12;
+
+  static bool _canSend(String key) {
+    final last = _lastSent[key];
+    if (last == null) return true;
+    return DateTime.now().difference(last).inHours >= _minIntervalHours;
+  }
+
+  static void _markSent(String key) {
+    _lastSent[key] = DateTime.now();
+  }
+
   static Future<void> initialize() async {
     if (kIsWeb || _initialized) return;
     await notif_impl.initializePlugin();
@@ -52,6 +68,8 @@ class NotificationService {
     final lowStockProducts = productProvider.productsNeedingReorder;
     for (var i = 0; i < lowStockProducts.length && i < 50; i++) {
       final product = lowStockProducts[i];
+      final key = 'low_stock_${product.id}';
+      if (!_canSend(key)) continue;
       await notif_impl.showNotification(
         id: 1000 + i,
         title: AppStrings.notifLowStockTitle,
@@ -59,6 +77,7 @@ class NotificationService {
             '${product.name} ${AppStrings.notifLowStockBody} \u2014 only ${product.stockQuantity} left',
         payload: '/reorder',
       );
+      _markSent(key);
     }
   }
 
@@ -73,15 +92,19 @@ class NotificationService {
         if (batch.isExpired) continue;
         final daysUntilExpiry = batch.expiryDate.difference(now).inDays;
         if (daysUntilExpiry <= 30) {
-          final daysLabel = daysUntilExpiry <= 0
-              ? 'has expired'
-              : '${AppStrings.notifExpiryBody} $daysUntilExpiry ${AppStrings.notifDays}';
-          await notif_impl.showNotification(
-            id: 2000 + index,
-            title: AppStrings.notifExpiryTitle,
-            body: '${product.name} (${batch.batchNumber}) $daysLabel',
-            payload: '/add-product',
-          );
+          final key = 'expiry_${product.id}_${batch.batchNumber}';
+          if (_canSend(key)) {
+            final daysLabel = daysUntilExpiry <= 0
+                ? 'has expired'
+                : '${AppStrings.notifExpiryBody} $daysUntilExpiry ${AppStrings.notifDays}';
+            await notif_impl.showNotification(
+              id: 2000 + index,
+              title: AppStrings.notifExpiryTitle,
+              body: '${product.name} (${batch.batchNumber}) $daysLabel',
+              payload: '/add-product',
+            );
+            _markSent(key);
+          }
           index++;
           if (index >= 50) return;
         }
@@ -98,15 +121,20 @@ class NotificationService {
     int index = 0;
     for (final customer in customerProvider.customers) {
       if (customer.outstandingBalance <= 0) continue;
-      final daysSince = now.difference(customer.createdAt).inDays;
+      final creditFrom = customer.lastCreditDate ?? customer.createdAt;
+      final daysSince = now.difference(creditFrom).inDays;
       if (daysSince >= thresholdDays) {
-        await notif_impl.showNotification(
-          id: 3000 + index,
-          title: AppStrings.notifCreditDueTitle,
-          body:
-              '${customer.name} \u2014 Rs. ${customer.outstandingBalance.toStringAsFixed(0)} ${AppStrings.notifCreditBody} $daysSince ${AppStrings.notifDays}',
-          payload: '/home',
-        );
+        final key = 'credit_due_${customer.id}';
+        if (_canSend(key)) {
+          await notif_impl.showNotification(
+            id: 3000 + index,
+            title: AppStrings.notifCreditDueTitle,
+            body:
+                '${customer.name} \u2014 Rs. ${customer.outstandingBalance.toStringAsFixed(0)} ${AppStrings.notifCreditBody} $daysSince ${AppStrings.notifDays}',
+            payload: '/home',
+          );
+          _markSent(key);
+        }
         index++;
         if (index >= 50) return;
       }
@@ -125,17 +153,21 @@ class NotificationService {
       if (nextDue != null) {
         final daysUntil = nextDue.difference(now).inDays;
         if (daysUntil >= 0 && daysUntil <= 2) {
-          final desc =
-              expense.customCategoryName ??
-              expense.description ??
-              expense.category.label;
-          await notif_impl.showNotification(
-            id: 4000 + index,
-            title: AppStrings.notifRecurringTitle,
-            body:
-                '$desc \u2014 Rs. ${expense.amount.toStringAsFixed(0)} ${AppStrings.notifRecurringBody}',
-            payload: '/expenses',
-          );
+          final key = 'recurring_${expense.id}';
+          if (_canSend(key)) {
+            final desc =
+                expense.customCategoryName ??
+                expense.description ??
+                expense.category.label;
+            await notif_impl.showNotification(
+              id: 4000 + index,
+              title: AppStrings.notifRecurringTitle,
+              body:
+                  '$desc \u2014 Rs. ${expense.amount.toStringAsFixed(0)} ${AppStrings.notifRecurringBody}',
+              payload: '/expenses',
+            );
+            _markSent(key);
+          }
           index++;
           if (index >= 20) return;
         }

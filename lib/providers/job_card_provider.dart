@@ -33,6 +33,19 @@ class JobCardProvider extends ChangeNotifier {
     return _jobCards.where((jc) => jc.status == status).toList();
   }
 
+  List<JobCard> searchJobCards(String query, {JobStatus? status}) {
+    if (query.length < 2) return getByStatus(status);
+    final lower = query.toLowerCase();
+    return _jobCards.where((jc) {
+      if (status != null && jc.status != status) return false;
+      return jc.jobNumber.toLowerCase().contains(lower) ||
+          jc.vehicleReg.toLowerCase().contains(lower) ||
+          jc.customerName.toLowerCase().contains(lower) ||
+          jc.vehicleMake.toLowerCase().contains(lower) ||
+          jc.vehicleModel.toLowerCase().contains(lower);
+    }).toList();
+  }
+
   String _nextJobNumber() {
     final num = _jobCounter++;
     return 'JOB-${num.toString().padLeft(4, '0')}';

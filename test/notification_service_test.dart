@@ -328,72 +328,72 @@ void main() {
     }
 
     testWidgets('shows notification section header', (tester) async {
+      tester.view.physicalSize = const Size(1600, 3000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
       await tester.pumpWidget(buildSettingsApp());
       await tester.pumpAndSettle();
 
-      final notifSection = find.text(AppStrings.notificationsSection);
-      await tester.scrollUntilVisible(
-        notifSection,
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
-      expect(notifSection, findsOneWidget);
+      expect(find.text(AppStrings.notificationsSection), findsOneWidget);
     });
 
     testWidgets('shows low stock toggle', (tester) async {
+      tester.view.physicalSize = const Size(1600, 3000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
       await tester.pumpWidget(buildSettingsApp());
       await tester.pumpAndSettle();
 
-      final lowStockToggle = find.text(AppStrings.notifLowStock);
-      await tester.scrollUntilVisible(
-        lowStockToggle,
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
-      expect(lowStockToggle, findsOneWidget);
+      await tester.tap(find.text(AppStrings.notificationsSection));
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppStrings.notifLowStock), findsOneWidget);
     });
 
     testWidgets('shows credit due toggle', (tester) async {
+      tester.view.physicalSize = const Size(1600, 3000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
       await tester.pumpWidget(buildSettingsApp());
       await tester.pumpAndSettle();
 
-      final creditToggle = find.text(AppStrings.notifCreditDue);
-      await tester.scrollUntilVisible(
-        creditToggle,
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
-      expect(creditToggle, findsOneWidget);
+      await tester.tap(find.text(AppStrings.notificationsSection));
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppStrings.notifCreditDue), findsOneWidget);
     });
 
     testWidgets('shows EOD reminder toggle', (tester) async {
+      tester.view.physicalSize = const Size(1600, 3000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
       await tester.pumpWidget(buildSettingsApp());
       await tester.pumpAndSettle();
 
-      final eodToggle = find.text(AppStrings.notifEodReminder);
-      await tester.scrollUntilVisible(
-        eodToggle,
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
-      expect(eodToggle, findsOneWidget);
+      await tester.tap(find.text(AppStrings.notificationsSection));
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppStrings.notifEodReminder), findsOneWidget);
     });
 
     testWidgets('shows recurring expense toggle', (tester) async {
+      tester.view.physicalSize = const Size(1600, 3000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
       await tester.pumpWidget(buildSettingsApp());
       await tester.pumpAndSettle();
 
-      final recurringToggle = find.text(AppStrings.notifRecurringExpense);
-      await tester.scrollUntilVisible(
-        recurringToggle,
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
-      expect(recurringToggle, findsOneWidget);
+      await tester.tap(find.text(AppStrings.notificationsSection));
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppStrings.notifRecurringExpense), findsOneWidget);
     });
 
     testWidgets('expiry toggle visible for pharmacy business type',
         (tester) async {
+      tester.view.physicalSize = const Size(1600, 3000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
       await tester.pumpWidget(buildSettingsApp(
         config: const BusinessConfig(
           setupCompleted: true,
@@ -404,17 +404,17 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      final expiryToggle = find.text(AppStrings.notifExpiry);
-      await tester.scrollUntilVisible(
-        expiryToggle,
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
-      expect(expiryToggle, findsOneWidget);
+      await tester.tap(find.text(AppStrings.notificationsSection));
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppStrings.notifExpiry), findsOneWidget);
     });
 
     testWidgets('expiry toggle hidden for general business type',
         (tester) async {
+      tester.view.physicalSize = const Size(1600, 3000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
       await tester.pumpWidget(buildSettingsApp(
         config: const BusinessConfig(
           setupCompleted: true,
@@ -425,13 +425,8 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      // Scroll through the full page
-      final scrollable = find.byType(Scrollable).first;
-      await tester.scrollUntilVisible(
-        find.text(AppStrings.notifEodReminder),
-        200,
-        scrollable: scrollable,
-      );
+      await tester.tap(find.text(AppStrings.notificationsSection));
+      await tester.pumpAndSettle();
 
       // Expiry toggle should not exist for general business type
       expect(find.text(AppStrings.notifExpiry), findsNothing);

@@ -198,6 +198,17 @@ class _Gstr1ExportScreenState extends State<Gstr1ExportScreen> {
     }
   }
 
+  /// Prevents CSV injection by prefixing values that start with formula
+  /// trigger characters (=, +, -, @, tab, carriage return) with a single quote.
+  static String _sanitizeCsv(String value) {
+    if (value.isEmpty) return value;
+    const triggers = ['=', '+', '-', '@', '\t', '\r'];
+    if (triggers.any((c) => value.startsWith(c))) {
+      return "'$value";
+    }
+    return value;
+  }
+
   Future<void> _exportCsv(List<Bill> bills) async {
     try {
       final lines = <String>[
@@ -207,9 +218,9 @@ class _Gstr1ExportScreenState extends State<Gstr1ExportScreen> {
       for (final bill in bills) {
         for (final item in bill.lineItems) {
           final date = DateFormat('dd-MM-yyyy').format(bill.timestamp);
-          final customerName = bill.customer?.name ?? '';
-          final customerGstin = bill.customer?.gstin ?? '';
-          final hsn = item.product.hsnCode ?? '';
+          final customerName = _sanitizeCsv(bill.customer?.name ?? '');
+          final customerGstin = _sanitizeCsv(bill.customer?.gstin ?? '');
+          final hsn = _sanitizeCsv(item.product.hsnCode ?? '');
           final taxable = item.taxableAmount.toStringAsFixed(2);
           final cgst = bill.isInterState ? '0.00' : item.cgstAmount.toStringAsFixed(2);
           final sgst = bill.isInterState ? '0.00' : item.sgstAmount.toStringAsFixed(2);
@@ -222,7 +233,7 @@ class _Gstr1ExportScreenState extends State<Gstr1ExportScreen> {
         }
       }
 
-      final dir = await getApplicationDocumentsDirectory();
+      final dir = await getTemporaryDirectory();
       final monthStr = DateFormat('yyyy_MM').format(_selectedMonth);
       final file = File('${dir.path}/GSTR1_$monthStr.csv');
       await file.writeAsString(lines.join('\n'));
@@ -230,6 +241,8 @@ class _Gstr1ExportScreenState extends State<Gstr1ExportScreen> {
       if (!mounted) return;
 
       await Share.shareXFiles([XFile(file.path)]);
+      // Clean up after sharing
+      if (await file.exists()) await file.delete();
 
       if (!mounted) return;
       AppSnackbar.success(context, AppStrings.csvExported);

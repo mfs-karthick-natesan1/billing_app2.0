@@ -9,6 +9,8 @@ import 'package:billing_app/models/payment_info.dart';
 import 'package:billing_app/providers/product_provider.dart';
 import 'package:billing_app/providers/customer_provider.dart';
 import 'package:billing_app/providers/return_provider.dart';
+import 'package:billing_app/models/business_config.dart';
+import 'package:billing_app/providers/business_config_provider.dart';
 
 Widget _buildTestApp(BillProvider billProvider) {
   return MultiProvider(
@@ -19,6 +21,9 @@ Widget _buildTestApp(BillProvider billProvider) {
         create: (_) => CustomerProvider(),
       ),
       ChangeNotifierProvider<ReturnProvider>(create: (_) => ReturnProvider()),
+      ChangeNotifierProvider<BusinessConfigProvider>(
+        create: (_) => BusinessConfigProvider(initialConfig: const BusinessConfig()),
+      ),
     ],
     child: const MaterialApp(home: BillHistoryScreen()),
   );

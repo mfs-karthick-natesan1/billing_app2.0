@@ -48,6 +48,9 @@ void main() {
   testWidgets('barcode scan adds matched product to active bill', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(1600, 3000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
     final billProvider = BillProvider();
     final productProvider = ProductProvider(
       initialProducts: [
@@ -83,6 +86,9 @@ void main() {
   testWidgets('unknown barcode shows error and does not add item', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(1600, 3000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
     final billProvider = BillProvider();
     final productProvider = ProductProvider(
       initialProducts: [

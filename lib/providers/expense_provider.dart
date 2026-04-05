@@ -216,18 +216,19 @@ class ExpenseProvider extends ChangeNotifier {
     );
   }
 
-  List<String> getVendorSuggestions(String query) {
+  List<String> getVendorSuggestions(String query, {int limit = 8}) {
     final normalized = query.trim().toLowerCase();
     final unique = <String>{};
-    for (final expense in _expenses) {
-      final vendor = expense.vendorName?.trim();
+    // Iterate most-recent expenses first for better relevance
+    for (var i = _expenses.length - 1; i >= 0; i--) {
+      final vendor = _expenses[i].vendorName?.trim();
       if (vendor == null || vendor.isEmpty) continue;
       if (normalized.isEmpty || vendor.toLowerCase().contains(normalized)) {
         unique.add(vendor);
+        if (unique.length >= limit) break;
       }
     }
-    final vendors = unique.toList()..sort();
-    return vendors;
+    return unique.toList()..sort();
   }
 
   List<Expense> getFilteredExpenses({
@@ -350,5 +351,23 @@ class ExpenseProvider extends ChangeNotifier {
   void _persistAndNotify() {
     _onChanged?.call();
     notifyListeners();
+  }
+
+  Future<String?> syncFromDb() async {
+    if (dbService == null) return null;
+    try {
+      final expenses = await dbService!.loadExpenses();
+      _expenses
+        ..clear()
+        ..addAll(expenses);
+      notifyListeners();
+      return null;
+    } on Exception catch (e) {
+      final msg = e.toString();
+      if (msg.contains('AuthException') || msg.contains('JWT')) {
+        return 'Sync failed: session expired. Please log in again.';
+      }
+      return 'Sync failed: please check your internet connection.';
+    }
   }
 }

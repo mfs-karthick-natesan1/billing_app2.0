@@ -70,6 +70,7 @@ class CustomerProvider extends ChangeNotifier {
     if (index != -1) {
       _customers[index] = _customers[index].copyWith(
         outstandingBalance: _customers[index].outstandingBalance + amount,
+        lastCreditDate: DateTime.now(),
       );
       dbService?.saveCustomers([_customers[index]]);
       _onChanged?.call();
@@ -289,5 +290,23 @@ class CustomerProvider extends ChangeNotifier {
       ..addAll(paymentEntries);
     _onChanged?.call();
     notifyListeners();
+  }
+
+  Future<String?> syncFromDb() async {
+    if (dbService == null) return null;
+    try {
+      final customers = await dbService!.loadCustomers();
+      _customers
+        ..clear()
+        ..addAll(customers);
+      notifyListeners();
+      return null;
+    } on Exception catch (e) {
+      final msg = e.toString();
+      if (msg.contains('AuthException') || msg.contains('JWT')) {
+        return 'Sync failed: session expired. Please log in again.';
+      }
+      return 'Sync failed: please check your internet connection.';
+    }
   }
 }

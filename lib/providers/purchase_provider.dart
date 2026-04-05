@@ -179,6 +179,24 @@ class PurchaseProvider extends ChangeNotifier {
     _onChanged?.call();
     notifyListeners();
   }
+
+  Future<String?> syncFromDb() async {
+    if (dbService == null) return null;
+    try {
+      final purchases = await dbService!.loadPurchases();
+      _purchases
+        ..clear()
+        ..addAll(purchases);
+      notifyListeners();
+      return null;
+    } on Exception catch (e) {
+      final msg = e.toString();
+      if (msg.contains('AuthException') || msg.contains('JWT')) {
+        return 'Sync failed: session expired. Please log in again.';
+      }
+      return 'Sync failed: please check your internet connection.';
+    }
+  }
 }
 
 class _PurchaseLineWithDate {

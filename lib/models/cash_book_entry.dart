@@ -90,6 +90,9 @@ class CashBookDay {
   final bool isClosed;
   final DateTime? closedAt;
   final String? closedBy;
+  /// Physical cash count entered by the user at end of day.
+  /// When set, [discrepancy] = physicalCashCount - closingBalance.
+  final double? physicalCashCount;
 
   CashBookDay({
     required this.date,
@@ -106,8 +109,14 @@ class CashBookDay {
     this.isClosed = false,
     this.closedAt,
     this.closedBy,
+    this.physicalCashCount,
   }) : otherCashIn = otherCashIn ?? const [],
        otherCashOut = otherCashOut ?? const [];
+
+  /// Difference between physical count and computed closing balance.
+  /// Returns null if physical count has not been recorded.
+  double? get discrepancy =>
+      physicalCashCount == null ? null : physicalCashCount! - closingBalance;
 
   double get totalOtherCashIn =>
       otherCashIn.fold(0, (sum, entry) => sum + entry.amount);
@@ -137,6 +146,8 @@ class CashBookDay {
     String? closedBy,
     bool clearClosedAt = false,
     bool clearClosedBy = false,
+    double? physicalCashCount,
+    bool clearPhysicalCashCount = false,
   }) {
     return CashBookDay(
       date: date ?? this.date,
@@ -154,6 +165,9 @@ class CashBookDay {
       isClosed: isClosed ?? this.isClosed,
       closedAt: clearClosedAt ? null : closedAt ?? this.closedAt,
       closedBy: clearClosedBy ? null : closedBy ?? this.closedBy,
+      physicalCashCount: clearPhysicalCashCount
+          ? null
+          : physicalCashCount ?? this.physicalCashCount,
     );
   }
 
@@ -173,6 +187,7 @@ class CashBookDay {
       'isClosed': isClosed,
       'closedAt': closedAt?.toIso8601String(),
       'closedBy': closedBy,
+      if (physicalCashCount != null) 'physicalCashCount': physicalCashCount,
     };
   }
 
@@ -193,6 +208,9 @@ class CashBookDay {
       isClosed: json['isClosed'] as bool? ?? false,
       closedAt: DateTime.tryParse(json['closedAt'] as String? ?? ''),
       closedBy: json['closedBy'] as String?,
+      physicalCashCount: json['physicalCashCount'] != null
+          ? JsonHelpers.asDouble(json['physicalCashCount'])
+          : null,
     );
   }
 

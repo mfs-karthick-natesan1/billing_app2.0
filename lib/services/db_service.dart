@@ -12,6 +12,7 @@ import '../models/product.dart';
 import '../models/purchase_entry.dart';
 import '../models/quotation.dart';
 import '../models/sales_return.dart';
+import '../models/serial_number.dart';
 import '../models/stock_adjustment.dart';
 import '../models/supplier.dart';
 import '../models/table_order.dart';
@@ -179,6 +180,9 @@ class DbService {
   Future<void> saveJobCards(List<JobCard> jobCards) =>
       _upsert('job_cards', _toRows(jobCards, (j) => j.toJson()));
 
+  Future<void> saveSerialNumbers(List<SerialNumber> serials) =>
+      _upsert('serial_numbers', _toRows(serials, (s) => s.toJson()));
+
   // ── Bulk persist ─────────────────────────────────────────────────────────────
 
   Future<void> persistAll(PersistedAppState state) async {
@@ -204,6 +208,7 @@ class DbService {
       saveUsers(state.users),
       saveTableOrders(state.tableOrders),
       saveJobCards(state.jobCards),
+      saveSerialNumbers(state.serialNumbers),
     ]);
   }
 
@@ -215,6 +220,36 @@ class DbService {
         .map((m) { try { return Bill.fromJson(m); } catch (_) { return null; } })
         .whereType<Bill>()
         .toList();
+  }
+
+  Future<List<Product>> loadProducts() async {
+    final rows = await _selectAll('products');
+    return rows.map((m) { try { return Product.fromJson(m); } catch (_) { return null; } }).whereType<Product>().toList();
+  }
+
+  Future<List<Customer>> loadCustomers() async {
+    final rows = await _selectAll('customers');
+    return rows.map((m) { try { return Customer.fromJson(m); } catch (_) { return null; } }).whereType<Customer>().toList();
+  }
+
+  Future<List<Expense>> loadExpenses() async {
+    final rows = await _selectAll('expenses');
+    return rows.map((m) { try { return Expense.fromJson(m); } catch (_) { return null; } }).whereType<Expense>().toList();
+  }
+
+  Future<List<PurchaseEntry>> loadPurchases() async {
+    final rows = await _selectAll('purchases');
+    return rows.map((m) { try { return PurchaseEntry.fromJson(m); } catch (_) { return null; } }).whereType<PurchaseEntry>().toList();
+  }
+
+  Future<List<Quotation>> loadQuotations() async {
+    final rows = await _selectAll('quotations');
+    return rows.map((m) { try { return Quotation.fromJson(m); } catch (_) { return null; } }).whereType<Quotation>().toList();
+  }
+
+  Future<List<Supplier>> loadSuppliers() async {
+    final rows = await _selectAll('suppliers');
+    return rows.map((m) { try { return Supplier.fromJson(m); } catch (_) { return null; } }).whereType<Supplier>().toList();
   }
 
   // ── Load all ─────────────────────────────────────────────────────────────────
@@ -235,6 +270,7 @@ class DbService {
       _selectAll('users'),
       _selectAll('table_orders'),
       _selectAll('job_cards'),
+      _selectAll('serial_numbers'),
     ]);
 
     final bizRow = await _client
@@ -320,6 +356,10 @@ class DbService {
       jobCards: results[13]
           .map((m) => parse(m, JobCard.fromJson))
           .whereType<JobCard>()
+          .toList(),
+      serialNumbers: results[14]
+          .map((m) => parse(m, SerialNumber.fromJson))
+          .whereType<SerialNumber>()
           .toList(),
     );
   }

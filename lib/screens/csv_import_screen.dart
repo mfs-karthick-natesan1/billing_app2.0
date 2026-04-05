@@ -315,6 +315,15 @@ class _CsvImportScreenState extends State<CsvImportScreen> {
     if (result == null || result.files.isEmpty) return;
 
     try {
+      const maxBytes = 1 * 1024 * 1024; // 1 MB
+      final fileSize = result.files.first.size;
+      if (fileSize > maxBytes) {
+        if (mounted) {
+          AppSnackbar.error(context, AppStrings.csvFileTooLarge);
+        }
+        return;
+      }
+
       String content;
       if (kIsWeb) {
         final bytes = result.files.first.bytes;

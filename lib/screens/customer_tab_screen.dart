@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+
+enum _CustomerSort { nameAsc, nameDesc, balanceDesc, balanceAsc }
 import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_spacing.dart';
 import '../constants/app_strings.dart';
 import '../constants/app_typography.dart';
 import '../constants/formatters.dart';
+import '../models/customer.dart';
 import '../providers/bill_provider.dart';
 import '../providers/business_config_provider.dart';
 import '../providers/customer_provider.dart';
@@ -21,6 +24,7 @@ class CustomerTabScreen extends StatefulWidget {
 
 class _CustomerTabScreenState extends State<CustomerTabScreen> {
   String _query = '';
+  _CustomerSort _sort = _CustomerSort.nameAsc;
   final _searchController = TextEditingController();
 
   @override
@@ -29,22 +33,61 @@ class _CustomerTabScreenState extends State<CustomerTabScreen> {
     super.dispose();
   }
 
+  List<Customer> _applySortCustomers(List<Customer> customers) {
+    final sorted = customers.toList();
+    switch (_sort) {
+      case _CustomerSort.nameAsc:
+        sorted.sort((a, b) => a.name.compareTo(b.name));
+      case _CustomerSort.nameDesc:
+        sorted.sort((a, b) => b.name.compareTo(a.name));
+      case _CustomerSort.balanceDesc:
+        sorted.sort((a, b) => b.outstandingBalance.compareTo(a.outstandingBalance));
+      case _CustomerSort.balanceAsc:
+        sorted.sort((a, b) => a.outstandingBalance.compareTo(b.outstandingBalance));
+    }
+    return sorted;
+  }
+
   @override
   Widget build(BuildContext context) {
     final customerProvider = context.watch<CustomerProvider>();
     final billProvider = context.watch<BillProvider>();
     final isClinic = context.watch<BusinessConfigProvider>().isClinic;
-    final customers = _query.isEmpty
-        ? customerProvider.customers
+    var customers = _query.isEmpty
+        ? customerProvider.customers.toList()
         : customerProvider.searchCustomers(_query);
+    customers = _applySortCustomers(customers);
 
     return Scaffold(
-      appBar: const AppTopBar(title: AppStrings.customersTitle),
-      body: customerProvider.customers.isEmpty
-          ? const EmptyState(
-              icon: Icons.people,
-              title: AppStrings.noCustomersYet,
-              description: AppStrings.noCustomersDesc,
+      appBar: AppTopBar(
+        title: AppStrings.customersTitle,
+        actions: [
+          PopupMenuButton<_CustomerSort>(
+            icon: const Icon(Icons.sort),
+            initialValue: _sort,
+            onSelected: (s) => setState(() => _sort = s),
+            itemBuilder: (_) => const [
+              PopupMenuItem(value: _CustomerSort.nameAsc, child: Text('Name: A–Z')),
+              PopupMenuItem(value: _CustomerSort.nameDesc, child: Text('Name: Z–A')),
+              PopupMenuItem(value: _CustomerSort.balanceDesc, child: Text('Balance: high to low')),
+              PopupMenuItem(value: _CustomerSort.balanceAsc, child: Text('Balance: low to high')),
+            ],
+          ),
+        ],
+      ),
+      body: RefreshIndicator(
+        color: AppColors.primary,
+        onRefresh: () => customerProvider.syncFromDb(),
+        child: customerProvider.customers.isEmpty
+          ? ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: const [
+                EmptyState(
+                  icon: Icons.people,
+                  title: AppStrings.noCustomersYet,
+                  description: AppStrings.noCustomersDesc,
+                ),
+              ],
             )
           : Column(
               children: [
@@ -93,6 +136,7 @@ class _CustomerTabScreenState extends State<CustomerTabScreen> {
                 ),
                 Expanded(
                   child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: customers.length,
                     itemBuilder: (context, index) {
                       final customer = customers[index];
@@ -178,6 +222,7 @@ class _CustomerTabScreenState extends State<CustomerTabScreen> {
                 ),
               ],
             ),
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:billing_app/models/business_config.dart';
 import 'package:billing_app/models/line_item.dart';
 import 'package:billing_app/models/payment_info.dart';
 import 'package:billing_app/models/product.dart';
+import 'package:billing_app/providers/bill_provider.dart';
 import 'package:billing_app/providers/business_config_provider.dart';
 import 'package:billing_app/providers/customer_provider.dart';
 import 'package:billing_app/providers/product_provider.dart';
@@ -85,6 +86,9 @@ void main() {
         providers: [
           ChangeNotifierProvider<BusinessConfigProvider>.value(
             value: configProvider,
+          ),
+          ChangeNotifierProvider<BillProvider>(
+            create: (_) => BillProvider(),
           ),
           ChangeNotifierProvider<ReturnProvider>(
             create: (_) => ReturnProvider(),

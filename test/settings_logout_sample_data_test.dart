@@ -26,6 +26,9 @@ void main() {
   testWidgets(
     'logout and load sample data resets state and navigates to setup',
     (tester) async {
+      tester.view.physicalSize = const Size(1600, 3000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
       final businessConfigProvider = BusinessConfigProvider(
         initialConfig: const BusinessConfig(
           setupCompleted: true,
@@ -128,14 +131,13 @@ void main() {
         ),
       );
 
+      // Expand the Data card ExpansionTile to reveal the logout button
+      await tester.tap(find.text(AppStrings.dataSection));
+      await tester.pumpAndSettle();
+
       final logoutActionFinder = find.widgetWithText(
         OutlinedButton,
         AppStrings.logoutAndLoadSampleData,
-      );
-      await tester.scrollUntilVisible(
-        logoutActionFinder,
-        200,
-        scrollable: find.byType(Scrollable).first,
       );
       await tester.tap(logoutActionFinder);
       await tester.pumpAndSettle();

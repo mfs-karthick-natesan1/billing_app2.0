@@ -64,7 +64,11 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
       body: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
+            child: RefreshIndicator(
+              color: AppColors.primary,
+              onRefresh: () => provider.syncFromDb(),
+              child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(AppSpacing.medium),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,6 +128,7 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
                 ],
               ),
             ),
+          ),
           ),
         ],
       ),
@@ -200,10 +205,20 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
           ),
           confirmDismiss: (_) => _confirmDelete(expense),
           onDismissed: (_) {
-            context.read<ExpenseProvider>().deleteExpense(expense.id);
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(AppStrings.expenseDeleted)));
+            final deleted = expense;
+            context.read<ExpenseProvider>().deleteExpense(deleted.id);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(AppStrings.expenseDeleted),
+                action: SnackBarAction(
+                  label: AppStrings.undo,
+                  onPressed: () {
+                    context.read<ExpenseProvider>().addExpense(deleted);
+                  },
+                ),
+                duration: const Duration(seconds: 4),
+              ),
+            );
           },
           child: ExpenseCard(
             expense: expense,

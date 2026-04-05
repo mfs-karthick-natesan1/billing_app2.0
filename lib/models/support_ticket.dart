@@ -1,3 +1,42 @@
+enum TicketStatus {
+  open,
+  inProgress,
+  resolved;
+
+  String get value {
+    switch (this) {
+      case TicketStatus.open:
+        return 'open';
+      case TicketStatus.inProgress:
+        return 'in_progress';
+      case TicketStatus.resolved:
+        return 'resolved';
+    }
+  }
+
+  String get label {
+    switch (this) {
+      case TicketStatus.open:
+        return 'Open';
+      case TicketStatus.inProgress:
+        return 'In Progress';
+      case TicketStatus.resolved:
+        return 'Resolved';
+    }
+  }
+
+  static TicketStatus fromString(String? value) {
+    switch (value) {
+      case 'in_progress':
+        return TicketStatus.inProgress;
+      case 'resolved':
+        return TicketStatus.resolved;
+      default:
+        return TicketStatus.open;
+    }
+  }
+}
+
 class TicketComment {
   final String id;
   final String ticketId;
@@ -24,6 +63,14 @@ class TicketComment {
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'ticket_id': ticketId,
+    'author': author,
+    'message': message,
+    'created_at': createdAt.toIso8601String(),
+  };
 }
 
 class SupportTicket {
@@ -32,7 +79,7 @@ class SupportTicket {
   final String subject;
   final String description;
   final String? attachmentUrl;
-  final String status; // 'open' | 'in_progress' | 'resolved'
+  final TicketStatus status;
   final DateTime createdAt;
   final List<TicketComment> comments;
 
@@ -42,25 +89,16 @@ class SupportTicket {
     required this.subject,
     required this.description,
     this.attachmentUrl,
-    required this.status,
+    this.status = TicketStatus.open,
     required this.createdAt,
     this.comments = const [],
   });
 
-  bool get isOpen => status == 'open';
-  bool get isInProgress => status == 'in_progress';
-  bool get isResolved => status == 'resolved';
+  bool get isOpen => status == TicketStatus.open;
+  bool get isInProgress => status == TicketStatus.inProgress;
+  bool get isResolved => status == TicketStatus.resolved;
 
-  String get statusLabel {
-    switch (status) {
-      case 'in_progress':
-        return 'In Progress';
-      case 'resolved':
-        return 'Resolved';
-      default:
-        return 'Open';
-    }
-  }
+  String get statusLabel => status.label;
 
   factory SupportTicket.fromJson(Map<String, dynamic> json) {
     final commentsJson =
@@ -77,9 +115,20 @@ class SupportTicket {
       subject: json['subject'] as String? ?? '',
       description: json['description'] as String? ?? '',
       attachmentUrl: json['attachment_url'] as String?,
-      status: json['status'] as String? ?? 'open',
+      status: TicketStatus.fromString(json['status'] as String?),
       createdAt: DateTime.parse(json['created_at'] as String),
       comments: comments,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'category': category,
+    'subject': subject,
+    'description': description,
+    if (attachmentUrl != null) 'attachment_url': attachmentUrl,
+    'status': status.value,
+    'created_at': createdAt.toIso8601String(),
+    'support_ticket_comments': comments.map((c) => c.toJson()).toList(),
+  };
 }

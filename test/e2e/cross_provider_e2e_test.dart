@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:billing_app/models/bill.dart';
 import 'package:billing_app/models/line_item.dart';
 import 'package:billing_app/models/payment_info.dart';
+import 'package:billing_app/models/product.dart';
 import 'package:billing_app/models/quotation.dart';
 import 'package:billing_app/providers/bill_provider.dart';
 import 'package:billing_app/providers/customer_provider.dart';
@@ -42,7 +44,7 @@ void main() {
       final product = generalProduct(sellingPrice: 1000, stockQuantity: 10, gstRate: 0);
       final customer = testCustomer();
       productProvider.addProduct(product);
-      customerProvider.addCustomer(customer);
+      final customerProvider = CustomerProvider(initialCustomers: [customer]);
 
       billProvider.addItemToBill(product);
       final bill = billProvider.completeBill(
@@ -189,17 +191,23 @@ void main() {
       }
 
       expect(bp.bills.length, equals(3));
-      expect(bp.bills[0].billNumber, equals('INV-001'));
-      expect(bp.bills[1].billNumber, equals('INV-002'));
-      expect(bp.bills[2].billNumber, equals('INV-003'));
+      // Bill numbers now include financial year prefix: FY/INV-NNN
+      expect(bp.bills[0].billNumber, matches(RegExp(r'^\d{4}-\d{2}/INV-001$')));
+      expect(bp.bills[1].billNumber, matches(RegExp(r'^\d{4}-\d{2}/INV-002$')));
+      expect(bp.bills[2].billNumber, matches(RegExp(r'^\d{4}-\d{2}/INV-003$')));
     });
 
     test('hydrate from existing bills preserves sequence', () {
       final product = generalProduct(stockQuantity: 100, gstRate: 0);
 
-      // Create a Bill with billNumber INV-005 as initialBills
+      // Determine current FY to use in existing bill number
+      final now = DateTime.now();
+      final fyStart = now.month >= 4 ? now.year : now.year - 1;
+      final fyLabel = '$fyStart-${(fyStart + 1).toString().substring(2)}';
+
+      // Create a Bill with FY-prefixed billNumber as initialBills
       final existingBill = Bill(
-        billNumber: 'INV-005',
+        billNumber: '$fyLabel/INV-005',
         lineItems: [LineItem(product: product)],
         subtotal: 250,
         grandTotal: 250,
@@ -212,7 +220,7 @@ void main() {
 
       expect(bp.bills.length, equals(1));
 
-      // Create a new bill — should be INV-006
+      // Create a new bill — should be INV-006 within the same FY
       bp.addItemToBill(product);
       final newBill = bp.completeBill(
         paymentInfo: cashPayment(),
@@ -221,7 +229,7 @@ void main() {
         customerProvider: customerProvider,
       );
 
-      expect(newBill.billNumber, equals('INV-006'));
+      expect(newBill.billNumber, equals('$fyLabel/INV-006'));
     });
   });
 

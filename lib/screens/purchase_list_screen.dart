@@ -112,14 +112,23 @@ class _PurchaseListScreenState extends State<PurchaseListScreen> {
                 const SizedBox(height: AppSpacing.small),
                 // List
                 Expanded(
-                  child: filtered.isEmpty
-                      ? Center(
-                          child: Text(
-                            AppStrings.noPurchasesFound,
-                            style: AppTypography.label,
-                          ),
+                  child: RefreshIndicator(
+                    color: AppColors.primary,
+                    onRefresh: () => context.read<PurchaseProvider>().syncFromDb(),
+                    child: filtered.isEmpty
+                      ? ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: [
+                            Center(
+                              child: Text(
+                                AppStrings.noPurchasesFound,
+                                style: AppTypography.label,
+                              ),
+                            ),
+                          ],
                         )
                       : ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
                           padding: const EdgeInsets.symmetric(
                             horizontal: AppSpacing.medium,
                           ),
@@ -166,6 +175,7 @@ class _PurchaseListScreenState extends State<PurchaseListScreen> {
                             );
                           },
                         ),
+                  ),
                 ),
               ],
             ),

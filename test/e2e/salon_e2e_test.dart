@@ -1,6 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:billing_app/models/payment_info.dart';
-import 'package:billing_app/models/business_config.dart';
 import 'package:billing_app/providers/bill_provider.dart';
 import 'package:billing_app/providers/customer_provider.dart';
 import 'package:billing_app/providers/product_provider.dart';

@@ -213,6 +213,13 @@ class _CashBookScreenState extends State<CashBookScreen> {
               emphasize: true,
             ),
             const SizedBox(height: AppSpacing.medium),
+            _PhysicalCountRow(
+              physicalCount: day.physicalCashCount,
+              closingBalance: day.closingBalance,
+              readOnly: day.isClosed,
+              onRecord: () => _setPhysicalCashCount(day.physicalCashCount),
+            ),
+            const SizedBox(height: AppSpacing.medium),
             Text(AppStrings.dayNotes, style: AppTypography.label),
             const SizedBox(height: 4),
             TextField(
@@ -389,6 +396,15 @@ class _CashBookScreenState extends State<CashBookScreen> {
       return;
     }
     AppSnackbar.success(context, AppStrings.dayReopenedSuccess);
+  }
+
+  Future<void> _setPhysicalCashCount(double? current) async {
+    final result = await _promptAmount(
+      title: AppStrings.physicalCashCount,
+      initial: current ?? 0,
+    );
+    if (result == null || !mounted) return;
+    context.read<CashBookProvider>().setPhysicalCashCount(_selectedDate, result);
   }
 }
 
@@ -627,6 +643,88 @@ class _ActionRow extends StatelessWidget {
         onPressed: onTap,
         icon: const Icon(Icons.add, size: 16),
         label: Text(label),
+      ),
+    );
+  }
+}
+
+class _PhysicalCountRow extends StatelessWidget {
+  final double? physicalCount;
+  final double closingBalance;
+  final bool readOnly;
+  final VoidCallback onRecord;
+
+  const _PhysicalCountRow({
+    required this.physicalCount,
+    required this.closingBalance,
+    required this.readOnly,
+    required this.onRecord,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final discrepancy =
+        physicalCount == null ? null : physicalCount! - closingBalance;
+    final discColor = discrepancy == null
+        ? AppColors.muted
+        : discrepancy.abs() < 0.01
+        ? AppColors.success
+        : AppColors.error;
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.medium),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        border: Border.all(color: AppColors.muted.withValues(alpha: 0.15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppStrings.physicalCashCount,
+                style: AppTypography.label,
+              ),
+              if (!readOnly)
+                TextButton(
+                  onPressed: onRecord,
+                  child: Text(AppStrings.recordPhysicalCount),
+                ),
+            ],
+          ),
+          if (physicalCount != null) ...[
+            Text(
+              Formatters.currency(physicalCount!),
+              style: AppTypography.currency,
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(
+                  discrepancy != null && discrepancy.abs() < 0.01
+                      ? Icons.check_circle_outline
+                      : Icons.info_outline,
+                  size: 14,
+                  color: discColor,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  discrepancy == null || discrepancy.abs() < 0.01
+                      ? AppStrings.noDiscrepancy
+                      : '${AppStrings.cashDiscrepancy}: ${Formatters.currency(discrepancy)}',
+                  style: AppTypography.label.copyWith(color: discColor),
+                ),
+              ],
+            ),
+          ] else
+            Text(
+              'Not recorded yet',
+              style: AppTypography.label.copyWith(color: AppColors.muted),
+            ),
+        ],
       ),
     );
   }

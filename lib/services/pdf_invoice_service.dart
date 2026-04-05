@@ -75,6 +75,16 @@ class PdfInvoiceService {
                   )
               : null,
         ),
+        footer: (context) => pw.Padding(
+          padding: const pw.EdgeInsets.only(top: 4, right: 24, bottom: 8),
+          child: pw.Align(
+            alignment: pw.Alignment.centerRight,
+            child: pw.Text(
+              'Page ${context.pageNumber} of ${context.pagesCount}',
+              style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey600),
+            ),
+          ),
+        ),
         build: (context) => [
           // ── HEADER (grey background) ────────────────────────────
           pw.Container(
@@ -560,6 +570,16 @@ class PdfInvoiceService {
         pageTheme: pw.PageTheme(
           pageFormat: format,
           margin: pw.EdgeInsets.zero,
+        ),
+        footer: (context) => pw.Padding(
+          padding: const pw.EdgeInsets.only(top: 4, right: 24, bottom: 8),
+          child: pw.Align(
+            alignment: pw.Alignment.centerRight,
+            child: pw.Text(
+              'Page ${context.pageNumber} of ${context.pagesCount}',
+              style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey600),
+            ),
+          ),
         ),
         build: (context) => [
           // Header

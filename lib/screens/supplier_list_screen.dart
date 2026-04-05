@@ -44,11 +44,19 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
         title: AppStrings.suppliersTitle,
         showBack: widget.showBack,
       ),
-      body: activeSuppliers.isEmpty
-          ? const EmptyState(
-              icon: Icons.local_shipping_outlined,
-              title: AppStrings.noSuppliersYet,
-              description: AppStrings.noSuppliersDesc,
+      body: RefreshIndicator(
+        color: AppColors.primary,
+        onRefresh: () => supplierProvider.syncFromDb(),
+        child: activeSuppliers.isEmpty
+          ? ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: const [
+                EmptyState(
+                  icon: Icons.local_shipping_outlined,
+                  title: AppStrings.noSuppliersYet,
+                  description: AppStrings.noSuppliersDesc,
+                ),
+              ],
             )
           : Column(
               children: [
@@ -98,6 +106,7 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
                 ),
                 Expanded(
                   child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: suppliers.length,
                     itemBuilder: (context, index) {
                       final supplier = suppliers[index];
@@ -181,6 +190,7 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
                 ),
               ],
             ),
+      ),
       floatingActionButton: AppFab(
         icon: Icons.add,
         onPressed: () => AddEditSupplierSheet.show(context),

@@ -298,7 +298,7 @@ void main() {
     });
 
     test('completeBill stores discount fields', () {
-      final product = Product(name: 'Prod', sellingPrice: 100);
+      final product = Product(name: 'Prod', sellingPrice: 100, stockQuantity: 10);
       productProvider.addProduct(product);
       billProvider.addItemToBill(product);
       billProvider.updateLineDiscount(0, 10);
