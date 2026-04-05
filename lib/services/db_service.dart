@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/bill.dart';
@@ -64,18 +65,25 @@ class DbService {
   }
 
   Future<List<Map<String, dynamic>>> _selectAll(String table) async {
-    return _retryWithBackoff(() async {
-      final rows = await _client
-          .from(table)
-          .select('data')
-          .eq('business_id', businessId);
-      return rows
-          .map(
-            (r) =>
-                (r['data'] as Map<String, dynamic>?) ?? <String, dynamic>{},
-          )
-          .toList();
-    });
+    try {
+      return await _retryWithBackoff(() async {
+        final rows = await _client
+            .from(table)
+            .select('data')
+            .eq('business_id', businessId);
+        return rows
+            .map(
+              (r) =>
+                  (r['data'] as Map<String, dynamic>?) ?? <String, dynamic>{},
+            )
+            .toList();
+      });
+    } catch (e) {
+      // Table may not exist in this deployment — return empty list rather than
+      // failing the entire loadAll() call.
+      debugPrint('BillReady: skipping table $table: $e');
+      return [];
+    }
   }
 
   List<Map<String, dynamic>> _toRows<T>(
