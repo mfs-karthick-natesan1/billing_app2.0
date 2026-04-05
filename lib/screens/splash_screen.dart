@@ -38,7 +38,13 @@ class _SplashScreenState extends State<SplashScreen> {
     final hasSession = widget.sessionChecker?.call()
         ?? (Supabase.instance.client.auth.currentSession != null);
     if (!hasSession) {
-      Navigator.pushReplacementNamed(context, '/auth-login');
+      // No session — show onboarding for first-time visitors, login for returning users
+      final onboardingDone = await (widget.onboardingChecker?.call() ?? OnboardingScreen.isComplete());
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(
+        context,
+        onboardingDone ? '/auth-login' : '/onboarding',
+      );
       return;
     }
     // Check local user login before setup
@@ -49,12 +55,8 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     final isSetup = context.read<BusinessConfigProvider>().isSetupCompleted;
     if (!isSetup) {
-      final onboardingDone = await (widget.onboardingChecker?.call() ?? OnboardingScreen.isComplete());
-      if (!mounted) return;
-      Navigator.pushReplacementNamed(
-        context,
-        onboardingDone ? '/setup' : '/onboarding',
-      );
+      // Logged-in but setup not complete — go directly to setup (skip onboarding)
+      Navigator.pushReplacementNamed(context, '/setup');
       return;
     }
     Navigator.pushReplacementNamed(context, '/home');

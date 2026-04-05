@@ -7,19 +7,21 @@ import 'package:provider/provider.dart';
 
 Widget _buildApp(
   BusinessConfigProvider provider, {
+  bool hasSession = true,
   bool onboardingComplete = true,
 }) {
   return ChangeNotifierProvider<BusinessConfigProvider>.value(
     value: provider,
     child: MaterialApp(
       home: SplashScreen(
-        sessionChecker: () => true,
+        sessionChecker: () => hasSession,
         onboardingChecker: () async => onboardingComplete,
       ),
       routes: {
         '/home': (_) => const Scaffold(body: Text('HOME_SCREEN')),
         '/setup': (_) => const Scaffold(body: Text('SETUP_SCREEN')),
         '/onboarding': (_) => const Scaffold(body: Text('ONBOARDING_SCREEN')),
+        '/auth-login': (_) => const Scaffold(body: Text('AUTH_LOGIN_SCREEN')),
       },
     ),
   );
@@ -42,13 +44,27 @@ void main() {
     expect(find.text('SETUP_SCREEN'), findsNothing);
   });
 
-  testWidgets('navigates to onboarding when setup not completed and onboarding not done',
+  testWidgets('logged-in user with setup not completed goes to setup (skips onboarding)',
       (tester) async {
     final provider = BusinessConfigProvider(
       initialConfig: const BusinessConfig(setupCompleted: false),
     );
 
-    await tester.pumpWidget(_buildApp(provider, onboardingComplete: false));
+    await tester.pumpWidget(_buildApp(provider, hasSession: true, onboardingComplete: false));
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pump();
+
+    expect(find.text('SETUP_SCREEN'), findsOneWidget);
+    expect(find.text('ONBOARDING_SCREEN'), findsNothing);
+  });
+
+  testWidgets('no session + onboarding not done navigates to onboarding',
+      (tester) async {
+    final provider = BusinessConfigProvider(
+      initialConfig: const BusinessConfig(setupCompleted: false),
+    );
+
+    await tester.pumpWidget(_buildApp(provider, hasSession: false, onboardingComplete: false));
     await tester.pump(const Duration(seconds: 3));
     await tester.pump();
 
@@ -56,17 +72,17 @@ void main() {
     expect(find.text('HOME_SCREEN'), findsNothing);
   });
 
-  testWidgets('navigates to setup when setup not completed but onboarding done',
+  testWidgets('no session + onboarding done navigates to auth-login',
       (tester) async {
     final provider = BusinessConfigProvider(
       initialConfig: const BusinessConfig(setupCompleted: false),
     );
 
-    await tester.pumpWidget(_buildApp(provider, onboardingComplete: true));
+    await tester.pumpWidget(_buildApp(provider, hasSession: false, onboardingComplete: true));
     await tester.pump(const Duration(seconds: 3));
     await tester.pump();
 
-    expect(find.text('SETUP_SCREEN'), findsOneWidget);
+    expect(find.text('AUTH_LOGIN_SCREEN'), findsOneWidget);
     expect(find.text('HOME_SCREEN'), findsNothing);
   });
 }
