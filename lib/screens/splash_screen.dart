@@ -38,8 +38,12 @@ class _SplashScreenState extends State<SplashScreen> {
     final hasSession = widget.sessionChecker?.call()
         ?? (Supabase.instance.client.auth.currentSession != null);
     if (!hasSession) {
-      // No session — show onboarding for first-time visitors, login for returning users
-      final onboardingDone = await (widget.onboardingChecker?.call() ?? OnboardingScreen.isComplete());
+      // On web, FlutterSecureStorage doesn't persist reliably — always go to login.
+      // On mobile, show onboarding for first-time visitors.
+      final onboardingDone = kIsWeb ||
+          (widget.onboardingChecker?.call() != null
+              ? await widget.onboardingChecker!.call()
+              : await OnboardingScreen.isComplete());
       if (!mounted) return;
       Navigator.pushReplacementNamed(
         context,

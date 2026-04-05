@@ -67,10 +67,12 @@ class GstCalculator {
     List<LineItem> items, {
     double discount = 0,
     bool isInterState = false,
+    bool gstEnabled = true,
   }) {
     final sub = discountedSubtotal(items);
     final afterBillDiscount = sub - discount;
     if (afterBillDiscount <= 0) return 0;
+    if (!gstEnabled) return _r(afterBillDiscount);
     // GST is calculated on the discounted subtotal proportionally
     final gst = totalGst(items, isInterState: isInterState);
     final discountRatio = sub > 0 ? afterBillDiscount / sub : 0.0;

@@ -654,6 +654,7 @@ class _AddPurchaseSheetState extends State<AddPurchaseSheet> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
             ),
             onPressed: () {
               setState(() {

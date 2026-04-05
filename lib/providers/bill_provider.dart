@@ -137,11 +137,12 @@ class BillProvider extends ChangeNotifier {
     return GstCalculator.totalIgst(_activeLineItems) * discountRatio;
   }
 
-  double activeGrandTotal({bool isInterState = false}) {
+  double activeGrandTotal({bool isInterState = false, bool gstEnabled = true}) {
     return GstCalculator.grandTotal(
       _activeLineItems,
       discount: _discountAmount,
       isInterState: isInterState,
+      gstEnabled: gstEnabled,
     );
   }
 
@@ -429,7 +430,7 @@ class BillProvider extends ChangeNotifier {
         cgst: gstEnabled ? activeCgst(isInterState: isInterState) : 0,
         sgst: gstEnabled ? activeSgst(isInterState: isInterState) : 0,
         igst: gstEnabled ? activeIgst(isInterState: isInterState) : 0,
-        grandTotal: activeGrandTotal(isInterState: isInterState),
+        grandTotal: activeGrandTotal(isInterState: isInterState, gstEnabled: gstEnabled),
         isInterState: isInterState,
         paymentMode: paymentInfo.mode,
         amountReceived: paymentInfo.amountReceived,
@@ -469,7 +470,7 @@ class BillProvider extends ChangeNotifier {
       cgst: gstEnabled ? activeCgst(isInterState: isInterState) : 0,
       sgst: gstEnabled ? activeSgst(isInterState: isInterState) : 0,
       igst: gstEnabled ? activeIgst(isInterState: isInterState) : 0,
-      grandTotal: activeGrandTotal(isInterState: isInterState),
+      grandTotal: activeGrandTotal(isInterState: isInterState, gstEnabled: gstEnabled),
       isInterState: isInterState,
       paymentMode: paymentInfo.mode,
       amountReceived: paymentInfo.amountReceived,
@@ -575,7 +576,7 @@ class BillProvider extends ChangeNotifier {
       cgst: gstEnabled ? activeCgst(isInterState: isInterState) : 0,
       sgst: gstEnabled ? activeSgst(isInterState: isInterState) : 0,
       igst: gstEnabled ? activeIgst(isInterState: isInterState) : 0,
-      grandTotal: activeGrandTotal(isInterState: isInterState),
+      grandTotal: activeGrandTotal(isInterState: isInterState, gstEnabled: gstEnabled),
       isInterState: isInterState,
       paymentMode: paymentInfo.mode,
       amountReceived: paymentInfo.amountReceived,
