@@ -19,7 +19,10 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return Semantics(
+      label: '$label: $value',
+      button: onTap != null,
+      child: InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: Container(
@@ -44,6 +47,7 @@ class StatCard extends StatelessWidget {
             Text(label, style: AppTypography.label),
           ],
         ),
+      ),
       ),
     );
   }

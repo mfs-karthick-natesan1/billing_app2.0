@@ -30,7 +30,10 @@ class BillHistoryCard extends StatelessWidget {
       PaymentMode.bankTransfer => AppColors.muted,
     };
 
-    return InkWell(
+    return Semantics(
+      label: '${bill.billNumber}, ${Formatters.currency(bill.grandTotal)}, ${mode.label}',
+      button: onTap != null,
+      child: InkWell(
       onTap: onTap,
       child: Container(
         height: 56,
@@ -86,6 +89,7 @@ class BillHistoryCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

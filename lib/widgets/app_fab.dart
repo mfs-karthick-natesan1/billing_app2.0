@@ -6,12 +6,14 @@ class AppFab extends StatelessWidget {
   final VoidCallback onPressed;
   final IconData icon;
   final Object? heroTag;
+  final String? tooltip;
 
   const AppFab({
     super.key,
     required this.onPressed,
     this.icon = Icons.add,
     this.heroTag,
+    this.tooltip,
   });
 
   @override
@@ -23,7 +25,8 @@ class AppFab extends StatelessWidget {
       foregroundColor: Colors.white,
       elevation: AppSpacing.fabElevation,
       shape: const CircleBorder(),
-      child: Icon(icon, size: 24),
+      tooltip: tooltip ?? 'Add',
+      child: Icon(icon, size: 24, semanticLabel: tooltip ?? 'Add'),
     );
   }
 }

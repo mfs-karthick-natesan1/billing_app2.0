@@ -23,7 +23,17 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    final stockDesc = product.isService
+        ? 'service'
+        : product.isOutOfStock
+            ? 'out of stock'
+            : product.isLowStock
+                ? 'low stock: ${product.stockQuantity}'
+                : 'stock: ${product.stockQuantity}';
+    return Semantics(
+      label: '${product.name}, ${Formatters.currency(product.sellingPrice)}, $stockDesc',
+      button: true,
+      child: InkWell(
       onTap: onTap,
       onLongPress: onLongPress,
       borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -97,6 +107,7 @@ class ProductCard extends StatelessWidget {
           ],
         ),
       ),
+      ),
     );
   }
 
@@ -122,18 +133,32 @@ class ProductCard extends StatelessWidget {
       product.stockQuantity.toDouble(),
     );
     if (product.isOutOfStock) {
-      return Text(
-        'Out of Stock',
-        style: AppTypography.label.copyWith(
-          color: AppColors.error,
-          fontWeight: FontWeight.bold,
-        ),
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.block, size: 13, color: AppColors.error),
+          const SizedBox(width: 3),
+          Text(
+            'Out of Stock',
+            style: AppTypography.label.copyWith(
+              color: AppColors.error,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       );
     }
     if (product.isLowStock) {
-      return Text(
-        'Low Stock: $stockDisplay',
-        style: AppTypography.label.copyWith(color: AppColors.error),
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.warning_amber_rounded, size: 13, color: AppColors.warning),
+          const SizedBox(width: 3),
+          Text(
+            'Low: $stockDisplay',
+            style: AppTypography.label.copyWith(color: AppColors.warning),
+          ),
+        ],
       );
     }
     return Text('Stock: $stockDisplay', style: AppTypography.label);

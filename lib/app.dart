@@ -19,6 +19,7 @@ import 'screens/subscription_screen.dart';
 import 'screens/supplier_list_screen.dart';
 import 'screens/payment_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/onboarding_screen.dart';
 import 'screens/setup_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/user_login_screen.dart';
@@ -57,6 +58,7 @@ class BillReadyApp extends StatelessWidget {
       ),
       routes: {
         '/': (_) => const SplashScreen(),
+        '/onboarding': (_) => const OnboardingScreen(),
         '/setup': (_) => const SetupScreen(),
         '/home': (_) => const HomeShell(),
         '/create-bill': (_) => const CreateBillScreen(showBack: true),

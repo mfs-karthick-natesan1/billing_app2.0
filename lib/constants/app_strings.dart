@@ -9,6 +9,11 @@ class AppStrings {
   static const String splashTitle = appName;
   static const String splashSubtitle = tagline;
 
+  // Onboarding
+  static const String skip = 'Skip';
+  static const String next = 'Next';
+  static const String getStarted = 'Get Started';
+
   // Setup
   static const String setupTitle = 'Set Up Your Shop';
   static const String businessNameLabel = 'Business Name';
