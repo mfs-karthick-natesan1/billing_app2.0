@@ -1,6 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../constants/supabase_config.dart';
-import 'https_client_factory.dart';
 
 class SupabaseService {
   static Future<void> initialize() async {
@@ -19,14 +18,9 @@ class SupabaseService {
       );
     }
 
-    final httpClient = createHttpsClient(
-      allowedHosts: [uri.host, 'supabase.co', 'supabase.in'],
-    );
-
     await Supabase.initialize(
       url: supabaseUrl,
       anonKey: supabaseAnonKey,
-      httpClient: httpClient,
     );
   }
 
