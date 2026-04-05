@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -543,6 +546,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                 // ── 9. Data Card ───────────────────────────────────
                 _card(Icons.storage_outlined, AppStrings.dataSection, [
+                  Text(AppStrings.exportBackupDesc, style: AppTypography.label.copyWith(color: AppColors.muted)),
+                  const SizedBox(height: AppSpacing.small),
+                  SizedBox(height: 44, child: OutlinedButton.icon(
+                    onPressed: _exportBackup,
+                    icon: const Icon(Icons.download_outlined, size: 18),
+                    label: Text(AppStrings.exportBackup, style: AppTypography.body.copyWith(fontWeight: FontWeight.w600)),
+                    style: OutlinedButton.styleFrom(foregroundColor: AppColors.primary, side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35))),
+                  )),
+                  const SizedBox(height: AppSpacing.medium),
                   Text(AppStrings.logoutAndLoadSampleDataDesc, style: AppTypography.label.copyWith(color: AppColors.muted)),
                   const SizedBox(height: AppSpacing.small),
                   SizedBox(height: 44, child: OutlinedButton.icon(
@@ -1008,7 +1020,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           );
                           if (result != null && result.files.isNotEmpty) {
                             final file = result.files.first;
-                            if (file.bytes != null) {
+                            const maxSize = 5 * 1024 * 1024; // 5 MB
+                            final allowedTypes = {'jpg', 'jpeg', 'png', 'webp'};
+                            final ext = file.name.split('.').last.toLowerCase();
+                            if (!allowedTypes.contains(ext)) {
+                              if (context.mounted) {
+                                AppSnackbar.error(context, 'Only JPG, PNG, or WebP images are allowed.');
+                              }
+                            } else if (file.size > maxSize) {
+                              if (context.mounted) {
+                                AppSnackbar.error(context, 'Screenshot must be under 5 MB.');
+                              }
+                            } else if (file.bytes != null) {
                               setModalState(() {
                                 screenshotBytes = file.bytes!.toList();
                                 screenshotName = file.name;
@@ -1210,6 +1233,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
       r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}Z[A-Z0-9]{1}$',
     );
     return pattern.hasMatch(gstin);
+  }
+
+  Future<void> _exportBackup() async {
+    try {
+      final billProvider = context.read<BillProvider>();
+      final productProvider = context.read<ProductProvider>();
+      final customerProvider = context.read<CustomerProvider>();
+      final expenseProvider = context.read<ExpenseProvider>();
+      final supplierProvider = context.read<SupplierProvider>();
+
+      final backup = {
+        'exportedAt': DateTime.now().toIso8601String(),
+        'bills': billProvider.bills.map((b) => b.toJson()).toList(),
+        'products': productProvider.products.map((p) => p.toJson()).toList(),
+        'customers': customerProvider.customers.map((c) => c.toJson()).toList(),
+        'expenses': expenseProvider.expenses.map((e) => e.toJson()).toList(),
+        'suppliers': supplierProvider.suppliers.map((s) => s.toJson()).toList(),
+      };
+
+      final json = const JsonEncoder.withIndent('  ').convert(backup);
+      final dir = await getTemporaryDirectory();
+      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-').substring(0, 19);
+      final file = File('${dir.path}/billready_backup_$timestamp.json');
+      await file.writeAsString(json);
+      await Share.shareXFiles([XFile(file.path)], subject: 'BillReady Data Backup');
+      await file.delete();
+
+      if (mounted) {
+        AppSnackbar.success(context, AppStrings.exportBackupDone);
+      }
+    } catch (_) {
+      if (mounted) {
+        AppSnackbar.error(context, AppStrings.exportBackupFailed);
+      }
+    }
   }
 
   Future<void> _logoutAndLoadSampleData() async {

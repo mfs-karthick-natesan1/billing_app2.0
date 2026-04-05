@@ -160,6 +160,8 @@ class AppStrings {
   static const String viewProducts = 'View Products';
   static const String invalidCsvFormat =
       'Invalid CSV format. Please use the provided template.';
+  static const String csvFileTooLarge =
+      'File too large. Maximum allowed size is 1 MB.';
 
   // Customers
   static const String customersTitle = 'Customers';
@@ -277,6 +279,11 @@ class AppStrings {
   static const String reopenDay = 'Reopen Day';
   static const String dayClosed = 'Day Closed';
   static const String dayClosedBadge = 'Day Closed ✓';
+  static const String physicalCashCount = 'Physical Cash Count';
+  static const String physicalCashCountHint = 'Enter the actual cash in hand';
+  static const String cashDiscrepancy = 'Discrepancy';
+  static const String recordPhysicalCount = 'Record Count';
+  static const String noDiscrepancy = 'No discrepancy';
   static const String closeDayConfirmTitle = 'Close this day?';
   static const String closeDayConfirmDesc =
       'You can reopen only if the next day is not closed.';
@@ -520,6 +527,10 @@ class AppStrings {
   static const String noBillsInPeriod = 'No bills in selected period';
   static const String csvExported = 'GSTR-1 CSV exported';
   static const String csvExportFailed = 'Failed to export CSV';
+  static const String exportBackup = 'Export Data Backup';
+  static const String exportBackupDesc = 'Download a full JSON backup of all your business data';
+  static const String exportBackupDone = 'Backup exported';
+  static const String exportBackupFailed = 'Failed to export backup';
 
   // UOM
   static const String customUomLabel = 'Custom Unit Name';
@@ -549,6 +560,8 @@ class AppStrings {
   static const String noSuppliersDesc =
       'Add your first supplier to manage purchases';
   static const String searchSuppliers = 'Search suppliers...';
+  static const String searchQuotations = 'Search by number or customer...';
+  static const String searchJobCards = 'Search by vehicle, job no. or customer...';
   static const String supplierNameLabel = 'Supplier Name';
   static const String supplierNameRequired = 'Supplier name is required';
   static const String supplierNameMinLength =

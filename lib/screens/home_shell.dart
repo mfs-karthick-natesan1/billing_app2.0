@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../constants/app_strings.dart';
 import '../models/business_config.dart';
@@ -14,6 +15,50 @@ import 'customer_tab_screen.dart';
 import 'quotation_list_screen.dart';
 import 'restaurant/table_screen.dart';
 import 'workshop/job_card_list_screen.dart';
+
+/// Lazy-loading alternative to [IndexedStack].
+/// Tabs are only built the first time they are visited, avoiding
+/// unnecessary widget construction and provider reads on app startup.
+class _LazyIndexedStack extends StatefulWidget {
+  final int index;
+  final List<Widget> children;
+
+  const _LazyIndexedStack({required this.index, required this.children});
+
+  @override
+  State<_LazyIndexedStack> createState() => _LazyIndexedStackState();
+}
+
+class _LazyIndexedStackState extends State<_LazyIndexedStack> {
+  late final List<bool> _activated;
+
+  @override
+  void initState() {
+    super.initState();
+    _activated = List.filled(widget.children.length, false);
+    _activated[widget.index] = true;
+  }
+
+  @override
+  void didUpdateWidget(_LazyIndexedStack oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final i = widget.index;
+    if (i < _activated.length && !_activated[i]) {
+      setState(() => _activated[i] = true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IndexedStack(
+      index: widget.index,
+      children: List.generate(
+        widget.children.length,
+        (i) => _activated[i] ? widget.children[i] : const SizedBox.shrink(),
+      ),
+    );
+  }
+}
 
 class HomeShell extends StatelessWidget {
   const HomeShell({super.key});
@@ -49,28 +94,44 @@ class HomeShell extends StatelessWidget {
       if (isRestaurantOrWorkshop) const ExpenseListScreen(),
     ];
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isWide = constraints.maxWidth >= 768;
-
-        if (isWide) {
-          return _WideLayout(
-            currentIndex: currentIndex,
-            tabs: tabs,
-            businessType: businessType,
-            lowStockCount: lowStockCount,
-            onTabSelected: navProvider.setTab,
-          );
-        }
-
-        return _NarrowLayout(
-          currentIndex: currentIndex,
-          tabs: tabs,
-          businessType: businessType,
-          lowStockCount: lowStockCount,
-          onTabSelected: navProvider.setTab,
-        );
+    return CallbackShortcuts(
+      bindings: {
+        // Alt+1…6 — jump to tab
+        for (var i = 0; i < tabs.length && i < 6; i++)
+          SingleActivator(
+            LogicalKeyboardKey(0x00100000030 + i), // LogicalKeyboardKey.digit1..6
+            alt: true,
+          ): () => navProvider.setTab(i),
+        // Alt+N — new bill (tab 1)
+        const SingleActivator(LogicalKeyboardKey.keyN, alt: true):
+            () => navProvider.setTab(1),
       },
+      child: Focus(
+        autofocus: true,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth >= 768;
+
+            if (isWide) {
+              return _WideLayout(
+                currentIndex: currentIndex,
+                tabs: tabs,
+                businessType: businessType,
+                lowStockCount: lowStockCount,
+                onTabSelected: navProvider.setTab,
+              );
+            }
+
+            return _NarrowLayout(
+              currentIndex: currentIndex,
+              tabs: tabs,
+              businessType: businessType,
+              lowStockCount: lowStockCount,
+              onTabSelected: navProvider.setTab,
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -96,7 +157,7 @@ class _NarrowLayout extends StatelessWidget {
     return Scaffold(
       key: navProvider.scaffoldKey,
       drawer: const AppNavDrawer(),
-      body: IndexedStack(index: currentIndex, children: tabs),
+      body: _LazyIndexedStack(index: currentIndex, children: tabs),
     );
   }
 }
@@ -201,7 +262,7 @@ class _WideLayout extends StatelessWidget {
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 1280),
-                  child: IndexedStack(index: currentIndex, children: tabs),
+                  child: _LazyIndexedStack(index: currentIndex, children: tabs),
                 ),
               ),
             ),
