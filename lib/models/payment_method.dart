@@ -1,7 +1,7 @@
 import '../constants/app_strings.dart';
 
 /// Unified payment method enum for bills, expenses, and customer settlements.
-enum PaymentMethod { cash, upi, credit, split, bankTransfer }
+enum PaymentMethod { cash, upi, credit, split, bankTransfer, cheque }
 
 extension PaymentMethodX on PaymentMethod {
   String get label {
@@ -16,6 +16,8 @@ extension PaymentMethodX on PaymentMethod {
         return 'Split';
       case PaymentMethod.bankTransfer:
         return AppStrings.bankTransfer;
+      case PaymentMethod.cheque:
+        return 'Cheque';
     }
   }
 
@@ -39,6 +41,7 @@ extension PaymentMethodX on PaymentMethod {
         PaymentMethod.cash,
         PaymentMethod.upi,
         PaymentMethod.bankTransfer,
+        PaymentMethod.cheque,
         PaymentMethod.credit,
       }.contains(this);
 
@@ -48,6 +51,7 @@ extension PaymentMethodX on PaymentMethod {
         PaymentMethod.cash,
         PaymentMethod.upi,
         PaymentMethod.bankTransfer,
+        PaymentMethod.cheque,
       }.contains(this);
 
   static PaymentMethod fromString(String? value,
