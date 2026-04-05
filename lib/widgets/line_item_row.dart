@@ -159,30 +159,44 @@ class LineItemRow extends StatelessWidget {
                           height: 1,
                           color: AppColors.muted.withValues(alpha: 0.3),
                         ),
-                        items: [
-                          if (selected != null)
-                            DropdownMenuItem<String>(
-                              value: null,
-                              child: Text(
-                                'Clear',
-                                style: AppTypography.label.copyWith(
-                                  fontSize: 11,
-                                  color: AppColors.error,
+                        items: options.isEmpty && selected == null
+                            ? [
+                                DropdownMenuItem<String>(
+                                  enabled: false,
+                                  value: '__none__',
+                                  child: Text(
+                                    'No S/N in stock — add via Purchases',
+                                    style: AppTypography.label.copyWith(
+                                      fontSize: 11,
+                                      color: AppColors.muted,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ...options.map(
-                            (sn) => DropdownMenuItem<String>(
-                              value: sn.id,
-                              child: Text(
-                                sn.number,
-                                style: AppTypography.label
-                                    .copyWith(fontSize: 12),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                        ],
+                              ]
+                            : [
+                                if (selected != null)
+                                  DropdownMenuItem<String>(
+                                    value: null,
+                                    child: Text(
+                                      'Clear',
+                                      style: AppTypography.label.copyWith(
+                                        fontSize: 11,
+                                        color: AppColors.error,
+                                      ),
+                                    ),
+                                  ),
+                                ...options.map(
+                                  (sn) => DropdownMenuItem<String>(
+                                    value: sn.id,
+                                    child: Text(
+                                      sn.number,
+                                      style: AppTypography.label
+                                          .copyWith(fontSize: 12),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ],
                         onChanged: (newId) {
                           final updatedIds = List<String>.from(
                             item.serialNumberIds,
