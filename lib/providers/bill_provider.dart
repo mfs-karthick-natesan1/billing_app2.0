@@ -60,6 +60,9 @@ class BillProvider extends ChangeNotifier {
     }
   }
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   List<Bill> get bills => List.unmodifiable(_bills);
   List<LineItem> get activeLineItems => List.unmodifiable(_activeLineItems);
   Customer? get activeCustomer => _activeCustomer;
@@ -699,6 +702,8 @@ class BillProvider extends ChangeNotifier {
   /// callers can display feedback to the user.
   Future<String?> syncFromDb() async {
     if (dbService == null) return null;
+    _isLoading = true;
+    notifyListeners();
     try {
       final bills = await dbService!.loadBills();
       // Sort newest-first so dedup always keeps the most recent bill per number
@@ -713,12 +718,17 @@ class BillProvider extends ChangeNotifier {
       _billNumberService.hydrateFromExistingBills(
         _bills.map((b) => b.billNumber).toList(),
       );
+      _isLoading = false;
       notifyListeners();
       return null;
     } on FormatException catch (e) {
+      _isLoading = false;
+      notifyListeners();
       debugPrint('syncFromDb: data parse error — $e');
       return 'Sync failed: could not parse bill data.';
     } on Exception catch (e) {
+      _isLoading = false;
+      notifyListeners();
       final msg = e.toString();
       if (msg.contains('AuthException') || msg.contains('JWT')) {
         debugPrint('syncFromDb: auth error — $e');

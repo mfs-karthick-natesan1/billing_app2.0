@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../constants/app_spacing.dart';
 import '../constants/app_strings.dart';
 import '../providers/business_config_provider.dart';
+import '../models/product.dart';
 import '../providers/product_provider.dart';
 import '../services/search_service.dart';
 import '../widgets/app_fab.dart';
@@ -14,6 +15,9 @@ import '../widgets/stock_adjustment_sheet.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_typography.dart';
 import '../widgets/confirm_dialog.dart';
+import '../widgets/skeleton_loader.dart';
+
+enum _ProductSort { nameAsc, nameDesc, priceAsc, priceDesc, stockAsc, stockDesc }
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -25,12 +29,32 @@ class ProductListScreen extends StatefulWidget {
 class _ProductListScreenState extends State<ProductListScreen> {
   ProductFilter _filter = ProductFilter.all;
   String _searchQuery = '';
+  _ProductSort _sort = _ProductSort.nameAsc;
   final _searchController = TextEditingController();
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  List<Product> _applySortProducts(List<Product> products) {
+    final sorted = products.toList();
+    switch (_sort) {
+      case _ProductSort.nameAsc:
+        sorted.sort((a, b) => a.name.compareTo(b.name));
+      case _ProductSort.nameDesc:
+        sorted.sort((a, b) => b.name.compareTo(a.name));
+      case _ProductSort.priceAsc:
+        sorted.sort((a, b) => a.sellingPrice.compareTo(b.sellingPrice));
+      case _ProductSort.priceDesc:
+        sorted.sort((a, b) => b.sellingPrice.compareTo(a.sellingPrice));
+      case _ProductSort.stockAsc:
+        sorted.sort((a, b) => a.stockQuantity.compareTo(b.stockQuantity));
+      case _ProductSort.stockDesc:
+        sorted.sort((a, b) => b.stockQuantity.compareTo(a.stockQuantity));
+    }
+    return sorted;
   }
 
   void _showProductOptions(
@@ -84,15 +108,30 @@ class _ProductListScreenState extends State<ProductListScreen> {
     final configProvider = context.watch<BusinessConfigProvider>();
     final isPharmacy = configProvider.isPharmacy;
     final isSalon = configProvider.isSalon;
-    final filtered = productProvider.getFilteredProducts(
-      searchQuery: _searchQuery,
-      filter: _filter,
+    final filtered = _applySortProducts(
+      productProvider.getFilteredProducts(
+        searchQuery: _searchQuery,
+        filter: _filter,
+      ),
     );
 
     return Scaffold(
       appBar: AppTopBar(
         title: AppStrings.productsTitle,
         actions: [
+          PopupMenuButton<_ProductSort>(
+            icon: const Icon(Icons.sort, color: AppColors.onSurface),
+            initialValue: _sort,
+            onSelected: (s) => setState(() => _sort = s),
+            itemBuilder: (_) => const [
+              PopupMenuItem(value: _ProductSort.nameAsc, child: Text('Name: A–Z')),
+              PopupMenuItem(value: _ProductSort.nameDesc, child: Text('Name: Z–A')),
+              PopupMenuItem(value: _ProductSort.priceDesc, child: Text('Price: high to low')),
+              PopupMenuItem(value: _ProductSort.priceAsc, child: Text('Price: low to high')),
+              PopupMenuItem(value: _ProductSort.stockDesc, child: Text('Stock: high to low')),
+              PopupMenuItem(value: _ProductSort.stockAsc, child: Text('Stock: low to high')),
+            ],
+          ),
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert, color: AppColors.onSurface),
             onSelected: (value) {
@@ -171,22 +210,38 @@ class _ProductListScreenState extends State<ProductListScreen> {
           const SizedBox(height: AppSpacing.small),
           // Product list
           Expanded(
-            child: productProvider.products.isEmpty
-                ? EmptyState(
-                    icon: Icons.inventory_2,
-                    title: AppStrings.noProductsYet,
-                    description: AppStrings.noProductsDesc,
-                    ctaLabel: AppStrings.addProduct,
-                    onCtaTap: () =>
-                        Navigator.pushNamed(context, '/add-product'),
+            child: RefreshIndicator(
+              color: AppColors.primary,
+              onRefresh: () => productProvider.syncFromDb(),
+              child: productProvider.isLoading
+                ? const SkeletonList()
+                : productProvider.products.isEmpty
+                ? ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      EmptyState(
+                        icon: Icons.inventory_2,
+                        title: AppStrings.noProductsYet,
+                        description: AppStrings.noProductsDesc,
+                        ctaLabel: AppStrings.addProduct,
+                        onCtaTap: () =>
+                            Navigator.pushNamed(context, '/add-product'),
+                      ),
+                    ],
                   )
                 : filtered.isEmpty
-                ? const EmptyState(
-                    icon: Icons.search_off,
-                    title: AppStrings.noSearchResults,
-                    description: AppStrings.noSearchResultsDesc,
+                ? ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: const [
+                      EmptyState(
+                        icon: Icons.search_off,
+                        title: AppStrings.noSearchResults,
+                        description: AppStrings.noSearchResultsDesc,
+                      ),
+                    ],
                   )
                 : ListView.separated(
+                    physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSpacing.medium,
                       vertical: AppSpacing.small,
@@ -219,7 +274,20 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           );
                         },
                         onDismissed: (_) {
-                          context.read<ProductProvider>().deleteProduct(product.id);
+                          final deleted = product;
+                          context.read<ProductProvider>().deleteProduct(deleted.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(AppStrings.deleteProduct),
+                              action: SnackBarAction(
+                                label: AppStrings.undo,
+                                onPressed: () {
+                                  context.read<ProductProvider>().addProduct(deleted);
+                                },
+                              ),
+                              duration: const Duration(seconds: 4),
+                            ),
+                          );
                         },
                         child: ProductCard(
                           product: product,
@@ -240,6 +308,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       );
                     },
                   ),
+            ),
           ),
         ],
       ),

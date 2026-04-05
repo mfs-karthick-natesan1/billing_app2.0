@@ -27,6 +27,9 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   List<Product> get products => List.unmodifiable(_products);
 
   int get totalCount => _products.length;
@@ -348,5 +351,28 @@ class ProductProvider extends ChangeNotifier {
     if (value == null) return null;
     final normalized = value.trim();
     return normalized.isEmpty ? null : normalized;
+  }
+
+  Future<String?> syncFromDb() async {
+    if (dbService == null) return null;
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final products = await dbService!.loadProducts();
+      _products
+        ..clear()
+        ..addAll(products);
+      _isLoading = false;
+      notifyListeners();
+      return null;
+    } on Exception catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      final msg = e.toString();
+      if (msg.contains('AuthException') || msg.contains('JWT')) {
+        return 'Sync failed: session expired. Please log in again.';
+      }
+      return 'Sync failed: please check your internet connection.';
+    }
   }
 }

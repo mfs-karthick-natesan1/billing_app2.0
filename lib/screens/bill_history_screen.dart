@@ -16,6 +16,7 @@ import '../widgets/bill_detail_sheet.dart';
 import '../widgets/bill_history_card.dart';
 import '../widgets/bill_history_filter_chips.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/skeleton_loader.dart';
 
 class BillHistoryScreen extends StatefulWidget {
   const BillHistoryScreen({super.key});
@@ -27,15 +28,22 @@ class BillHistoryScreen extends StatefulWidget {
 enum _BillSort { dateDesc, dateAsc, amountDesc, amountAsc }
 
 class _BillHistoryScreenState extends State<BillHistoryScreen> {
+  static const _pageSize = 30;
+
   BillFilter _filter = BillFilter.all;
   String _searchQuery = '';
   _BillSort _sort = _BillSort.dateDesc;
+  int _visibleCount = _pageSize;
   final _searchController = TextEditingController();
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _resetPagination() {
+    if (_visibleCount != _pageSize) setState(() => _visibleCount = _pageSize);
   }
 
   Future<void> _exportCsv(List<Bill> bills) async {
@@ -91,7 +99,7 @@ class _BillHistoryScreenState extends State<BillHistoryScreen> {
           PopupMenuButton<_BillSort>(
             icon: const Icon(Icons.sort),
             initialValue: _sort,
-            onSelected: (s) => setState(() => _sort = s),
+            onSelected: (s) { setState(() => _sort = s); _resetPagination(); },
             itemBuilder: (_) => const [
               PopupMenuItem(value: _BillSort.dateDesc, child: Text('Newest first')),
               PopupMenuItem(value: _BillSort.dateAsc, child: Text('Oldest first')),
@@ -123,7 +131,7 @@ class _BillHistoryScreenState extends State<BillHistoryScreen> {
             ),
             child: TextField(
               controller: _searchController,
-              onChanged: (v) => setState(() => _searchQuery = v),
+              onChanged: (v) { setState(() => _searchQuery = v); _resetPagination(); },
               decoration: InputDecoration(
                 hintText: AppStrings.searchBills,
                 hintStyle: AppTypography.body.copyWith(color: AppColors.muted),
@@ -162,7 +170,7 @@ class _BillHistoryScreenState extends State<BillHistoryScreen> {
             thisMonthCount: billProvider.thisMonthBillCount,
             cashCount: billProvider.cashBillCount,
             creditCount: billProvider.creditBillCount,
-            onChanged: (f) => setState(() => _filter = f),
+            onChanged: (f) { setState(() => _filter = f); _resetPagination(); },
           ),
           const SizedBox(height: AppSpacing.small),
           // Bill list
@@ -170,7 +178,9 @@ class _BillHistoryScreenState extends State<BillHistoryScreen> {
             child: RefreshIndicator(
               color: AppColors.primary,
               onRefresh: () => billProvider.syncFromDb(),
-              child: billProvider.bills.isEmpty
+              child: billProvider.isLoading
+                  ? const SkeletonList()
+                  : billProvider.bills.isEmpty
                   ? ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       children: [
@@ -192,23 +202,38 @@ class _BillHistoryScreenState extends State<BillHistoryScreen> {
                         ),
                       ],
                     )
-                  : ListView.separated(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.medium,
-                        vertical: AppSpacing.small,
-                      ),
-                      itemCount: filtered.length,
-                      separatorBuilder: (context, index) =>
-                          const Divider(height: 1),
-                      itemBuilder: (context, index) {
-                        final bill = filtered[index];
-                        return BillHistoryCard(
-                          bill: bill,
-                          onTap: () => BillDetailSheet.show(context, bill),
+                  : Builder(builder: (context) {
+                        final page = filtered.take(_visibleCount).toList();
+                        final hasMore = filtered.length > _visibleCount;
+                        return ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.medium,
+                            vertical: AppSpacing.small,
+                          ),
+                          itemCount: page.length + (hasMore ? 1 : 0),
+                          separatorBuilder: (context, index) =>
+                              const Divider(height: 1),
+                          itemBuilder: (context, index) {
+                            if (index == page.length) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: AppSpacing.medium),
+                                child: Center(
+                                  child: TextButton(
+                                    onPressed: () => setState(() => _visibleCount += _pageSize),
+                                    child: Text('Load more (${filtered.length - _visibleCount} remaining)'),
+                                  ),
+                                ),
+                              );
+                            }
+                            final bill = page[index];
+                            return BillHistoryCard(
+                              bill: bill,
+                              onTap: () => BillDetailSheet.show(context, bill),
+                            );
+                          },
                         );
-                      },
-                    ),
+                      }),
             ),
           ),
         ],
