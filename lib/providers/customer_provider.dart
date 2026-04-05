@@ -180,6 +180,116 @@ class CustomerProvider extends ChangeNotifier {
     ).fold(0, (sum, entry) => sum + entry.amount);
   }
 
+  // ── Invoice-level payment linkage (#43) ──────────────────────────────────
+
+  /// All payments linked to a specific bill/invoice.
+  List<CustomerPaymentEntry> getPaymentsForBill(String billId) {
+    return _paymentEntries
+        .where((e) => e.billReference == billId)
+        .toList()
+      ..sort((a, b) => b.recordedAt.compareTo(a.recordedAt));
+  }
+
+  /// Total amount paid against a specific bill.
+  double getPaidAmountForBill(String billId) {
+    return _paymentEntries
+        .where((e) => e.billReference == billId && !e.isBouncedCheque)
+        .fold(0.0, (sum, e) => sum + e.amount);
+  }
+
+  /// Outstanding balance remaining on a specific bill.
+  double getOutstandingForBill(String billId, double billCreditAmount) {
+    final paid = getPaidAmountForBill(billId);
+    return (billCreditAmount - paid).clamp(0.0, double.infinity);
+  }
+
+  // ── Cheque clearing workflow (#50) ──────────────────────────────────────
+
+  /// Records a cheque payment with pending status.
+  void recordChequePayment(
+    String customerId,
+    double amount, {
+    required String chequeNumber,
+    String? chequeBank,
+    DateTime? chequeDate,
+    String? recordedBy,
+    String? notes,
+    String? billReference,
+  }) {
+    final index = _customers.indexWhere((c) => c.id == customerId);
+    if (index == -1) return;
+
+    // Reduce outstanding immediately (optimistic — reversed if bounced)
+    final newBalance =
+        (_customers[index].outstandingBalance - amount).clamp(0.0, double.infinity);
+    _customers[index] = _customers[index].copyWith(
+      outstandingBalance: newBalance,
+    );
+
+    final entry = CustomerPaymentEntry(
+      customerId: customerId,
+      amount: amount,
+      paymentMode: SettlementPaymentMode.cheque,
+      recordedBy: recordedBy,
+      notes: notes,
+      billReference: billReference,
+      chequeNumber: chequeNumber,
+      chequeBank: chequeBank,
+      chequeDate: chequeDate,
+      chequeStatus: ChequeStatus.pending,
+    );
+    _paymentEntries.add(entry);
+    dbService?.saveCustomerPaymentEntries([entry]);
+    dbService?.saveCustomers([_customers[index]]);
+    _onChanged?.call();
+    notifyListeners();
+  }
+
+  /// Marks a pending cheque as cleared.
+  bool clearCheque(String entryId) {
+    final index = _paymentEntries.indexWhere((e) => e.id == entryId);
+    if (index == -1) return false;
+    final entry = _paymentEntries[index];
+    if (entry.chequeStatus != ChequeStatus.pending) return false;
+
+    _paymentEntries[index] = entry.copyWith(chequeStatus: ChequeStatus.cleared);
+    dbService?.saveCustomerPaymentEntries([_paymentEntries[index]]);
+    _onChanged?.call();
+    notifyListeners();
+    return true;
+  }
+
+  /// Marks a pending cheque as bounced and reverses the customer balance deduction.
+  bool bounceCheque(String entryId) {
+    final index = _paymentEntries.indexWhere((e) => e.id == entryId);
+    if (index == -1) return false;
+    final entry = _paymentEntries[index];
+    if (entry.chequeStatus != ChequeStatus.pending) return false;
+
+    _paymentEntries[index] = entry.copyWith(chequeStatus: ChequeStatus.bounced);
+
+    // Reverse the balance deduction
+    final custIndex = _customers.indexWhere((c) => c.id == entry.customerId);
+    if (custIndex != -1) {
+      _customers[custIndex] = _customers[custIndex].copyWith(
+        outstandingBalance: _customers[custIndex].outstandingBalance + entry.amount,
+      );
+      dbService?.saveCustomers([_customers[custIndex]]);
+    }
+
+    dbService?.saveCustomerPaymentEntries([_paymentEntries[index]]);
+    _onChanged?.call();
+    notifyListeners();
+    return true;
+  }
+
+  /// All cheque payments with pending status.
+  List<CustomerPaymentEntry> get pendingCheques {
+    return _paymentEntries.where((e) => e.isPendingCheque).toList()
+      ..sort((a, b) => (a.chequeDate ?? a.recordedAt)
+          .compareTo(b.chequeDate ?? b.recordedAt));
+  }
+
   List<Customer> searchCustomers(String query) {
     if (query.length < 2) return _customers;
     final lower = query.toLowerCase();
