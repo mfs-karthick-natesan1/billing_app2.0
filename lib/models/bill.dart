@@ -70,6 +70,71 @@ class Bill {
   /// Total discount given (bill-level + all line-level).
   double get totalDiscount => discount + totalLineDiscount;
 
+  Bill copyWith({
+    String? id,
+    String? billNumber,
+    List<LineItem>? lineItems,
+    double? subtotal,
+    double? discount,
+    double? billDiscountPercent,
+    double? totalLineDiscount,
+    double? cgst,
+    double? sgst,
+    double? igst,
+    double? grandTotal,
+    bool? isInterState,
+    PaymentMode? paymentMode,
+    double? amountReceived,
+    double? creditAmount,
+    Customer? customer,
+    DateTime? timestamp,
+    String? diagnosis,
+    String? visitNotes,
+    String? vehicleReg,
+    String? vehicleMake,
+    String? vehicleModel,
+    String? kmReading,
+    double? splitCashAmount,
+    double? splitUpiAmount,
+    double? advanceUsed,
+  }) {
+    return Bill(
+      id: id ?? this.id,
+      billNumber: billNumber ?? this.billNumber,
+      lineItems: lineItems ?? this.lineItems,
+      subtotal: subtotal ?? this.subtotal,
+      discount: discount ?? this.discount,
+      billDiscountPercent: billDiscountPercent ?? this.billDiscountPercent,
+      totalLineDiscount: totalLineDiscount ?? this.totalLineDiscount,
+      cgst: cgst ?? this.cgst,
+      sgst: sgst ?? this.sgst,
+      igst: igst ?? this.igst,
+      grandTotal: grandTotal ?? this.grandTotal,
+      isInterState: isInterState ?? this.isInterState,
+      paymentMode: paymentMode ?? this.paymentMode,
+      amountReceived: amountReceived ?? this.amountReceived,
+      creditAmount: creditAmount ?? this.creditAmount,
+      customer: customer ?? this.customer,
+      timestamp: timestamp ?? this.timestamp,
+      diagnosis: diagnosis ?? this.diagnosis,
+      visitNotes: visitNotes ?? this.visitNotes,
+      vehicleReg: vehicleReg ?? this.vehicleReg,
+      vehicleMake: vehicleMake ?? this.vehicleMake,
+      vehicleModel: vehicleModel ?? this.vehicleModel,
+      kmReading: kmReading ?? this.kmReading,
+      splitCashAmount: splitCashAmount ?? this.splitCashAmount,
+      splitUpiAmount: splitUpiAmount ?? this.splitUpiAmount,
+      advanceUsed: advanceUsed ?? this.advanceUsed,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Bill && other.id == id);
+
+  @override
+  int get hashCode => id.hashCode;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -100,6 +165,10 @@ class Bill {
       'advanceUsed': advanceUsed,
     };
   }
+
+  @override
+  String toString() =>
+      'Bill(billNumber: $billNumber, total: $grandTotal, mode: $paymentMode)';
 
   factory Bill.fromJson(Map<String, dynamic> json) {
     final lineItemJson = json['lineItems'] as List<dynamic>? ?? const [];

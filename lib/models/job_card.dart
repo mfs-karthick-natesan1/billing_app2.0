@@ -190,6 +190,13 @@ class JobCard {
     );
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is JobCard && other.id == id);
+
+  @override
+  int get hashCode => id.hashCode;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -210,6 +217,10 @@ class JobCard {
       'estimatedCost': estimatedCost,
     };
   }
+
+  @override
+  String toString() =>
+      'JobCard(jobNumber: $jobNumber, vehicle: $vehicleReg, status: ${status.label})';
 
   factory JobCard.fromJson(Map<String, dynamic> json) {
     final rawItems = json['items'] as List<dynamic>? ?? [];

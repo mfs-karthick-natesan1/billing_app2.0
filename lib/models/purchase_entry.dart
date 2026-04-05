@@ -31,6 +31,39 @@ class PurchaseEntry {
         totalAmount =
             totalAmount ?? items.fold(0.0, (sum, i) => sum + i.totalCost);
 
+  PurchaseEntry copyWith({
+    String? id,
+    String? supplierId,
+    String? supplierName,
+    DateTime? date,
+    List<PurchaseLineItem>? items,
+    double? totalAmount,
+    PaymentMode? paymentMode,
+    String? invoiceNumber,
+    String? notes,
+    String? createdBy,
+  }) {
+    return PurchaseEntry(
+      id: id ?? this.id,
+      supplierId: supplierId ?? this.supplierId,
+      supplierName: supplierName ?? this.supplierName,
+      date: date ?? this.date,
+      items: items ?? this.items,
+      totalAmount: totalAmount ?? this.totalAmount,
+      paymentMode: paymentMode ?? this.paymentMode,
+      invoiceNumber: invoiceNumber ?? this.invoiceNumber,
+      notes: notes ?? this.notes,
+      createdBy: createdBy ?? this.createdBy,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is PurchaseEntry && other.id == id);
+
+  @override
+  int get hashCode => id.hashCode;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

@@ -64,6 +64,7 @@ class Customer {
   final String? medicalNotes;
   final double defaultDiscountPercent;
   final List<CustomerVehicle> vehicles;
+  final DateTime? lastCreditDate;
 
   Customer({
     String? id,
@@ -80,6 +81,7 @@ class Customer {
     this.medicalNotes,
     this.defaultDiscountPercent = 0,
     List<CustomerVehicle>? vehicles,
+    this.lastCreditDate,
   }) : id = id ?? const Uuid().v4(),
        createdAt = createdAt ?? DateTime.now(),
        vehicles = vehicles ?? const [];
@@ -97,6 +99,7 @@ class Customer {
     String? medicalNotes,
     double? defaultDiscountPercent,
     List<CustomerVehicle>? vehicles,
+    DateTime? lastCreditDate,
   }) {
     return Customer(
       id: id,
@@ -114,8 +117,16 @@ class Customer {
       defaultDiscountPercent:
           defaultDiscountPercent ?? this.defaultDiscountPercent,
       vehicles: vehicles ?? this.vehicles,
+      lastCreditDate: lastCreditDate ?? this.lastCreditDate,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Customer && other.id == id);
+
+  @override
+  int get hashCode => id.hashCode;
 
   Map<String, dynamic> toJson() {
     return {
@@ -133,8 +144,13 @@ class Customer {
       'medicalNotes': medicalNotes,
       'defaultDiscountPercent': defaultDiscountPercent,
       'vehicles': vehicles.map((v) => v.toJson()).toList(),
+      if (lastCreditDate != null) 'lastCreditDate': lastCreditDate!.toIso8601String(),
     };
   }
+
+  @override
+  String toString() =>
+      'Customer(id: $id, name: $name, balance: $outstandingBalance)';
 
   factory Customer.fromJson(Map<String, dynamic> json) {
     return Customer(
@@ -152,6 +168,7 @@ class Customer {
       medicalNotes: json['medicalNotes'] as String?,
       defaultDiscountPercent: JsonHelpers.asDouble(json['defaultDiscountPercent']),
       vehicles: _vehicleList(json['vehicles']),
+      lastCreditDate: DateTime.tryParse(json['lastCreditDate'] as String? ?? ''),
     );
   }
 

@@ -141,6 +141,13 @@ class Quotation {
     );
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Quotation && other.id == id);
+
+  @override
+  int get hashCode => id.hashCode;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -169,6 +176,10 @@ class Quotation {
       'isInterState': isInterState,
     };
   }
+
+  @override
+  String toString() =>
+      'Quotation(number: $quotationNumber, total: $grandTotal, status: ${status.label})';
 
   factory Quotation.fromJson(Map<String, dynamic> json) {
     final itemsJson = json['items'] as List<dynamic>? ?? const [];

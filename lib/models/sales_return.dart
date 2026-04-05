@@ -46,6 +46,13 @@ class SalesReturn {
        totalIgst = totalIgst ??
            items.fold(0.0, (sum, item) => sum + item.igstAmount);
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is SalesReturn && other.id == id);
+
+  @override
+  int get hashCode => id.hashCode;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

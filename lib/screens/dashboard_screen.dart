@@ -30,19 +30,18 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final businessConfig = context.watch<BusinessConfigProvider>();
     final billProvider = context.watch<BillProvider>();
-    final productProvider = context.watch<ProductProvider>();
-    final customerProvider = context.watch<CustomerProvider>();
     final expenseProvider = context.watch<ExpenseProvider>();
     final cashBookProvider = context.watch<CashBookProvider>();
 
+    // Select only scalar values from providers to avoid full rebuilds on unrelated changes
+    final lowStock = context.select<ProductProvider, int>((p) => p.lowStockCount);
+    final outstanding = context.select<CustomerProvider, double>((p) => p.totalOutstanding);
+    final todaysPurchases = context.select<PurchaseProvider, double>((p) => p.todayPurchaseTotal);
+    final todayRefundTotal = context.select<ReturnProvider, double>((p) => p.todayRefundTotal);
+
     final todaysSales = billProvider.todaysSales;
     final billCount = billProvider.todaysBillCount;
-    final outstanding = customerProvider.totalOutstanding;
-    final lowStock = productProvider.lowStockCount;
     final recentBills = billProvider.recentBills;
-    final purchaseProvider = context.watch<PurchaseProvider>();
-    final returnProvider = context.watch<ReturnProvider>();
-    final todaysPurchases = purchaseProvider.todayPurchaseTotal;
     final todaysExpenses = expenseProvider.todayTotal;
     final recentExpenses = expenseProvider
         .getFilteredExpenses()
@@ -173,13 +172,11 @@ class DashboardScreen extends StatelessWidget {
                       valueColor: AppColors.error,
                     ),
                   ],
-                  if (returnProvider.todayRefundTotal > 0) ...[
+                  if (todayRefundTotal > 0) ...[
                     const SizedBox(height: AppSpacing.small),
                     StatCard(
                       label: AppStrings.todaysReturns,
-                      value: Formatters.currency(
-                        returnProvider.todayRefundTotal,
-                      ),
+                      value: Formatters.currency(todayRefundTotal),
                       valueColor: AppColors.error,
                     ),
                   ],

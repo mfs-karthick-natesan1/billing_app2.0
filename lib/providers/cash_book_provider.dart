@@ -209,6 +209,36 @@ class CashBookProvider extends ChangeNotifier {
     final normalizedStart = _startOfDay(startDate);
     final end = _maxRelevantDate();
 
+    // Pre-index transactions by date key for O(1) lookup per day,
+    // replacing the previous O(N_records × N_days) nested iteration.
+    final cashSalesByDay = <String, double>{};
+    for (final bill in _billProvider.bills) {
+      if (bill.paymentMode != PaymentMode.cash) continue;
+      final k = _dateKey(bill.timestamp);
+      cashSalesByDay[k] = (cashSalesByDay[k] ?? 0) + bill.grandTotal;
+    }
+
+    final cashReceivedByDay = <String, double>{};
+    for (final entry in _customerProvider.paymentEntries) {
+      if (entry.paymentMode != SettlementPaymentMode.cash) continue;
+      final k = _dateKey(entry.recordedAt);
+      cashReceivedByDay[k] = (cashReceivedByDay[k] ?? 0) + entry.amount;
+    }
+
+    final cashExpensesByDay = <String, double>{};
+    for (final expense in _expenseProvider.expenses) {
+      if (expense.paymentMode != ExpensePaymentMode.cash) continue;
+      final k = _dateKey(expense.date);
+      cashExpensesByDay[k] = (cashExpensesByDay[k] ?? 0) + expense.amount;
+    }
+
+    final cashRefundsByDay = <String, double>{};
+    for (final r in _returnProvider?.returns ?? const []) {
+      if (r.refundMode != RefundMode.cash) continue;
+      final k = _dateKey(r.date);
+      cashRefundsByDay[k] = (cashRefundsByDay[k] ?? 0) + r.totalRefundAmount;
+    }
+
     var cursor = normalizedStart;
     while (!cursor.isAfter(end)) {
       _ensureDayExists(cursor);
@@ -222,29 +252,10 @@ class CashBookProvider extends ChangeNotifier {
           ? current.openingBalance
           : prev?.closingBalance ?? current.openingBalance;
 
-      final cashSales = _billProvider.bills
-          .where((bill) => bill.paymentMode == PaymentMode.cash)
-          .where((bill) => _isSameDay(bill.timestamp, cursor))
-          .fold<double>(0, (sum, bill) => sum + bill.grandTotal);
-
-      final cashReceived = _customerProvider
-          .getPaymentEntriesByDateRange(
-            cursor,
-            cursor,
-            paymentMode: SettlementPaymentMode.cash,
-          )
-          .fold<double>(0, (sum, entry) => sum + entry.amount);
-
-      final cashExpenses = _expenseProvider.expenses
-          .where((expense) => expense.paymentMode == ExpensePaymentMode.cash)
-          .where((expense) => _isSameDay(expense.date, cursor))
-          .fold<double>(0, (sum, expense) => sum + expense.amount);
-
-      final cashRefunds = _returnProvider?.returns
-              .where((r) => r.refundMode == RefundMode.cash)
-              .where((r) => _isSameDay(r.date, cursor))
-              .fold<double>(0, (sum, r) => sum + r.totalRefundAmount) ??
-          0;
+      final cashSales = cashSalesByDay[key] ?? 0;
+      final cashReceived = cashReceivedByDay[key] ?? 0;
+      final cashExpenses = cashExpensesByDay[key] ?? 0;
+      final cashRefunds = cashRefundsByDay[key] ?? 0;
 
       final totalOtherIn = current.otherCashIn.fold<double>(
         0,
@@ -360,7 +371,19 @@ class CashBookProvider extends ChangeNotifier {
   }
 
   double? getCashDiscrepancy(DateTime date) {
-    return null;
+    return getCashBookDay(date).discrepancy;
+  }
+
+  void setPhysicalCashCount(DateTime date, double? count) {
+    final key = _dateKey(date);
+    final current = _dayLedgers[key];
+    if (current == null) return;
+    _dayLedgers[key] = current.copyWith(
+      physicalCashCount: count,
+      clearPhysicalCashCount: count == null,
+    );
+    dbService?.saveCashBook(_dayLedgers.values.toList());
+    _persistAndNotify();
   }
 
   void clearAllData() {

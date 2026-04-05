@@ -51,6 +51,13 @@ class Supplier {
     );
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Supplier && other.id == id);
+
+  @override
+  int get hashCode => id.hashCode;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -65,6 +72,10 @@ class Supplier {
       'createdAt': createdAt.toIso8601String(),
     };
   }
+
+  @override
+  String toString() =>
+      'Supplier(id: $id, name: $name, payable: $outstandingPayable)';
 
   factory Supplier.fromJson(Map<String, dynamic> json) {
     return Supplier(

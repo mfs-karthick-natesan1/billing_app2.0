@@ -188,6 +188,17 @@ class Product {
     };
   }
 
+  @override
+  String toString() =>
+      'Product(id: $id, name: $name, price: $sellingPrice, stock: $stockQuantity)';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Product && other.id == id);
+
+  @override
+  int get hashCode => id.hashCode;
+
   factory Product.fromJson(Map<String, dynamic> json) {
     final batchJson = json['batches'] as List<dynamic>? ?? const [];
     return Product(
