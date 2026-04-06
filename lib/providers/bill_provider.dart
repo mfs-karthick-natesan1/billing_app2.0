@@ -633,16 +633,26 @@ class BillProvider extends ChangeNotifier {
     }
 
     if (!rpcSucceeded) {
+      // Fallback: persist the bill locally so a crash won't lose it.
       pendingSave = dbService?.saveBills([bill]);
     }
 
-    // Update local state regardless (for instant UI)
+    // Update local state for instant UI.
+    //
+    // When the RPC succeeded, the server already decremented stock and
+    // recorded the credit atomically. We must NOT let the providers
+    // re-write their own (now-stale) values to Supabase — that would
+    // race with concurrent devices selling the same product and can
+    // overwrite their decrements. Use persist:false on the RPC-success
+    // path so we only update the local cache.
+    final persistLocally = !rpcSucceeded;
     for (final item in _activeLineItems) {
       if (!item.product.isService) {
         productProvider.decrementStock(
           item.product.id,
           item.quantity,
           batchId: item.batch?.id,
+          persist: persistLocally,
         );
       }
     }
@@ -650,6 +660,7 @@ class BillProvider extends ChangeNotifier {
       customerProvider.addCredit(
         paymentInfo.customer!.id,
         paymentInfo.creditAmount,
+        persist: persistLocally,
       );
     }
     if (_activeVehicleReg != null &&

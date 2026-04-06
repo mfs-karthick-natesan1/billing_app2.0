@@ -65,14 +65,23 @@ class CustomerProvider extends ChangeNotifier {
     return customer;
   }
 
-  void addCredit(String customerId, double amount) {
+  /// Adds credit (outstanding balance) to a customer.
+  ///
+  /// When [persist] is false, only the in-memory state is updated and
+  /// the DB is not written. Use this after a server-side RPC has
+  /// already applied the same mutation atomically — avoids a
+  /// redundant (and race-prone) client write that could overwrite
+  /// concurrent updates from other devices.
+  void addCredit(String customerId, double amount, {bool persist = true}) {
     final index = _customers.indexWhere((c) => c.id == customerId);
     if (index != -1) {
       _customers[index] = _customers[index].copyWith(
         outstandingBalance: _customers[index].outstandingBalance + amount,
         lastCreditDate: DateTime.now(),
       );
-      dbService?.saveCustomers([_customers[index]]);
+      if (persist) {
+        dbService?.saveCustomers([_customers[index]]);
+      }
       _onChanged?.call();
       notifyListeners();
     }
