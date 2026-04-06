@@ -19,7 +19,23 @@ class BillProvider extends ChangeNotifier {
   final List<Bill> _bills = [];
   final VoidCallback? _onChanged;
   DbService? dbService;
+  /// Awaitable handle to the tail of the pending bill-save chain. Callers
+  /// (e.g. the dashboard before sync) can `await` this to guarantee every
+  /// fire-and-forget save has finished.
   Future<void>? pendingSave;
+
+  /// Enqueue [bills] onto [pendingSave] so concurrent calls don't overwrite
+  /// an in-flight save. Previously `pendingSave = dbService?.saveBills(...)`
+  /// replaced the field on every call, dropping any still-running save — if
+  /// the app crashed mid-write the earlier bill could be lost. Chaining
+  /// serialises the writes and keeps `pendingSave` pointing at the tail so
+  /// `await pendingSave` now drains the entire queue.
+  void _enqueueSave(List<Bill> bills) {
+    final db = dbService;
+    if (db == null) return;
+    final prior = pendingSave ?? Future<void>.value();
+    pendingSave = prior.then((_) => db.saveBills(bills));
+  }
   String? businessId;
 
   // Edit mode
@@ -449,7 +465,7 @@ class BillProvider extends ChangeNotifier {
       );
       final idx = _bills.indexWhere((b) => b.id == _editingBill!.id);
       if (idx != -1) _bills[idx] = updatedBill;
-      pendingSave = dbService?.saveBills([updatedBill]);
+      _enqueueSave([updatedBill]);
       _resetActiveState();
       _onChanged?.call();
       notifyListeners();
@@ -490,7 +506,7 @@ class BillProvider extends ChangeNotifier {
     _bills.add(bill);
 
     // Immediately persist new bill to Supabase — track future so refresh can await it
-    pendingSave = dbService?.saveBills([bill]);
+    _enqueueSave([bill]);
 
     // Decrement stock (skip services)
     for (final item in _activeLineItems) {
@@ -634,7 +650,7 @@ class BillProvider extends ChangeNotifier {
 
     if (!rpcSucceeded) {
       // Fallback: persist the bill locally so a crash won't lose it.
-      pendingSave = dbService?.saveBills([bill]);
+      _enqueueSave([bill]);
     }
 
     // Update local state for instant UI.
