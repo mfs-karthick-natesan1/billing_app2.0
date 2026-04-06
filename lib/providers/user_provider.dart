@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
@@ -293,13 +295,17 @@ class UserProvider extends ChangeNotifier {
     if (index == -1) return false;
 
     final user = _users[index];
-    if (user.pinHash != hashPin(pin, phone: user.phone)) {
+    if (!verifyPin(pin, user.pinHash, phone: user.phone)) {
       _recordFailedAttempt(userId);
       return false;
     }
 
     _clearFailedAttempts(userId);
-    final updated = user.copyWith(lastLoginAt: DateTime.now());
+    var updated = user.copyWith(lastLoginAt: DateTime.now());
+    // Upgrade legacy sha256 hashes to pbkdf2 opportunistically on login.
+    if (!user.pinHash.startsWith(_pbkdf2Prefix)) {
+      updated = updated.copyWith(pinHash: hashPin(pin, phone: user.phone));
+    }
     _users[index] = updated;
     _currentUser = updated;
     _isLocked = false;
@@ -330,11 +336,22 @@ class UserProvider extends ChangeNotifier {
 
     if (_isLockedOut(user.id)) return false;
 
-    if (hashPin(pin, phone: user.phone) != user.pinHash) {
+    if (!verifyPin(pin, user.pinHash, phone: user.phone)) {
       _recordFailedAttempt(user.id);
       return false;
     }
     _clearFailedAttempts(user.id);
+    // Upgrade legacy sha256 hashes to pbkdf2 on successful unlock.
+    if (!user.pinHash.startsWith(_pbkdf2Prefix)) {
+      final index = _users.indexWhere((u) => u.id == user.id);
+      if (index != -1) {
+        final upgraded = _users[index].copyWith(
+          pinHash: hashPin(pin, phone: user.phone),
+        );
+        _users[index] = upgraded;
+        _currentUser = upgraded;
+      }
+    }
     _isLocked = false;
     notifyListeners();
     return true;
@@ -349,12 +366,101 @@ class UserProvider extends ChangeNotifier {
     _persistAndNotify();
   }
 
+  // PBKDF2-HMAC-SHA256 parameters. 100k iterations is OWASP's minimum for
+  // SHA-256 and runs in well under 100ms on a phone, which is acceptable for a
+  // PIN login. Salt is 16 random bytes sourced from Random.secure().
+  static const String _pbkdf2Prefix = 'pbkdf2\$';
+  static const int _pbkdf2Iterations = 100000;
+  static const int _pbkdf2SaltBytes = 16;
+  static const int _pbkdf2KeyBytes = 32;
+  static final Random _secureRandom = Random.secure();
+
+  /// Hashes [pin] using PBKDF2-HMAC-SHA256 with a fresh random salt.
+  ///
+  /// [phone] is accepted for backward-compatibility with older call sites
+  /// but is no longer mixed into the hash — the random per-user salt makes
+  /// rainbow-table attacks infeasible without it.
   static String hashPin(String pin, {required String phone}) {
+    final salt = Uint8List(_pbkdf2SaltBytes);
+    for (var i = 0; i < salt.length; i++) {
+      salt[i] = _secureRandom.nextInt(256);
+    }
+    final derived = _pbkdf2(utf8.encode(pin), salt, _pbkdf2Iterations,
+        _pbkdf2KeyBytes);
+    return '$_pbkdf2Prefix$_pbkdf2Iterations\$${base64.encode(salt)}\$'
+        '${base64.encode(derived)}';
+  }
+
+  /// Verifies [pin] against a [storedHash]. Accepts both the new PBKDF2
+  /// format and the legacy sha256(phone|pin|billmaster) format so existing
+  /// user records keep working until they re-login (at which point callers
+  /// should upgrade the stored hash).
+  static bool verifyPin(String pin, String storedHash,
+      {required String phone}) {
+    if (storedHash.startsWith(_pbkdf2Prefix)) {
+      final parts = storedHash.split(r'$');
+      // ['pbkdf2', iters, salt, hash]
+      if (parts.length != 4) return false;
+      final iters = int.tryParse(parts[1]);
+      if (iters == null || iters <= 0) return false;
+      final Uint8List salt;
+      final Uint8List expected;
+      try {
+        salt = base64.decode(parts[2]);
+        expected = base64.decode(parts[3]);
+      } catch (_) {
+        return false;
+      }
+      final derived = _pbkdf2(utf8.encode(pin), salt, iters, expected.length);
+      return _constantTimeEquals(derived, expected);
+    }
+    // Legacy sha256(phone|pin|billmaster) format.
     final normalizedPhone = _normalizePhone(phone);
-    final digest = sha256.convert(
-      utf8.encode('$normalizedPhone|$pin|billmaster'),
+    final legacy = sha256
+        .convert(utf8.encode('$normalizedPhone|$pin|billmaster'))
+        .toString();
+    return _constantTimeEquals(
+      utf8.encode(legacy),
+      utf8.encode(storedHash),
     );
-    return digest.toString();
+  }
+
+  static Uint8List _pbkdf2(
+    List<int> password,
+    List<int> salt,
+    int iterations,
+    int keyLength,
+  ) {
+    final hmac = Hmac(sha256, password);
+    final blockCount = (keyLength + 31) ~/ 32;
+    final result = Uint8List(blockCount * 32);
+    for (var block = 1; block <= blockCount; block++) {
+      final saltBlock = Uint8List(salt.length + 4)
+        ..setRange(0, salt.length, salt)
+        ..[salt.length] = (block >> 24) & 0xff
+        ..[salt.length + 1] = (block >> 16) & 0xff
+        ..[salt.length + 2] = (block >> 8) & 0xff
+        ..[salt.length + 3] = block & 0xff;
+      var u = Uint8List.fromList(hmac.convert(saltBlock).bytes);
+      final t = Uint8List.fromList(u);
+      for (var i = 1; i < iterations; i++) {
+        u = Uint8List.fromList(hmac.convert(u).bytes);
+        for (var j = 0; j < t.length; j++) {
+          t[j] ^= u[j];
+        }
+      }
+      result.setRange((block - 1) * 32, block * 32, t);
+    }
+    return Uint8List.sublistView(result, 0, keyLength);
+  }
+
+  static bool _constantTimeEquals(List<int> a, List<int> b) {
+    if (a.length != b.length) return false;
+    var diff = 0;
+    for (var i = 0; i < a.length; i++) {
+      diff |= a[i] ^ b[i];
+    }
+    return diff == 0;
   }
 
   static bool _isValidPin(String value) {
