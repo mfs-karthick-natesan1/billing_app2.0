@@ -192,8 +192,15 @@ class CashBookDay {
   }
 
   factory CashBookDay.fromJson(Map<String, dynamic> json) {
+    final rawDate = json['date'] as String?;
+    if (rawDate == null || rawDate.isEmpty) {
+      throw FormatException('CashBookDay.date is required');
+    }
+    // Use DateTime.parse (throws) rather than tryParse + DateTime.now()
+    // fallback: silently collapsing a corrupt row onto "today" would merge
+    // historical cash-book days into the current day's totals.
     return CashBookDay(
-      date: DateTime.tryParse(json['date'] as String? ?? '') ?? DateTime.now(),
+      date: DateTime.parse(rawDate),
       openingBalance: JsonHelpers.asDouble(json['openingBalance']),
       openingBalanceOverridden:
           json['openingBalanceOverridden'] as bool? ?? false,
