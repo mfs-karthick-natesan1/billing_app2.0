@@ -78,9 +78,10 @@ class ReturnProvider extends ChangeNotifier {
         final qtyRatio = billItem.quantity == 0
             ? 0.0
             : item.quantityReturned / billItem.quantity;
-        final hasTax = item.cgstAmount != 0 ||
-            item.sgstAmount != 0 ||
-            item.igstAmount != 0;
+        // Per CGST Act §34, credit notes must mirror the EXACT pro-rated tax
+        // from the original invoice. Always derive from billItem, ignoring
+        // any tax the caller may have passed, so partial returns never over-
+        // or under-refund GST.
         enrichedItems.add(ReturnLineItem(
           productId: item.productId,
           productName: item.productName,
@@ -89,9 +90,9 @@ class ReturnProvider extends ChangeNotifier {
           refundAmount: billItem.totalWithGst * qtyRatio,
           batchId: item.batchId,
           batchNumber: item.batchNumber,
-          cgstAmount: hasTax ? item.cgstAmount : billItem.cgstAmount * qtyRatio,
-          sgstAmount: hasTax ? item.sgstAmount : billItem.sgstAmount * qtyRatio,
-          igstAmount: hasTax ? item.igstAmount : billItem.igstAmount * qtyRatio,
+          cgstAmount: billItem.cgstAmount * qtyRatio,
+          sgstAmount: billItem.sgstAmount * qtyRatio,
+          igstAmount: billItem.igstAmount * qtyRatio,
         ));
       }
       salesReturn = SalesReturn(
