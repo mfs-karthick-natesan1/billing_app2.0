@@ -48,20 +48,16 @@ class ReturnProvider extends ChangeNotifier {
   /// Throws [StateError] if any item exceeds the returnable quantity.
   void addReturn(SalesReturn salesReturn, {Bill? originalBill}) {
     if (originalBill != null) {
+      final enrichedItems = <ReturnLineItem>[];
       for (final item in salesReturn.items) {
         // Find matching line item in original bill
-        final billItem = originalBill.lineItems
-            .cast<dynamic>()
-            .firstWhere(
-              (li) => li.product.id == item.productId,
-              orElse: () => null,
-            );
-        if (billItem == null) {
-          throw StateError(
+        final billItem = originalBill.lineItems.firstWhere(
+          (li) => li.product.id == item.productId,
+          orElse: () => throw StateError(
             'Product "${item.productName}" not found in original bill '
             '${originalBill.billNumber}.',
-          );
-        }
+          ),
+        );
         final alreadyReturned = getReturnedQuantity(
           originalBill.id,
           item.productId,
@@ -74,7 +70,41 @@ class ReturnProvider extends ChangeNotifier {
             '($maxReturnable).',
           );
         }
+
+        // Per CGST Act §34, credit notes must reverse the EXACT tax from
+        // the original invoice. Pro-rate tax and refund by returned qty so
+        // discount + GST applied at sale time are mirrored on the refund.
+        final qtyRatio = billItem.quantity == 0
+            ? 0.0
+            : item.quantityReturned / billItem.quantity;
+        final hasTax = item.cgstAmount != 0 ||
+            item.sgstAmount != 0 ||
+            item.igstAmount != 0;
+        enrichedItems.add(ReturnLineItem(
+          productId: item.productId,
+          productName: item.productName,
+          quantityReturned: item.quantityReturned,
+          pricePerUnit: item.pricePerUnit,
+          refundAmount: billItem.totalWithGst * qtyRatio,
+          batchId: item.batchId,
+          batchNumber: item.batchNumber,
+          cgstAmount: hasTax ? item.cgstAmount : billItem.cgstAmount * qtyRatio,
+          sgstAmount: hasTax ? item.sgstAmount : billItem.sgstAmount * qtyRatio,
+          igstAmount: hasTax ? item.igstAmount : billItem.igstAmount * qtyRatio,
+        ));
       }
+      salesReturn = SalesReturn(
+        id: salesReturn.id,
+        originalBillId: salesReturn.originalBillId,
+        returnNumber: salesReturn.returnNumber,
+        date: salesReturn.date,
+        customerId: salesReturn.customerId,
+        customerName: salesReturn.customerName,
+        items: enrichedItems,
+        refundMode: salesReturn.refundMode,
+        notes: salesReturn.notes,
+        createdBy: salesReturn.createdBy,
+      );
     }
 
     _returns.add(salesReturn);

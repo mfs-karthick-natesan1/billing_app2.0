@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'supabase_service.dart';
 
 class BillNumberService {
   int _counter = 0;
   String? _currentFy;
+  static final Random _rng = Random.secure();
 
   String get currentFinancialYear {
     final now = DateTime.now();
@@ -39,8 +42,18 @@ class BillNumberService {
       } catch (_) {
         // Offline or RPC unavailable — fall through to local fallback
       }
+      // We have a businessId but RPC failed — this is a true offline case.
+      // Append a random suffix so two offline devices can't mint identical
+      // numbers and collide when they later sync to the server.
+      final base = generateBillNumber(prefix: prefix);
+      return '$base-OFL${_offlineSuffix()}';
     }
     return generateBillNumber(prefix: prefix);
+  }
+
+  static String _offlineSuffix() {
+    const chars = '0123456789abcdef';
+    return List.generate(6, (_) => chars[_rng.nextInt(chars.length)]).join();
   }
 
   /// Local fallback: generates a bill number using an in-memory counter.
@@ -65,9 +78,12 @@ class BillNumberService {
 
     for (final billNumber in billNumbers) {
       if (!billNumber.startsWith('$fy/')) continue;
-      final parts = billNumber.split('-');
-      if (parts.isEmpty) continue;
-      final number = int.tryParse(parts.last) ?? 0;
+      // Format: "<fy>/<PREFIX>-<seq>" optionally followed by "-OFL<suffix>".
+      // Extract the sequence segment (the one immediately after the prefix).
+      final afterSlash = billNumber.substring(fy.length + 1); // "INV-001[-OFLxxxx]"
+      final parts = afterSlash.split('-');
+      if (parts.length < 2) continue;
+      final number = int.tryParse(parts[1]) ?? 0;
       if (number > maxCounter) {
         maxCounter = number;
       }
