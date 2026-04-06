@@ -738,9 +738,15 @@ class _AddPurchaseSheetState extends State<AddPurchaseSheet> {
       }
     }
 
+    // Capture all context-dependent references before popping — provider mutations
+    // (addPurchase / incrementStock) call notifyListeners() which would queue a
+    // rebuild for this sheet while it's still in the tree, triggering the
+    // _dependents.isEmpty assertion. Popping first removes the sheet cleanly.
     final purchaseProvider = context.read<PurchaseProvider>();
     final productProvider = context.read<ProductProvider>();
     final supplierProvider = context.read<SupplierProvider>();
+    final serialNumberProvider = context.read<SerialNumberProvider>();
+    final messenger = ScaffoldMessenger.of(context);
 
     final supplierName = _selectedSupplier?.name ??
         (_adHocSupplierController.text.trim().isNotEmpty
@@ -772,6 +778,10 @@ class _AddPurchaseSheetState extends State<AddPurchaseSheet> {
       notes: notes.isNotEmpty ? notes : null,
     );
 
+    // Pop BEFORE provider mutations so the sheet is removed from the tree
+    // before notifyListeners fires (avoids _dependents.isEmpty assertion).
+    Navigator.pop(context);
+
     if (_isEdit) {
       purchaseProvider.updatePurchase(
         widget.existingEntry!.id,
@@ -789,7 +799,6 @@ class _AddPurchaseSheetState extends State<AddPurchaseSheet> {
 
     // Register serial numbers for tracked products (new entries only)
     if (!_isEdit) {
-      final serialNumberProvider = context.read<SerialNumberProvider>();
       for (final line in _lines) {
         if (line.product.trackSerialNumbers && line.serialNumbers.isNotEmpty) {
           serialNumberProvider.addFromPurchase(
@@ -802,8 +811,21 @@ class _AddPurchaseSheetState extends State<AddPurchaseSheet> {
       }
     }
 
-    Navigator.pop(context);
-    AppSnackbar.success(context, _isEdit ? 'Purchase updated' : AppStrings.purchaseAdded);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(SnackBar(
+      content: Text(_isEdit ? 'Purchase updated' : AppStrings.purchaseAdded),
+      backgroundColor: AppColors.success,
+      duration: const Duration(seconds: 4),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+      ),
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.medium,
+        vertical: AppSpacing.medium,
+      ),
+      dismissDirection: DismissDirection.horizontal,
+    ));
   }
 }
 
