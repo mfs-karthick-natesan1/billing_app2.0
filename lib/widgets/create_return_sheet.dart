@@ -400,8 +400,8 @@ class _CreateReturnSheetState extends State<CreateReturnSheet> {
       notes: notes.isNotEmpty ? notes : null,
     );
 
-    // Save the return
-    returnProvider.addReturn(salesReturn);
+    // Save the return (passes originalBill so GST is copied from it)
+    returnProvider.addReturn(salesReturn, originalBill: widget.bill);
 
     // Increment stock for returned items
     for (final item in returnItems) {
