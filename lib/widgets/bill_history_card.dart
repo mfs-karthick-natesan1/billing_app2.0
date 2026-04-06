@@ -21,6 +21,7 @@ class BillHistoryCard extends StatelessWidget {
       PaymentMode.credit => AppColors.errorLight(0.10),
       PaymentMode.split => AppColors.success.withValues(alpha: 0.12),
       PaymentMode.bankTransfer => AppColors.muted.withValues(alpha: 0.10),
+      PaymentMode.cheque => AppColors.muted.withValues(alpha: 0.10),
     };
     final chipColor = switch (mode) {
       PaymentMode.cash => AppColors.muted,
@@ -28,6 +29,7 @@ class BillHistoryCard extends StatelessWidget {
       PaymentMode.credit => AppColors.error,
       PaymentMode.split => AppColors.success,
       PaymentMode.bankTransfer => AppColors.muted,
+      PaymentMode.cheque => AppColors.muted,
     };
 
     return Semantics(

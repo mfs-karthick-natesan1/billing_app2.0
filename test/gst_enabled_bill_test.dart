@@ -35,12 +35,17 @@ import 'package:flutter_test/flutter_test.dart';
 // ── Minimal stubs ──────────────────────────────────────────────────────────────
 class _NoOpProductProvider extends ProductProvider {
   @override
-  void decrementStock(String productId, double quantity, {String? batchId}) {}
+  void decrementStock(
+    String productId,
+    double quantity, {
+    String? batchId,
+    bool persist = true,
+  }) {}
 }
 
 class _NoOpCustomerProvider extends CustomerProvider {
   @override
-  void addCredit(String customerId, double amount) {}
+  void addCredit(String customerId, double amount, {bool persist = true}) {}
 }
 
 void main() {

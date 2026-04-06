@@ -1,0 +1,56 @@
+name: Flutter Test
+
+on:
+  push:
+    branches:
+      - main
+      - 'claude/**'
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze (non-blocking)
+        continue-on-error: true
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Run tests
+        id: tests
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          flutter test --reporter expanded 2>&1 | tee test-output.txt
+
+      - name: Commit test log on failure
+        if: steps.tests.outcome == 'failure' && github.event_name == 'push'
+        run: |
+          mkdir -p ci-logs
+          # Last 800 lines is enough for failure context, keeps repo small
+          tail -n 800 test-output.txt > ci-logs/latest.txt
+          git config user.email "ci@local"
+          git config user.name "ci-bot"
+          git add ci-logs/latest.txt
+          git commit -m "ci: test log for ${GITHUB_SHA::7} [skip ci]" || echo "no changes"
+          git push origin HEAD:${GITHUB_REF#refs/heads/}
+
+      - name: Fail job if tests failed
+        if: steps.tests.outcome == 'failure'
+        run: exit 1

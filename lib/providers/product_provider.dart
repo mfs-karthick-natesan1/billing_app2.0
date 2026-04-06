@@ -266,7 +266,17 @@ class ProductProvider extends ChangeNotifier {
 
   /// Decrements stock for the given product. Throws [StateError] if
   /// the resulting stock would be negative.
-  void decrementStock(String productId, double quantity, {String? batchId}) {
+  ///
+  /// When [persist] is false, only the in-memory state is updated and
+  /// the DB is not written. Use this after a server-side RPC has
+  /// already applied the same mutation atomically — avoids a
+  /// redundant client write that could race with concurrent sales.
+  void decrementStock(
+    String productId,
+    double quantity, {
+    String? batchId,
+    bool persist = true,
+  }) {
     final index = _products.indexWhere((p) => p.id == productId);
     if (index == -1) return;
 
@@ -312,7 +322,9 @@ class ProductProvider extends ChangeNotifier {
     }
 
     _products[index] = updated;
-    dbService?.saveProducts([updated]);
+    if (persist) {
+      dbService?.saveProducts([updated]);
+    }
     _onChanged?.call();
     notifyListeners();
   }

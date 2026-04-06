@@ -36,7 +36,7 @@ class _SpyDbService extends DbService {
 // ── Minimal stubs ──────────────────────────────────────────────────────────────
 class _NoOpCustomerProvider extends CustomerProvider {
   @override
-  void addCredit(String customerId, double amount) {}
+  void addCredit(String customerId, double amount, {bool persist = true}) {}
 }
 
 void main() {

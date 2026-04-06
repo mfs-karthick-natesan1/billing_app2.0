@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../models/bill.dart';
+import '../models/return_line_item.dart';
 import '../models/sales_return.dart';
 import '../services/db_service.dart';
 

@@ -264,14 +264,19 @@ void main() {
 // Minimal mock for ProductProvider — only needs decrementStock
 class _MockProductProvider extends ProductProvider {
   @override
-  void decrementStock(String productId, double quantity, {String? batchId}) {
+  void decrementStock(
+    String productId,
+    double quantity, {
+    String? batchId,
+    bool persist = true,
+  }) {
     // no-op for testing
   }
 }
 
 class _MockCustomerProvider extends CustomerProvider {
   @override
-  void addCredit(String customerId, double amount) {
+  void addCredit(String customerId, double amount, {bool persist = true}) {
     // no-op for testing
   }
 }

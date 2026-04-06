@@ -56,6 +56,24 @@ class Subscription {
         _maxProductsOverride = maxProductsOverride,
         _maxUsersOverride = maxUsersOverride;
 
+  Subscription copyWith({
+    int? billsThisMonth,
+    SubscriptionTier? tier,
+    DateTime? trialEndsAt,
+    DateTime? expiresAt,
+  }) {
+    return Subscription(
+      businessId: businessId,
+      tier: tier ?? this.tier,
+      billsThisMonth: billsThisMonth ?? this.billsThisMonth,
+      trialEndsAt: trialEndsAt ?? this.trialEndsAt,
+      expiresAt: expiresAt ?? this.expiresAt,
+      maxBillsOverride: _maxBillsOverride,
+      maxProductsOverride: _maxProductsOverride,
+      maxUsersOverride: _maxUsersOverride,
+    );
+  }
+
   // ── Tier resolution ──────────────────────────────────────────────────────────
 
   bool get isTrialActive =>
