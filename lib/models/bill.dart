@@ -189,7 +189,12 @@ class Bill {
       amountReceived: JsonHelpers.asDouble(json['amountReceived']),
       creditAmount: JsonHelpers.asDouble(json['creditAmount']),
       customer: _customerFromJson(json['customer']),
-      timestamp: DateTime.tryParse(json['timestamp'] as String? ?? ''),
+      // Fail fast on a missing or malformed timestamp rather than defaulting
+      // to DateTime.now() via the constructor — a corrupt row would otherwise
+      // be silently re-dated to today, which breaks historical reports and
+      // GST period attribution. db_service's parse<T> wrapper drops rows
+      // that throw here.
+      timestamp: DateTime.parse(json['timestamp'] as String),
       diagnosis: json['diagnosis'] as String?,
       visitNotes: json['visitNotes'] as String?,
       vehicleReg: json['vehicleReg'] as String?,
