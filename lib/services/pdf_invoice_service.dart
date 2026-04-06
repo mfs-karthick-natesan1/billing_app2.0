@@ -883,6 +883,8 @@ class PdfInvoiceService {
         return 'Split (Cash + UPI)';
       case PaymentMode.bankTransfer:
         return 'Bank Transfer';
+      case PaymentMode.cheque:
+        return 'Cheque';
     }
   }
 }
