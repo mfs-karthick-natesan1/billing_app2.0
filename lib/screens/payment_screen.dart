@@ -767,9 +767,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
       return;
     }
 
-    // Refresh subscription counter from server
+    // Bump subscription counter (local optimistic + server RPC).
+    // Awaited so callers can observe updated limits before returning.
     if (!isEdit && context.mounted) {
-      context.read<SubscriptionProvider>().incrementBillCount();
+      await context.read<SubscriptionProvider>().incrementBillCount();
     }
 
     // Mark serial numbers as sold
