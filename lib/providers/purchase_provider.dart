@@ -69,6 +69,7 @@ class PurchaseProvider extends ChangeNotifier {
     }
 
     _purchases.removeAt(index);
+    dbService?.deleteRecord('purchases', id);
     _onChanged?.call();
     notifyListeners();
   }

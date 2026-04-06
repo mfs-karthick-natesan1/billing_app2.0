@@ -149,18 +149,18 @@ void main() {
       customerProvider.addCredit(customer.id!, 5000);
     });
 
-    String get customerId => customerProvider.customers.first.id!;
+    String customerId() => customerProvider.customers.first.id!;
 
     test('recordChequePayment creates entry with pending status', () {
       customerProvider.recordChequePayment(
-        customerId,
+        customerId(),
         2000,
         chequeNumber: 'CHQ-001',
         chequeBank: 'SBI',
         chequeDate: DateTime(2026, 4, 10),
       );
 
-      final entries = customerProvider.getPaymentHistory(customerId);
+      final entries = customerProvider.getPaymentHistory(customerId());
       expect(entries.length, equals(1));
       expect(entries.first.paymentMode, equals(PaymentMethod.cheque));
       expect(entries.first.chequeNumber, equals('CHQ-001'));
@@ -174,7 +174,7 @@ void main() {
 
     test('clearCheque marks cheque as cleared', () {
       customerProvider.recordChequePayment(
-        customerId,
+        customerId(),
         2000,
         chequeNumber: 'CHQ-001',
       );
@@ -193,7 +193,7 @@ void main() {
 
     test('bounceCheque reverses the balance deduction', () {
       customerProvider.recordChequePayment(
-        customerId,
+        customerId(),
         2000,
         chequeNumber: 'CHQ-001',
       );
@@ -214,7 +214,7 @@ void main() {
 
     test('cannot clear an already bounced cheque', () {
       customerProvider.recordChequePayment(
-        customerId,
+        customerId(),
         2000,
         chequeNumber: 'CHQ-001',
       );
@@ -228,7 +228,7 @@ void main() {
 
     test('cannot bounce an already cleared cheque', () {
       customerProvider.recordChequePayment(
-        customerId,
+        customerId(),
         2000,
         chequeNumber: 'CHQ-001',
       );
@@ -242,12 +242,12 @@ void main() {
 
     test('pendingCheques returns only pending entries', () {
       customerProvider.recordChequePayment(
-        customerId,
+        customerId(),
         1000,
         chequeNumber: 'CHQ-001',
       );
       customerProvider.recordChequePayment(
-        customerId,
+        customerId(),
         500,
         chequeNumber: 'CHQ-002',
       );
@@ -264,7 +264,7 @@ void main() {
 
     test('bounced cheque excluded from getPaidAmountForBill', () {
       customerProvider.recordChequePayment(
-        customerId,
+        customerId(),
         2000,
         chequeNumber: 'CHQ-001',
         billReference: 'bill-abc',
@@ -282,7 +282,7 @@ void main() {
 
     test('cheque payment serialization roundtrip', () {
       customerProvider.recordChequePayment(
-        customerId,
+        customerId(),
         1500,
         chequeNumber: 'CHQ-123',
         chequeBank: 'HDFC',

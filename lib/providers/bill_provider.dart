@@ -740,10 +740,19 @@ class BillProvider extends ChangeNotifier {
     }
   }
 
-  void deleteBill(String billNumber) {
+  void deleteBill(String billNumber, {required ProductProvider productProvider}) {
     final index = _bills.indexWhere((b) => b.billNumber == billNumber);
     if (index == -1) return;
     final bill = _bills.removeAt(index);
+    // Restore stock for non-service items
+    for (final item in bill.lineItems) {
+      if (!item.product.isService) {
+        productProvider.incrementStock(
+          item.product.id,
+          item.quantity,
+        );
+      }
+    }
     dbService?.deleteRecord('bills', bill.id);
     _onChanged?.call();
     notifyListeners();

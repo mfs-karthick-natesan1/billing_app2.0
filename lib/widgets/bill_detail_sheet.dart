@@ -391,7 +391,10 @@ class BillDetailSheet extends StatelessWidget {
                       confirmLabel: 'Delete',
                     );
                     if (confirmed == true && context.mounted) {
-                      context.read<BillProvider>().deleteBill(bill.billNumber);
+                      context.read<BillProvider>().deleteBill(
+                        bill.billNumber,
+                        productProvider: context.read<ProductProvider>(),
+                      );
                       Navigator.pop(context);
                     }
                   },

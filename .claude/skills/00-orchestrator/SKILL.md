@@ -1,6 +1,6 @@
 ---
 name: 00-orchestrator
-description: "Master orchestrator that coordinates all 6 specialized agents (01-code-review, 02-architecture, 03-uiux-design, 04-workflow-logic, 05-security-performance, 06-project-planner) to run a full codebase audit of the BillReady billing app. Use this skill whenever the user wants to run the complete multi-agent audit, trigger all agents together, do a full app review, or coordinate multiple agent passes. Also trigger on 'run all agents', 'full audit', 'complete review', 'run the whole team', 'multi-agent review', 'audit everything', or 'start the dev team'. This is the master controller for the multi-agent dev team system."
+description: "Master orchestrator that coordinates all 7 specialized agents (01-code-review, 02-architecture, 03-uiux-design, 04-workflow-logic, 05-security-performance, 06-project-planner, 08-flutter-testing) to run a full codebase audit of the BillReady billing app. Use this skill whenever the user wants to run the complete multi-agent audit, trigger all agents together, do a full app review, or coordinate multiple agent passes. Also trigger on 'run all agents', 'full audit', 'complete review', 'run the whole team', 'multi-agent review', 'audit everything', or 'start the dev team'. This is the master controller for the multi-agent dev team system."
 ---
 
 # Master Orchestrator Agent
@@ -19,7 +19,8 @@ Run all 6 agents in the correct layered order, manage context passing between la
 | 03 | UI/UX Design | `03-uiux-design/SKILL.md` | 1 (Analyze) | Nothing |
 | 04 | Workflow & Logic | `04-workflow-logic/SKILL.md` | 1 (Analyze) | Nothing |
 | 05 | Security & Performance | `05-security-performance/SKILL.md` | 1 (Analyze) | Nothing |
-| 02 | Architecture | `02-architecture/SKILL.md` | 2 (Architect) | 01, 03, 04, 05 |
+| 08 | Flutter Testing | `08-flutter-testing/SKILL.md` | 1 (Analyze) | Nothing |
+| 02 | Architecture | `02-architecture/SKILL.md` | 2 (Architect) | 01, 03, 04, 05, 08 |
 | 06 | Project Planner | `06-project-planner/SKILL.md` | 3 (Plan) | ALL agents |
 
 ## Execution Model
@@ -34,6 +35,7 @@ Step 1: 01-code-review              → produces Report 01 + Handoff 01
 Step 2: 04-workflow-logic            → produces Report 04 + Handoff 04
 Step 3: 03-uiux-design              → produces Report 03 + Handoff 03
 Step 4: 05-security-performance      → produces Report 05 + Handoff 05
+Step 4b: 08-flutter-testing         → produces Report 08 + Handoff 08
 
 ── QUALITY GATE 1: Verify all Layer 1 reports meet minimum quality ──
 ── COMPILE: Layer 1 Summary for 02-architecture ──

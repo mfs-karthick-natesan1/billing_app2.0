@@ -49,8 +49,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void initState() {
     super.initState();
     final billProvider = context.read<BillProvider>();
-    final isInterState = context.read<BusinessConfigProvider>().isInterState;
-    final grandTotal = billProvider.activeGrandTotal(isInterState: isInterState);
+    final config = context.read<BusinessConfigProvider>();
+    final isInterState = config.isInterState;
+    final grandTotal = billProvider.activeGrandTotal(isInterState: isInterState, gstEnabled: config.gstEnabled);
     _amountReceivedController.text = grandTotal.toStringAsFixed(2);
 
     final existingCustomer = billProvider.activeCustomer;
@@ -82,7 +83,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final gstEnabled = businessConfig.gstEnabled;
     final isInterState = businessConfig.isInterState;
     final isClinic = businessConfig.isClinic;
-    final grandTotal = billProvider.activeGrandTotal(isInterState: isInterState);
+    final grandTotal = billProvider.activeGrandTotal(isInterState: isInterState, gstEnabled: gstEnabled);
 
     return Scaffold(
       appBar: const AppTopBar(title: AppStrings.payment, showBack: true),
@@ -631,6 +632,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
         );
         return;
 
+      case PaymentMode.cheque:
+        _finishBill(
+          context,
+          PaymentInfo(
+            mode: PaymentMode.cheque,
+            amountReceived: grandTotal,
+            customer:
+                _selectedCustomer ??
+                context.read<BillProvider>().activeCustomer,
+          ),
+        );
+        return;
+
       case PaymentMode.credit:
         if (_selectedCustomer == null) {
           setState(() => _customerError = AppStrings.customerRequired);
@@ -721,7 +735,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     final customer = billProvider.activeCustomer ?? paymentInfo.customer ?? _selectedCustomer;
     final advBalance = customer?.advanceBalance ?? 0.0;
-    final grandTotal = billProvider.activeGrandTotal(isInterState: isInterState);
+    final grandTotal = billProvider.activeGrandTotal(isInterState: isInterState, gstEnabled: gstEnabled);
     final advanceUsed = _useAdvance ? advBalance.clamp(0.0, grandTotal) : 0.0;
 
     if (_useAdvance && advanceUsed > 0 && paymentInfo.customer != null) {

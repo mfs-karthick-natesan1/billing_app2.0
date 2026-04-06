@@ -694,6 +694,7 @@ class _CreateBillScreenState extends State<CreateBillScreen> {
               igst: billProvider.activeIgst(isInterState: isInterState),
               grandTotal: billProvider.activeGrandTotal(
                 isInterState: isInterState,
+                gstEnabled: gstEnabled,
               ),
               gstEnabled: gstEnabled,
               isInterState: isInterState,
@@ -804,7 +805,7 @@ class _CreateBillScreenState extends State<CreateBillScreen> {
           gstEnabled
           ? billProvider.activeIgst(isInterState: isInterState)
           : 0,
-      grandTotal: billProvider.activeGrandTotal(isInterState: isInterState),
+      grandTotal: billProvider.activeGrandTotal(isInterState: isInterState, gstEnabled: gstEnabled),
       isInterState: isInterState,
     );
 

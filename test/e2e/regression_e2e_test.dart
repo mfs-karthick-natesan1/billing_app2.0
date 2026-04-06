@@ -311,6 +311,7 @@ void main() {
       final salesReturn = SalesReturn(
         originalBillId: bill.id,
         returnNumber: 'RET-001',
+        refundMode: RefundMode.cash,
         items: [
           ReturnLineItem(
             productId: product.id!,
@@ -348,6 +349,7 @@ void main() {
       final return1 = SalesReturn(
         originalBillId: bill.id,
         returnNumber: 'RET-001',
+        refundMode: RefundMode.cash,
         items: [
           ReturnLineItem(
             productId: product.id!,
@@ -364,6 +366,7 @@ void main() {
       final return2 = SalesReturn(
         originalBillId: bill.id,
         returnNumber: 'RET-002',
+        refundMode: RefundMode.cash,
         items: [
           ReturnLineItem(
             productId: product.id!,
@@ -396,6 +399,7 @@ void main() {
       final return1 = SalesReturn(
         originalBillId: bill.id,
         returnNumber: 'RET-001',
+        refundMode: RefundMode.cash,
         items: [
           ReturnLineItem(
             productId: product.id!,
@@ -411,6 +415,7 @@ void main() {
       final return2 = SalesReturn(
         originalBillId: bill.id,
         returnNumber: 'RET-002',
+        refundMode: RefundMode.cash,
         items: [
           ReturnLineItem(
             productId: product.id!,
