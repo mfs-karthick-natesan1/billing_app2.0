@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../domain/repositories/supplier_repository.dart';
 import '../models/supplier.dart';
 import '../services/db_service.dart';
 
@@ -7,6 +8,14 @@ class SupplierProvider extends ChangeNotifier {
   final VoidCallback? _onChanged;
 
   DbService? dbService;
+  // Sprint 3 #24 slice 2: prefer this repository when wired.
+  SupplierRepository? supplierRepository;
+
+  Future<void> _persist(List<Supplier> suppliers) {
+    final repo = supplierRepository;
+    if (repo != null) return repo.saveAll(suppliers);
+    return dbService?.saveSuppliers(suppliers) ?? Future<void>.value();
+  }
 
   SupplierProvider({
     List<Supplier>? initialSuppliers,
@@ -54,7 +63,7 @@ class SupplierProvider extends ChangeNotifier {
       notes: notes,
     );
     _suppliers.add(supplier);
-    dbService?.saveSuppliers([supplier]);
+    _persist([supplier]);
     _onChanged?.call();
     notifyListeners();
     return supplier;
@@ -80,7 +89,7 @@ class SupplierProvider extends ChangeNotifier {
       productCategories: productCategories,
       notes: notes,
     );
-    dbService?.saveSuppliers([_suppliers[index]]);
+    _persist([_suppliers[index]]);
     _onChanged?.call();
     notifyListeners();
     return true;
@@ -90,7 +99,7 @@ class SupplierProvider extends ChangeNotifier {
     final index = _suppliers.indexWhere((s) => s.id == id);
     if (index == -1) return;
     _suppliers[index] = _suppliers[index].copyWith(isActive: false);
-    dbService?.saveSuppliers([_suppliers[index]]);
+    _persist([_suppliers[index]]);
     _onChanged?.call();
     notifyListeners();
   }
@@ -99,7 +108,7 @@ class SupplierProvider extends ChangeNotifier {
     final index = _suppliers.indexWhere((s) => s.id == id);
     if (index == -1) return;
     _suppliers[index] = _suppliers[index].copyWith(isActive: true);
-    dbService?.saveSuppliers([_suppliers[index]]);
+    _persist([_suppliers[index]]);
     _onChanged?.call();
     notifyListeners();
   }
@@ -110,7 +119,7 @@ class SupplierProvider extends ChangeNotifier {
       _suppliers[index] = _suppliers[index].copyWith(
         outstandingPayable: _suppliers[index].outstandingPayable + amount,
       );
-      dbService?.saveSuppliers([_suppliers[index]]);
+      _persist([_suppliers[index]]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -124,7 +133,7 @@ class SupplierProvider extends ChangeNotifier {
       _suppliers[index] = _suppliers[index].copyWith(
         outstandingPayable: newPayable,
       );
-      dbService?.saveSuppliers([_suppliers[index]]);
+      _persist([_suppliers[index]]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -161,9 +170,11 @@ class SupplierProvider extends ChangeNotifier {
   }
 
   Future<String?> syncFromDb() async {
-    if (dbService == null) return null;
+    if (supplierRepository == null && dbService == null) return null;
     try {
-      final suppliers = await dbService!.loadSuppliers();
+      final suppliers = await (supplierRepository != null
+          ? supplierRepository!.loadAll()
+          : dbService!.loadSuppliers());
       _suppliers
         ..clear()
         ..addAll(suppliers);

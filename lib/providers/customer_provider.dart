@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../domain/repositories/customer_repository.dart';
 import '../models/customer.dart';
 import '../models/customer_payment_entry.dart';
 import '../services/db_service.dart';
@@ -9,6 +10,27 @@ class CustomerProvider extends ChangeNotifier {
   final VoidCallback? _onChanged;
 
   DbService? dbService;
+  // Sprint 3 #24 slice 2: prefer this repository when wired.
+  CustomerRepository? customerRepository;
+
+  Future<void> _persistCustomers(List<Customer> customers) {
+    final repo = customerRepository;
+    if (repo != null) return repo.saveAll(customers);
+    return dbService?.saveCustomers(customers) ?? Future<void>.value();
+  }
+
+  Future<void> _persistPaymentEntries(List<CustomerPaymentEntry> entries) {
+    final repo = customerRepository;
+    if (repo != null) return repo.savePaymentEntries(entries);
+    return dbService?.saveCustomerPaymentEntries(entries) ??
+        Future<void>.value();
+  }
+
+  Future<void> _deleteCustomerRemote(String id) {
+    final repo = customerRepository;
+    if (repo != null) return repo.delete(id);
+    return dbService?.deleteRecord('customers', id) ?? Future<void>.value();
+  }
 
   CustomerProvider({
     List<Customer>? initialCustomers,
@@ -59,7 +81,7 @@ class CustomerProvider extends ChangeNotifier {
       defaultDiscountPercent: defaultDiscountPercent,
     );
     _customers.add(customer);
-    dbService?.saveCustomers([customer]);
+    _persistCustomers([customer]);
     _onChanged?.call();
     notifyListeners();
     return customer;
@@ -80,7 +102,7 @@ class CustomerProvider extends ChangeNotifier {
         lastCreditDate: DateTime.now(),
       );
       if (persist) {
-        dbService?.saveCustomers([_customers[index]]);
+        _persistCustomers([_customers[index]]);
       }
       _onChanged?.call();
       notifyListeners();
@@ -93,7 +115,7 @@ class CustomerProvider extends ChangeNotifier {
       _customers[index] = _customers[index].copyWith(
         advanceBalance: _customers[index].advanceBalance + amount,
       );
-      dbService?.saveCustomers([_customers[index]]);
+      _persistCustomers([_customers[index]]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -106,7 +128,7 @@ class CustomerProvider extends ChangeNotifier {
         advanceBalance: (_customers[index].advanceBalance - amount)
             .clamp(0, double.infinity),
       );
-      dbService?.saveCustomers([_customers[index]]);
+      _persistCustomers([_customers[index]]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -138,8 +160,8 @@ class CustomerProvider extends ChangeNotifier {
         billReference: billReference,
       );
       _paymentEntries.add(entry);
-      dbService?.saveCustomerPaymentEntries([entry]);
-      dbService?.saveCustomers([_customers[index]]);
+      _persistPaymentEntries([entry]);
+      _persistCustomers([_customers[index]]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -248,8 +270,8 @@ class CustomerProvider extends ChangeNotifier {
       chequeStatus: ChequeStatus.pending,
     );
     _paymentEntries.add(entry);
-    dbService?.saveCustomerPaymentEntries([entry]);
-    dbService?.saveCustomers([_customers[index]]);
+    _persistPaymentEntries([entry]);
+    _persistCustomers([_customers[index]]);
     _onChanged?.call();
     notifyListeners();
   }
@@ -262,7 +284,7 @@ class CustomerProvider extends ChangeNotifier {
     if (entry.chequeStatus != ChequeStatus.pending) return false;
 
     _paymentEntries[index] = entry.copyWith(chequeStatus: ChequeStatus.cleared);
-    dbService?.saveCustomerPaymentEntries([_paymentEntries[index]]);
+    _persistPaymentEntries([_paymentEntries[index]]);
     _onChanged?.call();
     notifyListeners();
     return true;
@@ -283,10 +305,10 @@ class CustomerProvider extends ChangeNotifier {
       _customers[custIndex] = _customers[custIndex].copyWith(
         outstandingBalance: _customers[custIndex].outstandingBalance + entry.amount,
       );
-      dbService?.saveCustomers([_customers[custIndex]]);
+      _persistCustomers([_customers[custIndex]]);
     }
 
-    dbService?.saveCustomerPaymentEntries([_paymentEntries[index]]);
+    _persistPaymentEntries([_paymentEntries[index]]);
     _onChanged?.call();
     notifyListeners();
     return true;
@@ -344,7 +366,7 @@ class CustomerProvider extends ChangeNotifier {
       medicalNotes: medicalNotes,
       defaultDiscountPercent: defaultDiscountPercent,
     );
-    dbService?.saveCustomers([_customers[index]]);
+    _persistCustomers([_customers[index]]);
     _onChanged?.call();
     notifyListeners();
     return true;
@@ -370,14 +392,14 @@ class CustomerProvider extends ChangeNotifier {
       );
     }
     _customers[index] = customer.copyWith(vehicles: vehicles);
-    dbService?.saveCustomers([_customers[index]]);
+    _persistCustomers([_customers[index]]);
     _onChanged?.call();
     notifyListeners();
   }
 
   void deleteCustomer(String id) {
     _customers.removeWhere((c) => c.id == id);
-    dbService?.deleteRecord('customers', id);
+    _deleteCustomerRemote(id);
     _onChanged?.call();
     notifyListeners();
   }
@@ -412,9 +434,11 @@ class CustomerProvider extends ChangeNotifier {
   }
 
   Future<String?> syncFromDb() async {
-    if (dbService == null) return null;
+    if (customerRepository == null && dbService == null) return null;
     try {
-      final customers = await dbService!.loadCustomers();
+      final customers = await (customerRepository != null
+          ? customerRepository!.loadAll()
+          : dbService!.loadCustomers());
       _customers
         ..clear()
         ..addAll(customers);
