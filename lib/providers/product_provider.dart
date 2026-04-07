@@ -268,14 +268,24 @@ class ProductProvider extends ChangeNotifier {
     );
   }
 
-  void incrementStock(String productId, double quantity) {
+  /// Increments stock for the given product.
+  ///
+  /// When [persist] is false, only the in-memory state is updated and
+  /// the DB is not written. Sprint 3 #23 slice 5: CreatePurchaseUseCase
+  /// uses this to apply cache-only updates and then persist a single
+  /// snapshot through ProductRepository.
+  void incrementStock(
+    String productId,
+    double quantity, {
+    bool persist = true,
+  }) {
     final index = _products.indexWhere((p) => p.id == productId);
     if (index != -1) {
       final updated = _products[index].copyWith(
         stockQuantity: _products[index].stockQuantity + quantity.toInt(),
       );
       _products[index] = updated;
-      _persist([updated]);
+      if (persist) _persist([updated]);
       _onChanged?.call();
       notifyListeners();
     }

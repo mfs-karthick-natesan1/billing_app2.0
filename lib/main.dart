@@ -13,6 +13,7 @@ import 'app.dart';
 import 'app_bootstrap.dart';
 import 'data/repositories/supabase_bill_repository.dart';
 import 'domain/usecases/complete_bill_usecase.dart';
+import 'domain/usecases/create_purchase_usecase.dart';
 import 'data/repositories/supabase_customer_repository.dart';
 import 'data/repositories/supabase_product_repository.dart';
 import 'data/repositories/supabase_supplier_repository.dart';
@@ -313,7 +314,14 @@ Future<Widget> _bootstrap() async {
   purchaseProvider = PurchaseProvider(
     initialPurchases: initialState.purchases,
     onChanged: schedulePersist,
-  )..dbService = dbService;
+  )
+    ..dbService = dbService
+    ..createPurchaseUseCase = localDbService != null
+        ? CreatePurchaseUseCase(
+            productRepository: SupabaseProductRepository(localDbService),
+            supplierRepository: SupabaseSupplierRepository(localDbService),
+          )
+        : null;
   quotationProvider = QuotationProvider(
     initialQuotations: initialState.quotations,
     onChanged: schedulePersist,
