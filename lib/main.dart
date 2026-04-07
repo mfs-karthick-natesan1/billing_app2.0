@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'app.dart';
 import 'app_bootstrap.dart';
+import 'data/repositories/supabase_bill_repository.dart';
 import 'models/persisted_app_state.dart';
 import 'providers/auth_provider.dart';
 import 'providers/bill_provider.dart';
@@ -248,10 +249,13 @@ Future<Widget> _bootstrap() async {
     initialAdjustments: initialState.stockAdjustments,
     onChanged: schedulePersist,
   )..dbService = dbService;
+  final localDbService = dbService;
   billProvider = BillProvider(
     initialBills: initialState.bills,
     onChanged: schedulePersist,
-  )..dbService = dbService
+  )..dbService = localDbService
+   ..billRepository =
+       localDbService != null ? SupabaseBillRepository(localDbService) : null
    ..businessId = AuthService.businessId;
   customerProvider = CustomerProvider(
     initialCustomers: initialState.customers,
