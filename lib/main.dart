@@ -260,13 +260,24 @@ Future<Widget> _bootstrap() async {
   final billRepo = localDbService != null
       ? SupabaseBillRepository(localDbService)
       : null;
+  final productRepoForUseCase = localDbService != null
+      ? SupabaseProductRepository(localDbService)
+      : null;
+  final customerRepoForUseCase = localDbService != null
+      ? SupabaseCustomerRepository(localDbService)
+      : null;
   billProvider = BillProvider(
     initialBills: initialState.bills,
     onChanged: schedulePersist,
   )..dbService = localDbService
    ..billRepository = billRepo
-   ..completeBillUseCase =
-       billRepo != null ? CompleteBillUseCase(billRepo) : null
+   ..completeBillUseCase = billRepo != null
+       ? CompleteBillUseCase(
+           billRepo,
+           productRepository: productRepoForUseCase,
+           customerRepository: customerRepoForUseCase,
+         )
+       : null
    ..businessId = AuthService.businessId;
   customerProvider = CustomerProvider(
     initialCustomers: initialState.customers,

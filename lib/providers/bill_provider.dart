@@ -692,20 +692,20 @@ class BillProvider extends ChangeNotifier {
 
     // Update local state for instant UI.
     //
-    // When the RPC succeeded, the server already decremented stock and
-    // recorded the credit atomically. We must NOT let the providers
-    // re-write their own (now-stale) values to Supabase — that would
-    // race with concurrent devices selling the same product and can
-    // overwrite their decrements. Use persist:false on the RPC-success
-    // path so we only update the local cache.
-    final persistLocally = !rpcSucceeded;
+    // Sprint 3 #23 slice 4: always apply cache-only updates here and
+    // defer the fallback persistence to CompleteBillUseCase.
+    // persistFallbackSideEffects when the RPC did not succeed. When the
+    // RPC did succeed the server already decremented stock and recorded
+    // the credit atomically, so no follow-up writes are needed.
+    final useCaseForSideEffects = completeBillUseCase;
     for (final item in _activeLineItems) {
       if (!item.product.isService) {
         productProvider.decrementStock(
           item.product.id,
           item.quantity,
           batchId: item.batch?.id,
-          persist: persistLocally,
+          // Cache-only; the use case handles fallback persistence below.
+          persist: useCaseForSideEffects == null && !rpcSucceeded,
         );
       }
     }
@@ -713,7 +713,32 @@ class BillProvider extends ChangeNotifier {
       customerProvider.addCredit(
         paymentInfo.customer!.id,
         paymentInfo.creditAmount,
-        persist: persistLocally,
+        persist: useCaseForSideEffects == null && !rpcSucceeded,
+      );
+    }
+    if (!rpcSucceeded && useCaseForSideEffects != null) {
+      // Gather the freshly-updated peer snapshots (after the in-memory
+      // decrements above) and persist them via the repository layer.
+      final updatedProducts = <Product>[];
+      for (final item in _activeLineItems) {
+        if (item.product.isService) continue;
+        final updated = productProvider.findById(item.product.id);
+        if (updated != null) updatedProducts.add(updated);
+      }
+      Customer? updatedCustomer;
+      if (paymentInfo.mode == PaymentMode.credit &&
+          paymentInfo.customer != null) {
+        updatedCustomer = customerProvider.findById(paymentInfo.customer!.id);
+      }
+      // Fire-and-forget: chain onto pendingSave so the dashboard's
+      // existing `await pendingSave` drains this write alongside the
+      // bill save.
+      final prior = pendingSave ?? Future<void>.value();
+      pendingSave = prior.then(
+        (_) => useCaseForSideEffects.persistFallbackSideEffects(
+          updatedProducts: updatedProducts,
+          updatedCustomer: updatedCustomer,
+        ),
       );
     }
     if (_activeVehicleReg != null &&
