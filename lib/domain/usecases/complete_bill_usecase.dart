@@ -1,5 +1,9 @@
 import '../../models/bill.dart';
+import '../../models/customer.dart';
+import '../../models/product.dart';
 import '../repositories/bill_repository.dart';
+import '../repositories/customer_repository.dart';
+import '../repositories/product_repository.dart';
 
 /// Result of running [CompleteBillUseCase.execute].
 ///
@@ -30,9 +34,20 @@ class CompleteBillResult {
 /// BillProvider. Later slices will introduce ProductRepository /
 /// CustomerRepository dependencies and drain those effects fully.
 class CompleteBillUseCase {
-  CompleteBillUseCase(this._billRepository);
+  CompleteBillUseCase(
+    this._billRepository, {
+    ProductRepository? productRepository,
+    CustomerRepository? customerRepository,
+  })  : _productRepository = productRepository,
+        _customerRepository = customerRepository;
 
   final BillRepository _billRepository;
+  // Sprint 3 #23 slice 4: optional peer repositories so the use case can
+  // persist the fallback-path stock/credit side effects directly, without
+  // BillProvider having to ask ProductProvider / CustomerProvider to do
+  // their own database writes.
+  final ProductRepository? _productRepository;
+  final CustomerRepository? _customerRepository;
 
   /// Invokes the atomic `complete_bill` RPC when a [businessId] is
   /// available. Returns a [CompleteBillResult] whose
@@ -66,6 +81,29 @@ class CompleteBillUseCase {
     } catch (_) {
       // Offline or RPC error — caller will fall back to a local save.
       return CompleteBillResult(bill: bill, rpcSucceeded: false);
+    }
+  }
+
+  /// Persists the fallback-path stock and credit side effects after
+  /// [execute] returned `rpcSucceeded: false`. Pass the already-updated
+  /// [Product] snapshots (i.e. stock after the decrement is applied in
+  /// memory) and, if relevant, the [Customer] with the new outstanding
+  /// balance. BillProvider still owns the in-memory cache update via
+  /// ProductProvider / CustomerProvider; this method just writes the
+  /// snapshots through the repository layer so the cross-provider
+  /// persistence path is centralised here rather than scattered across
+  /// `persist: true` calls on peer providers.
+  Future<void> persistFallbackSideEffects({
+    List<Product> updatedProducts = const [],
+    Customer? updatedCustomer,
+  }) async {
+    final productRepo = _productRepository;
+    if (productRepo != null && updatedProducts.isNotEmpty) {
+      await productRepo.saveAll(updatedProducts);
+    }
+    final customerRepo = _customerRepository;
+    if (customerRepo != null && updatedCustomer != null) {
+      await customerRepo.saveAll([updatedCustomer]);
     }
   }
 }
