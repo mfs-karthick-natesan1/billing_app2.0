@@ -70,10 +70,16 @@ class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
   @override
   Widget build(BuildContext context) {
     final billProvider = context.read<BillProvider>();
+    final customerProvider = context.watch<CustomerProvider>();
+    // Show only credit bills that still have an outstanding balance,
+    // oldest first (FIFO aging). Fully-settled bills are filtered out
+    // so cashiers can't accidentally link a payment to a closed bill.
     final outstandingBills = billProvider.bills
         .where((b) =>
             b.customer?.id == widget.customer.id &&
-            b.paymentMode == PaymentMode.credit)
+            b.paymentMode == PaymentMode.credit &&
+            customerProvider.getOutstandingForBill(b.id, b.creditAmount) >
+                0.009)
         .toList()
       ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
@@ -241,13 +247,17 @@ class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
                     child: Text(AppStrings.generalPayment),
                   ),
                   ...outstandingBills.map(
-                    (bill) => DropdownMenuItem<String?>(
-                      value: bill.id,
-                      child: Text(
-                        '${bill.billNumber} - ${Formatters.currency(bill.grandTotal)}',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
+                    (bill) {
+                      final outstanding = customerProvider
+                          .getOutstandingForBill(bill.id, bill.creditAmount);
+                      return DropdownMenuItem<String?>(
+                        value: bill.id,
+                        child: Text(
+                          '${bill.billNumber} • ${Formatters.currency(outstanding)} due',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    },
                   ),
                 ],
                 onChanged: (v) => setState(() => _selectedBillId = v),
@@ -301,21 +311,40 @@ class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
       return;
     }
 
-    final notes = _notesController.text.trim();
+    final customerProvider = context.read<CustomerProvider>();
+
+    // When a specific bill is selected, #43 stores the bill's primary
+    // key (bill.id) as the linkage reference so getPaidAmountForBill /
+    // getOutstandingForBill queries resolve correctly. Also reject
+    // payments that would overpay the selected bill — callers should
+    // either split the payment or pick "General Payment".
     String? billRef;
     if (_selectedBillId != null) {
       final billProvider = context.read<BillProvider>();
-      final bill = billProvider.bills.where((b) => b.id == _selectedBillId).firstOrNull;
-      billRef = bill?.billNumber;
+      final bill =
+          billProvider.bills.where((b) => b.id == _selectedBillId).firstOrNull;
+      if (bill != null) {
+        final billOutstanding = customerProvider.getOutstandingForBill(
+          bill.id,
+          bill.creditAmount,
+        );
+        if (amount > billOutstanding + 0.009) {
+          setState(() => _error =
+              'Amount exceeds outstanding on bill ${bill.billNumber} (${Formatters.currency(billOutstanding)})');
+          return;
+        }
+        billRef = bill.id;
+      }
     }
 
-    context.read<CustomerProvider>().recordPayment(
-          widget.customer.id,
-          amount,
-          paymentMode: _paymentMode,
-          notes: notes.isNotEmpty ? notes : null,
-          billReference: billRef,
-        );
+    final notes = _notesController.text.trim();
+    customerProvider.recordPayment(
+      widget.customer.id,
+      amount,
+      paymentMode: _paymentMode,
+      notes: notes.isNotEmpty ? notes : null,
+      billReference: billRef,
+    );
     Navigator.pop(context);
     AppSnackbar.success(
       context,
