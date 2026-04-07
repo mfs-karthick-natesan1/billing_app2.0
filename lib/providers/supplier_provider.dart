@@ -113,13 +113,19 @@ class SupplierProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addPayable(String supplierId, double amount) {
+  /// Increments outstanding payable for a supplier.
+  ///
+  /// When [persist] is false, only the in-memory state is updated.
+  /// Sprint 3 #23 slice 5: CreatePurchaseUseCase uses this path to
+  /// apply cache-only updates and persist the snapshot through
+  /// SupplierRepository itself.
+  void addPayable(String supplierId, double amount, {bool persist = true}) {
     final index = _suppliers.indexWhere((s) => s.id == supplierId);
     if (index != -1) {
       _suppliers[index] = _suppliers[index].copyWith(
         outstandingPayable: _suppliers[index].outstandingPayable + amount,
       );
-      _persist([_suppliers[index]]);
+      if (persist) _persist([_suppliers[index]]);
       _onChanged?.call();
       notifyListeners();
     }

@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import '../domain/usecases/create_purchase_usecase.dart';
 import '../models/payment_info.dart';
+import '../models/product.dart';
 import '../models/purchase_entry.dart';
 import '../models/purchase_line_item.dart';
 import '../providers/product_provider.dart';
@@ -11,6 +13,10 @@ class PurchaseProvider extends ChangeNotifier {
   final VoidCallback? _onChanged;
 
   DbService? dbService;
+  // Sprint 3 #23 slice 5: when wired, the use case owns persistence of
+  // cross-provider side effects (stock + supplier payable) via
+  // repositories. Peer provider calls then run with `persist: false`.
+  CreatePurchaseUseCase? createPurchaseUseCase;
 
   PurchaseProvider({
     List<PurchaseEntry>? initialPurchases,
@@ -30,16 +36,48 @@ class PurchaseProvider extends ChangeNotifier {
   }) {
     _purchases.add(entry);
 
-    // Increment stock for each item
+    final useCase = createPurchaseUseCase;
+    final useUseCase = useCase != null;
+
+    // Increment stock for each item. When the use case is wired, peer
+    // writes are cache-only and the use case persists the snapshot.
     for (final item in entry.items) {
-      productProvider.incrementStock(item.productId, item.quantity);
+      productProvider.incrementStock(
+        item.productId,
+        item.quantity,
+        persist: !useUseCase,
+      );
     }
 
     // Credit purchase → increment supplier payable
-    if (entry.paymentMode == PaymentMode.credit &&
+    final isCreditPurchase = entry.paymentMode == PaymentMode.credit &&
         entry.supplierId != null &&
-        supplierProvider != null) {
-      supplierProvider.addPayable(entry.supplierId!, entry.totalAmount);
+        supplierProvider != null;
+    if (isCreditPurchase) {
+      supplierProvider.addPayable(
+        entry.supplierId!,
+        entry.totalAmount,
+        persist: !useUseCase,
+      );
+    }
+
+    if (useUseCase) {
+      final updatedProducts = <Product>[];
+      for (final item in entry.items) {
+        final p = productProvider.findById(item.productId);
+        if (p != null) updatedProducts.add(p);
+      }
+      final updatedSupplier = isCreditPurchase
+          ? supplierProvider.getSupplierById(entry.supplierId!)
+          : null;
+      // Fire-and-forget: matches the pre-slice-5 behaviour where stock
+      // / payable writes weren't awaited. Errors surface through the
+      // provider's onChanged → debounced full persist.
+      // ignore: discarded_futures
+      useCase.persistSideEffects(
+        updatedProducts: updatedProducts,
+        updatedSupplier: updatedSupplier,
+      );
     }
 
     _onChanged?.call();
