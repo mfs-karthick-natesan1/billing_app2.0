@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../domain/repositories/bill_repository.dart';
+import '../domain/usecases/complete_bill_usecase.dart';
 import '../models/bill.dart';
 import '../models/business_config.dart';
 import '../models/line_item.dart';
@@ -24,6 +25,10 @@ class BillProvider extends ChangeNotifier {
   // persistence. `dbService` is kept temporarily for paths that other slices
   // will migrate (stock/credit/supplier side effects live elsewhere for now).
   BillRepository? billRepository;
+  // Sprint 3 #23 slice 3: optional use case for the complete_bill RPC
+  // orchestration. When null, BillProvider falls back to calling the
+  // RPC inline so tests and unmigrated call sites keep working.
+  CompleteBillUseCase? completeBillUseCase;
   /// Awaitable handle to the tail of the pending bill-save chain. Callers
   /// (e.g. the dashboard before sync) can `await` this to guarantee every
   /// fire-and-forget save has finished.
@@ -640,7 +645,17 @@ class BillProvider extends ChangeNotifier {
 
     // Try atomic server RPC; fall back to individual saves on failure
     bool rpcSucceeded = false;
-    if (businessId != null) {
+    final useCase = completeBillUseCase;
+    if (useCase != null) {
+      final result = await useCase.execute(
+        bill: bill,
+        businessId: businessId,
+        stockChanges: stockChanges,
+        credit: creditPayload,
+        billPrefix: billPrefix,
+      );
+      rpcSucceeded = result.rpcSucceeded;
+    } else if (businessId != null) {
       try {
         if (billRepository != null) {
           await billRepository!.completeBillRpc(

@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'app.dart';
 import 'app_bootstrap.dart';
 import 'data/repositories/supabase_bill_repository.dart';
+import 'domain/usecases/complete_bill_usecase.dart';
 import 'data/repositories/supabase_customer_repository.dart';
 import 'data/repositories/supabase_product_repository.dart';
 import 'data/repositories/supabase_supplier_repository.dart';
@@ -256,12 +257,16 @@ Future<Widget> _bootstrap() async {
    ..productRepository = localDbService != null
        ? SupabaseProductRepository(localDbService)
        : null;
+  final billRepo = localDbService != null
+      ? SupabaseBillRepository(localDbService)
+      : null;
   billProvider = BillProvider(
     initialBills: initialState.bills,
     onChanged: schedulePersist,
   )..dbService = localDbService
-   ..billRepository =
-       localDbService != null ? SupabaseBillRepository(localDbService) : null
+   ..billRepository = billRepo
+   ..completeBillUseCase =
+       billRepo != null ? CompleteBillUseCase(billRepo) : null
    ..businessId = AuthService.businessId;
   customerProvider = CustomerProvider(
     initialCustomers: initialState.customers,
