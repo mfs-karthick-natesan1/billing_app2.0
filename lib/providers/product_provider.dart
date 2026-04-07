@@ -4,6 +4,7 @@ import '../models/product.dart';
 import '../models/product_batch.dart';
 import '../models/stock_adjustment.dart';
 import '../constants/sample_data.dart';
+import '../domain/repositories/product_repository.dart';
 import '../services/search_service.dart';
 import '../services/db_service.dart';
 
@@ -13,6 +14,22 @@ class ProductProvider extends ChangeNotifier {
   final VoidCallback? _onChanged;
 
   DbService? dbService;
+  // Sprint 3 #24 slice 2: prefer this repository when wired. The legacy
+  // dbService field is kept as a fallback so tests / unmigrated call
+  // sites keep working until slice 4 removes it.
+  ProductRepository? productRepository;
+
+  Future<void> _persist(List<Product> products) {
+    final repo = productRepository;
+    if (repo != null) return repo.saveAll(products);
+    return dbService?.saveProducts(products) ?? Future<void>.value();
+  }
+
+  Future<void> _deleteRemote(String id) {
+    final repo = productRepository;
+    if (repo != null) return repo.delete(id);
+    return dbService?.deleteRecord('products', id) ?? Future<void>.value();
+  }
 
   ProductProvider({
     List<Product>? initialProducts,
@@ -125,7 +142,7 @@ class ProductProvider extends ChangeNotifier {
 
   void addProduct(Product product) {
     _products.add(product);
-    dbService?.saveProducts([product]);
+    _persist([product]);
     _onChanged?.call();
     notifyListeners();
   }
@@ -134,7 +151,7 @@ class ProductProvider extends ChangeNotifier {
     final index = _products.indexWhere((p) => p.id == updated.id);
     if (index != -1) {
       _products[index] = updated;
-      dbService?.saveProducts([updated]);
+      _persist([updated]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -142,7 +159,7 @@ class ProductProvider extends ChangeNotifier {
 
   void deleteProduct(String id) {
     _products.removeWhere((p) => p.id == id);
-    dbService?.deleteRecord('products', id);
+    _deleteRemote(id);
     _onChanged?.call();
     notifyListeners();
   }
@@ -163,7 +180,7 @@ class ProductProvider extends ChangeNotifier {
         stockQuantity: newBatches.fold<int>(0, (sum, b) => sum + b.stockQuantity),
       );
       _products[index] = updated;
-      dbService?.saveProducts([updated]);
+      _persist([updated]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -180,7 +197,7 @@ class ProductProvider extends ChangeNotifier {
         stockQuantity: newBatches.fold<int>(0, (sum, b) => sum + b.stockQuantity),
       );
       _products[index] = updated;
-      dbService?.saveProducts([updated]);
+      _persist([updated]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -196,7 +213,7 @@ class ProductProvider extends ChangeNotifier {
         stockQuantity: newBatches.fold<int>(0, (sum, b) => sum + b.stockQuantity),
       );
       _products[index] = updated;
-      dbService?.saveProducts([updated]);
+      _persist([updated]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -258,7 +275,7 @@ class ProductProvider extends ChangeNotifier {
         stockQuantity: _products[index].stockQuantity + quantity.toInt(),
       );
       _products[index] = updated;
-      dbService?.saveProducts([updated]);
+      _persist([updated]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -323,7 +340,7 @@ class ProductProvider extends ChangeNotifier {
 
     _products[index] = updated;
     if (persist) {
-      dbService?.saveProducts([updated]);
+      _persist([updated]);
     }
     _onChanged?.call();
     notifyListeners();
@@ -338,7 +355,7 @@ class ProductProvider extends ChangeNotifier {
       );
       _products[index] = updated;
       _adjustments.add(adjustment);
-      dbService?.saveProducts([updated]);
+      _persist([updated]);
       _onChanged?.call();
       notifyListeners();
     }
@@ -366,11 +383,13 @@ class ProductProvider extends ChangeNotifier {
   }
 
   Future<String?> syncFromDb() async {
-    if (dbService == null) return null;
+    if (productRepository == null && dbService == null) return null;
     _isLoading = true;
     notifyListeners();
     try {
-      final products = await dbService!.loadProducts();
+      final products = await (productRepository != null
+          ? productRepository!.loadAll()
+          : dbService!.loadProducts());
       _products
         ..clear()
         ..addAll(products);

@@ -11,6 +11,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'app.dart';
 import 'app_bootstrap.dart';
+import 'data/repositories/supabase_bill_repository.dart';
+import 'domain/usecases/complete_bill_usecase.dart';
+import 'data/repositories/supabase_customer_repository.dart';
+import 'data/repositories/supabase_product_repository.dart';
+import 'data/repositories/supabase_supplier_repository.dart';
 import 'models/persisted_app_state.dart';
 import 'providers/auth_provider.dart';
 import 'providers/bill_provider.dart';
@@ -243,21 +248,34 @@ Future<Widget> _bootstrap() async {
     initialConfig: initialState.businessConfig,
     onChanged: schedulePersist,
   )..dbService = dbService;
+  final localDbService = dbService;
   productProvider = ProductProvider(
     initialProducts: initialState.products,
     initialAdjustments: initialState.stockAdjustments,
     onChanged: schedulePersist,
-  )..dbService = dbService;
+  )..dbService = localDbService
+   ..productRepository = localDbService != null
+       ? SupabaseProductRepository(localDbService)
+       : null;
+  final billRepo = localDbService != null
+      ? SupabaseBillRepository(localDbService)
+      : null;
   billProvider = BillProvider(
     initialBills: initialState.bills,
     onChanged: schedulePersist,
-  )..dbService = dbService
+  )..dbService = localDbService
+   ..billRepository = billRepo
+   ..completeBillUseCase =
+       billRepo != null ? CompleteBillUseCase(billRepo) : null
    ..businessId = AuthService.businessId;
   customerProvider = CustomerProvider(
     initialCustomers: initialState.customers,
     initialPaymentEntries: initialState.customerPaymentEntries,
     onChanged: schedulePersist,
-  )..dbService = dbService;
+  )..dbService = localDbService
+   ..customerRepository = localDbService != null
+       ? SupabaseCustomerRepository(localDbService)
+       : null;
   expenseProvider = ExpenseProvider(
     initialExpenses: initialState.expenses,
     onChanged: schedulePersist,
@@ -277,7 +295,10 @@ Future<Widget> _bootstrap() async {
   supplierProvider = SupplierProvider(
     initialSuppliers: initialState.suppliers,
     onChanged: schedulePersist,
-  )..dbService = dbService;
+  )..dbService = localDbService
+   ..supplierRepository = localDbService != null
+       ? SupabaseSupplierRepository(localDbService)
+       : null;
   purchaseProvider = PurchaseProvider(
     initialPurchases: initialState.purchases,
     onChanged: schedulePersist,

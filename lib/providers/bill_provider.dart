@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import '../domain/repositories/bill_repository.dart';
+import '../domain/usecases/complete_bill_usecase.dart';
 import '../models/bill.dart';
 import '../models/business_config.dart';
 import '../models/line_item.dart';
@@ -19,6 +21,14 @@ class BillProvider extends ChangeNotifier {
   final List<Bill> _bills = [];
   final VoidCallback? _onChanged;
   DbService? dbService;
+  // Sprint 3 #24 slice 1: BillProvider now prefers this repository for bill
+  // persistence. `dbService` is kept temporarily for paths that other slices
+  // will migrate (stock/credit/supplier side effects live elsewhere for now).
+  BillRepository? billRepository;
+  // Sprint 3 #23 slice 3: optional use case for the complete_bill RPC
+  // orchestration. When null, BillProvider falls back to calling the
+  // RPC inline so tests and unmigrated call sites keep working.
+  CompleteBillUseCase? completeBillUseCase;
   /// Awaitable handle to the tail of the pending bill-save chain. Callers
   /// (e.g. the dashboard before sync) can `await` this to guarantee every
   /// fire-and-forget save has finished.
@@ -31,10 +41,16 @@ class BillProvider extends ChangeNotifier {
   /// serialises the writes and keeps `pendingSave` pointing at the tail so
   /// `await pendingSave` now drains the entire queue.
   void _enqueueSave(List<Bill> bills) {
+    // Prefer the repository if one is wired in; fall back to the legacy
+    // DbService field so tests and partially-migrated call paths keep
+    // working while Sprint 3 lands incrementally.
+    final repo = billRepository;
     final db = dbService;
-    if (db == null) return;
+    if (repo == null && db == null) return;
     final prior = pendingSave ?? Future<void>.value();
-    pendingSave = prior.then((_) => db.saveBills(bills));
+    pendingSave = prior.then(
+      (_) => repo != null ? repo.saveAll(bills) : db!.saveBills(bills),
+    );
   }
   String? businessId;
 
@@ -629,19 +645,40 @@ class BillProvider extends ChangeNotifier {
 
     // Try atomic server RPC; fall back to individual saves on failure
     bool rpcSucceeded = false;
-    if (businessId != null) {
+    final useCase = completeBillUseCase;
+    if (useCase != null) {
+      final result = await useCase.execute(
+        bill: bill,
+        businessId: businessId,
+        stockChanges: stockChanges,
+        credit: creditPayload,
+        billPrefix: billPrefix,
+      );
+      rpcSucceeded = result.rpcSucceeded;
+    } else if (businessId != null) {
       try {
-        await SupabaseService.client.rpc(
-          'complete_bill',
-          params: {
-            'p_business_id': businessId,
-            'p_bill': bill.toJson(),
-            'p_stock_changes': stockChanges,
-            if (creditPayload != null) 'p_credit': creditPayload,
-            'p_prefix': billPrefix,
-            'p_use_server_bill_number': false, // already got number above
-          },
-        );
+        if (billRepository != null) {
+          await billRepository!.completeBillRpc(
+            businessId: businessId!,
+            bill: bill.toJson(),
+            stockChanges: stockChanges,
+            credit: creditPayload,
+            prefix: billPrefix,
+            useServerBillNumber: false, // already got number above
+          );
+        } else {
+          await SupabaseService.client.rpc(
+            'complete_bill',
+            params: {
+              'p_business_id': businessId,
+              'p_bill': bill.toJson(),
+              'p_stock_changes': stockChanges,
+              if (creditPayload != null) 'p_credit': creditPayload,
+              'p_prefix': billPrefix,
+              'p_use_server_bill_number': false, // already got number above
+            },
+          );
+        }
         rpcSucceeded = true;
       } catch (_) {
         // Offline or RPC error — fall through to individual saves
@@ -729,11 +766,13 @@ class BillProvider extends ChangeNotifier {
   /// Returns `null` on success, or an error message string on failure so
   /// callers can display feedback to the user.
   Future<String?> syncFromDb() async {
-    if (dbService == null) return null;
+    if (billRepository == null && dbService == null) return null;
     _isLoading = true;
     notifyListeners();
     try {
-      final bills = await dbService!.loadBills();
+      final bills = await (billRepository != null
+          ? billRepository!.loadAll()
+          : dbService!.loadBills());
       // Sort newest-first so dedup always keeps the most recent bill per number
       bills.sort((a, b) => b.timestamp.compareTo(a.timestamp));
       _bills.clear();
@@ -780,7 +819,11 @@ class BillProvider extends ChangeNotifier {
         );
       }
     }
-    dbService?.deleteRecord('bills', bill.id);
+    if (billRepository != null) {
+      billRepository!.delete(bill.id);
+    } else {
+      dbService?.deleteRecord('bills', bill.id);
+    }
     _onChanged?.call();
     notifyListeners();
   }
