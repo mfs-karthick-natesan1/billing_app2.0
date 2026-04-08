@@ -58,10 +58,48 @@ class _CustomerTabScreenState extends State<CustomerTabScreen> {
         : customerProvider.searchCustomers(_query);
     customers = _applySortCustomers(customers);
 
+    final pendingChequeCount = customerProvider.pendingCheques.length;
+
     return Scaffold(
       appBar: AppTopBar(
         title: AppStrings.customersTitle,
         actions: [
+          IconButton(
+            tooltip: 'Pending cheques',
+            icon: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                const Icon(Icons.receipt_long_outlined),
+                if (pendingChequeCount > 0)
+                  Positioned(
+                    right: -4,
+                    top: -4,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: const BoxDecoration(
+                        color: AppColors.error,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        '$pendingChequeCount',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            onPressed: () =>
+                Navigator.pushNamed(context, '/pending-cheques'),
+          ),
           PopupMenuButton<_CustomerSort>(
             icon: const Icon(Icons.sort),
             initialValue: _sort,

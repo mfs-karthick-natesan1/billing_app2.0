@@ -20,6 +20,7 @@ import 'screens/reorder_list_screen.dart';
 import 'screens/subscription_screen.dart';
 import 'screens/supplier_list_screen.dart';
 import 'screens/payment_screen.dart';
+import 'screens/pending_cheques_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/setup_screen.dart';
@@ -102,6 +103,7 @@ class BillReadyApp extends StatelessWidget {
         '/auth-signup': (_) => const AuthSignupScreen(),
         '/subscription': (_) => const SubscriptionScreen(),
         '/support-tickets': (_) => const SupportTicketsScreen(),
+        '/pending-cheques': (_) => const PendingChequesScreen(),
       },
     );
   }

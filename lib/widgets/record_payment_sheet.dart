@@ -48,9 +48,13 @@ class RecordPaymentSheet extends StatefulWidget {
 class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
   final _amountController = TextEditingController();
   final _notesController = TextEditingController();
+  final _chequeNumberController = TextEditingController();
+  final _chequeBankController = TextEditingController();
+  DateTime? _chequeDate;
   SettlementPaymentMode _paymentMode = SettlementPaymentMode.cash;
   String? _selectedBillId;
   String? _error;
+  String? _chequeNumberError;
 
   double get _enteredAmount =>
       double.tryParse(_amountController.text) ?? 0;
@@ -64,6 +68,8 @@ class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
   void dispose() {
     _amountController.dispose();
     _notesController.dispose();
+    _chequeNumberController.dispose();
+    _chequeBankController.dispose();
     super.dispose();
   }
 
@@ -224,6 +230,96 @@ class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
               }).toList(),
             ),
             const SizedBox(height: AppSpacing.medium),
+            // Cheque details (#50 cheque clearing workflow)
+            if (_paymentMode == SettlementPaymentMode.cheque) ...[
+              TextField(
+                controller: _chequeNumberController,
+                textCapitalization: TextCapitalization.characters,
+                decoration: InputDecoration(
+                  labelText: 'Cheque Number *',
+                  errorText: _chequeNumberError,
+                  border: OutlineInputBorder(
+                    borderRadius:
+                        BorderRadius.circular(AppSpacing.cardRadius),
+                  ),
+                ),
+                onChanged: (_) => setState(() => _chequeNumberError = null),
+              ),
+              const SizedBox(height: AppSpacing.small),
+              TextField(
+                controller: _chequeBankController,
+                textCapitalization: TextCapitalization.words,
+                decoration: InputDecoration(
+                  labelText: 'Bank',
+                  border: OutlineInputBorder(
+                    borderRadius:
+                        BorderRadius.circular(AppSpacing.cardRadius),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.small),
+              InkWell(
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                onTap: () async {
+                  final now = DateTime.now();
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: _chequeDate ?? now,
+                    firstDate: DateTime(now.year - 1),
+                    lastDate: DateTime(now.year + 1),
+                  );
+                  if (picked != null) {
+                    setState(() => _chequeDate = picked);
+                  }
+                },
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    labelText: 'Cheque Date',
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(AppSpacing.cardRadius),
+                    ),
+                    suffixIcon: const Icon(Icons.calendar_today, size: 18),
+                  ),
+                  child: Text(
+                    _chequeDate == null
+                        ? 'Select date'
+                        : Formatters.date(_chequeDate!),
+                    style: AppTypography.body.copyWith(
+                      color: _chequeDate == null
+                          ? AppColors.muted
+                          : AppColors.onSurface,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.small),
+              Container(
+                padding: const EdgeInsets.all(AppSpacing.small),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLight(0.08),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.info_outline,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        'Cheque is marked pending. Clear or bounce it from the Pending Cheques screen once processed.',
+                        style: AppTypography.label
+                            .copyWith(color: AppColors.primary),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSpacing.medium),
+            ],
             // Bill reference
             if (outstandingBills.isNotEmpty) ...[
               Text(AppStrings.againstBill, style: AppTypography.label),
@@ -338,6 +434,31 @@ class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
     }
 
     final notes = _notesController.text.trim();
+
+    if (_paymentMode == SettlementPaymentMode.cheque) {
+      final chequeNumber = _chequeNumberController.text.trim();
+      if (chequeNumber.isEmpty) {
+        setState(() => _chequeNumberError = 'Cheque number is required');
+        return;
+      }
+      final bank = _chequeBankController.text.trim();
+      customerProvider.recordChequePayment(
+        widget.customer.id,
+        amount,
+        chequeNumber: chequeNumber,
+        chequeBank: bank.isNotEmpty ? bank : null,
+        chequeDate: _chequeDate,
+        notes: notes.isNotEmpty ? notes : null,
+        billReference: billRef,
+      );
+      Navigator.pop(context);
+      AppSnackbar.success(
+        context,
+        'Cheque $chequeNumber recorded as pending',
+      );
+      return;
+    }
+
     customerProvider.recordPayment(
       widget.customer.id,
       amount,
