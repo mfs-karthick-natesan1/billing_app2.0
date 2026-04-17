@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_spacing.dart';
 import '../constants/app_strings.dart';
@@ -13,6 +14,9 @@ class SearchBarWidget extends StatefulWidget {
   final VoidCallback? onScanBarcode;
   final bool autofocus;
   final FocusNode? focusNode;
+  // Set to false to suppress the mic button on surfaces that don't
+  // need voice input (e.g. embedded search inside another form).
+  final bool voiceSearch;
 
   const SearchBarWidget({
     super.key,
@@ -22,27 +26,76 @@ class SearchBarWidget extends StatefulWidget {
     this.onScanBarcode,
     this.autofocus = false,
     this.focusNode,
+    this.voiceSearch = true,
   });
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
 }
 
-class _SearchBarWidgetState extends State<SearchBarWidget> {
+class _SearchBarWidgetState extends State<SearchBarWidget>
+    with SingleTickerProviderStateMixin {
   final _controller = TextEditingController();
   late final FocusNode _focusNode;
   List<Product> _results = [];
   bool _showResults = false;
 
+  // Voice search
+  final _speech = SpeechToText();
+  bool _speechAvailable = false;
+  bool _isListening = false;
+  late final AnimationController _pulseController;
+
   @override
   void initState() {
     super.initState();
     _focusNode = widget.focusNode ?? FocusNode();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..repeat(reverse: true);
+    if (widget.voiceSearch) _initSpeech();
+  }
+
+  Future<void> _initSpeech() async {
+    final available = await _speech.initialize(
+      onError: (_) => setState(() => _isListening = false),
+      onStatus: (status) {
+        if (status == 'done' || status == 'notListening') {
+          setState(() => _isListening = false);
+        }
+      },
+    );
+    if (mounted) setState(() => _speechAvailable = available);
+  }
+
+  Future<void> _toggleListening() async {
+    if (_isListening) {
+      await _speech.stop();
+      setState(() => _isListening = false);
+      return;
+    }
+    setState(() => _isListening = true);
+    await _speech.listen(
+      onResult: (result) {
+        final text = result.recognizedWords;
+        _controller.text = text;
+        _onChanged(text);
+        if (result.finalResult) {
+          setState(() => _isListening = false);
+        }
+      },
+      listenFor: const Duration(seconds: 10),
+      pauseFor: const Duration(seconds: 3),
+      localeId: 'en_IN',
+      partialResults: true,
+    );
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _pulseController.dispose();
     if (widget.focusNode == null) _focusNode.dispose();
     super.dispose();
   }
@@ -73,6 +126,11 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final showMic = widget.voiceSearch && _speechAvailable;
+    final hasSuffix = _controller.text.isNotEmpty ||
+        widget.onScanBarcode != null ||
+        showMic;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -81,7 +139,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-            border: Border.all(color: AppColors.muted.withValues(alpha: 0.2)),
+            border: Border.all(
+              color: _isListening
+                  ? AppColors.error.withValues(alpha: 0.6)
+                  : AppColors.muted.withValues(alpha: 0.2),
+              width: _isListening ? 2 : 1,
+            ),
           ),
           child: TextField(
             controller: _controller,
@@ -90,15 +153,16 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             onChanged: _onChanged,
             style: AppTypography.body,
             decoration: InputDecoration(
-              hintText: widget.hint,
-              hintStyle: AppTypography.body.copyWith(color: AppColors.muted),
+              hintText: _isListening ? 'Listening…' : widget.hint,
+              hintStyle: AppTypography.body.copyWith(
+                color: _isListening ? AppColors.error : AppColors.muted,
+              ),
               prefixIcon: const Icon(
                 Icons.search,
                 color: AppColors.muted,
                 size: 24,
               ),
-              suffixIcon:
-                  _controller.text.isNotEmpty || widget.onScanBarcode != null
+              suffixIcon: hasSuffix
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -112,6 +176,30 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                             onPressed: () {
                               _controller.clear();
                               _onChanged('');
+                            },
+                          ),
+                        if (showMic)
+                          AnimatedBuilder(
+                            animation: _pulseController,
+                            builder: (_, __) {
+                              final opacity = _isListening
+                                  ? 0.4 + 0.6 * _pulseController.value
+                                  : 1.0;
+                              return IconButton(
+                                icon: Icon(
+                                  _isListening ? Icons.mic : Icons.mic_none,
+                                  color: _isListening
+                                      ? AppColors.error.withValues(
+                                          alpha: opacity,
+                                        )
+                                      : AppColors.primary,
+                                  size: 24,
+                                ),
+                                tooltip: _isListening
+                                    ? 'Tap to stop'
+                                    : 'Search by voice',
+                                onPressed: _toggleListening,
+                              );
                             },
                           ),
                         if (widget.onScanBarcode != null)
