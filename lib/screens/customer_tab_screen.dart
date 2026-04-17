@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-enum _CustomerSort { nameAsc, nameDesc, balanceDesc, balanceAsc }
 import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_spacing.dart';
@@ -14,6 +12,8 @@ import '../providers/customer_provider.dart';
 import '../widgets/app_top_bar.dart';
 import '../widgets/customer_detail_sheet.dart';
 import '../widgets/empty_state.dart';
+
+enum _CustomerSort { nameAsc, nameDesc, balanceDesc, balanceAsc }
 
 class CustomerTabScreen extends StatefulWidget {
   const CustomerTabScreen({super.key});
