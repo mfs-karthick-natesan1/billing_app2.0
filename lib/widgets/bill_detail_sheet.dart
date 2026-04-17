@@ -260,11 +260,35 @@ class BillDetailSheet extends StatelessWidget {
                     bill.amountReceived - bill.grandTotal,
                   ),
                 ),
-              if (isCredit && bill.creditAmount > 0)
+              if (isCredit && bill.creditAmount > 0) ...[
                 _InfoRow(
                   label: AppStrings.creditAmount,
                   value: Formatters.currency(bill.creditAmount),
                 ),
+                // #43 invoice-level payment linkage: show per-bill
+                // paid vs outstanding so the cashier can see how much
+                // of *this* bill the customer still owes, independent
+                // of their aggregate balance.
+                Builder(builder: (ctx) {
+                  final cp = ctx.watch<CustomerProvider>();
+                  final paid = cp.getPaidAmountForBill(bill.id);
+                  final outstanding =
+                      cp.getOutstandingForBill(bill.id, bill.creditAmount);
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _InfoRow(
+                        label: 'Paid',
+                        value: Formatters.currency(paid),
+                      ),
+                      _InfoRow(
+                        label: 'Outstanding',
+                        value: Formatters.currency(outstanding),
+                      ),
+                    ],
+                  );
+                }),
+              ],
               if (bill.advanceUsed > 0)
                 _InfoRow(
                   label: 'Advance Used',
