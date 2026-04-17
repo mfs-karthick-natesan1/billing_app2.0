@@ -50,39 +50,57 @@ class _SearchBarWidgetState extends State<SearchBarWidget>
   void initState() {
     super.initState();
     _focusNode = widget.focusNode ?? FocusNode();
+    // Pulse controller only animates while _isListening; stopped by default
+    // so it does not leak timers in widget tests.
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
-    )..repeat(reverse: true);
+    );
     if (widget.voiceSearch) _initSpeech();
   }
 
   Future<void> _initSpeech() async {
-    final available = await _speech.initialize(
-      onError: (_) => setState(() => _isListening = false),
-      onStatus: (status) {
-        if (status == 'done' || status == 'notListening') {
-          setState(() => _isListening = false);
-        }
-      },
-    );
-    if (mounted) setState(() => _speechAvailable = available);
+    try {
+      final available = await _speech.initialize(
+        onError: (_) => _setListening(false),
+        onStatus: (status) {
+          if (status == 'done' || status == 'notListening') {
+            _setListening(false);
+          }
+        },
+      );
+      if (mounted) setState(() => _speechAvailable = available);
+    } catch (_) {
+      // Plugin not available in test / web environments — hide the mic button.
+    }
+  }
+
+  void _setListening(bool value) {
+    if (!mounted) return;
+    setState(() => _isListening = value);
+    if (value) {
+      _pulseController.repeat(reverse: true);
+    } else {
+      _pulseController
+        ..stop()
+        ..reset();
+    }
   }
 
   Future<void> _toggleListening() async {
     if (_isListening) {
       await _speech.stop();
-      setState(() => _isListening = false);
+      _setListening(false);
       return;
     }
-    setState(() => _isListening = true);
+    _setListening(true);
     await _speech.listen(
       onResult: (result) {
         final text = result.recognizedWords;
         _controller.text = text;
         _onChanged(text);
         if (result.finalResult) {
-          setState(() => _isListening = false);
+          _setListening(false);
         }
       },
       listenFor: const Duration(seconds: 10),
