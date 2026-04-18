@@ -118,8 +118,12 @@ class _AppRootState extends State<_AppRoot> {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Scaffold(
-            backgroundColor: Color(0xFFF8F9FA),
-            body: Center(child: CircularProgressIndicator()),
+            backgroundColor: Color(0xFFF1F5F9),
+            body: Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0D9488)),
+              ),
+            ),
           ),
         );
       },

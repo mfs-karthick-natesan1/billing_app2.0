@@ -10,8 +10,8 @@ class AppSpacing {
   static const double fabElevation = 6.0;
 
   // Border radius
-  static const double cardRadius = 8.0;
-  static const double buttonRadius = 4.0;
+  static const double cardRadius = 12.0;
+  static const double buttonRadius = 8.0;
 
   // Bottom nav
   static const double bottomNavHeight = 56.0;

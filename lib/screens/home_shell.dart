@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import '../models/business_config.dart';
 import '../providers/business_config_provider.dart';
@@ -229,7 +230,7 @@ class _WideLayout extends StatelessWidget {
     return Scaffold(
       key: navProvider.scaffoldKey,
       drawer: const AppNavDrawer(),
-      backgroundColor: const Color(0xFFEEF0F3),
+      backgroundColor: AppColors.background,
       body: Row(
         children: [
           // Extended sidebar — shows label beside icon
@@ -237,7 +238,6 @@ class _WideLayout extends StatelessWidget {
             extended: true,
             selectedIndex: currentIndex < tabCount ? currentIndex : 0,
             onDestinationSelected: handleDestination,
-            backgroundColor: Colors.white,
             destinations: [
               _dest(Icons.home_outlined, AppStrings.homeTitle),
               _dest(Icons.receipt_long_outlined, AppStrings.newBill),
@@ -254,11 +254,10 @@ class _WideLayout extends StatelessWidget {
               _dest(Icons.store_outlined, AppStrings.suppliersTitle),
             ],
           ),
-          const VerticalDivider(thickness: 1, width: 1),
           // Content area — centered with max-width so it doesn't over-stretch
           Expanded(
             child: ColoredBox(
-              color: const Color(0xFFEEF0F3),
+              color: AppColors.background,
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 1280),
