@@ -25,11 +25,11 @@ import 'supabase_service.dart';
 /// Schema per table: id (text/uuid) | business_id (uuid) | data (jsonb)
 /// CashBookDay uses a date-string id; all other models use their UUID id field.
 ///
-/// #42 JSONB→relational (slice 1): the bills table now also has flat columns
-/// (bill_timestamp, payment_mode, grand_total, customer_id, cgst, sgst, igst)
-/// populated by a DB trigger on every upsert.  New server-side helpers
-/// (loadBillsForDateRange, loadBillsByCustomer) use those columns for
-/// push-down filtering instead of full-table scans.
+/// #42 JSONB→relational (slice 1–2): the bills and products tables now have
+/// flat columns populated by DB triggers on every upsert.  Server-side helpers
+/// (loadBillsForDateRange, loadBillsByCustomer, loadProductsByCategory,
+/// loadLowStockProducts) use those columns for push-down filtering instead of
+/// full-table scans.
 class DbService {
   final String businessId;
 
@@ -309,6 +309,49 @@ class DbService {
   Future<List<Product>> loadProducts() async {
     final rows = await _selectAll('products');
     return rows.map((m) { try { return Product.fromJson(m); } catch (_) { return null; } }).whereType<Product>().toList();
+  }
+
+  /// #42 slice 2 — server-side category filter using the flat
+  /// [category] column.
+  Future<List<Product>> loadProductsByCategory(String category) async {
+    try {
+      final rows = await _retryWithBackoff(
+        () => _client
+            .from('products')
+            .select('data')
+            .eq('business_id', businessId)
+            .eq('category', category)
+            .order('product_name'),
+      );
+      return rows
+          .map((r) {
+            try {
+              final m = (r['data'] as Map<String, dynamic>?) ?? {};
+              return Product.fromJson(m);
+            } catch (_) {
+              return null;
+            }
+          })
+          .whereType<Product>()
+          .toList();
+    } catch (_) {
+      return loadProducts();
+    }
+  }
+
+  /// #42 slice 2 — returns products below their low-stock threshold
+  /// using the [low_stock_products] view created by the migration.
+  Future<List<Map<String, dynamic>>> loadLowStockProducts() async {
+    try {
+      return await _retryWithBackoff(
+        () => _client
+            .from('low_stock_products')
+            .select()
+            .eq('business_id', businessId),
+      );
+    } catch (_) {
+      return [];
+    }
   }
 
   Future<List<Customer>> loadCustomers() async {
