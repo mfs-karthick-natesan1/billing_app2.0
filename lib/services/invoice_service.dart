@@ -27,6 +27,10 @@ class InvoiceService {
           config.drugLicenseNumber != null &&
           config.drugLicenseNumber!.isNotEmpty)
         'Drug Lic: ${config.drugLicenseNumber}',
+      if (config.showGpayOnInvoice &&
+          config.gpayNumber != null &&
+          config.gpayNumber!.isNotEmpty)
+        'GPay: ${config.gpayNumber}',
       '━━━━━━━━━━━━━━━━━━',
       '*$invoiceTitle #${bill.billNumber}*',
       '📅 ${Formatters.date(bill.timestamp)} | ⏰ ${Formatters.time(bill.timestamp)}',
@@ -55,6 +59,12 @@ class InvoiceService {
       '━━━━━━━━━━━━━━━━━━',
       'Paid: ${_paymentModeLabel(bill.paymentMode)}'
           '${bill.amountReceived > 0 ? ' - ${Formatters.currency(bill.amountReceived)}' : ''}',
+      if (bill.paymentMode == PaymentMode.split) ...[
+        if (bill.splitCashAmount != null && bill.splitCashAmount! > 0)
+          '  Cash: ${Formatters.currency(bill.splitCashAmount!)}',
+        if (bill.splitUpiAmount != null && bill.splitUpiAmount! > 0)
+          '  UPI: ${Formatters.currency(bill.splitUpiAmount!)}',
+      ],
       if (bill.paymentMode == PaymentMode.credit && bill.creditAmount > 0)
         '*BALANCE DUE: ${Formatters.currency(bill.creditAmount)}*',
       if (config.invoiceTermsText.trim().isNotEmpty)

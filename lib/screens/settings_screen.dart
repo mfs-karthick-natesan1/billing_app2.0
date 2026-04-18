@@ -60,6 +60,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _isCompositionScheme = false;
   final _drugLicenseController = TextEditingController();
   final _upiIdController = TextEditingController();
+  final _gpayNumberController = TextEditingController();
+  bool _showGpayOnInvoice = false;
   final _tableCountController = TextEditingController(text: '10');
   BusinessType _businessType = BusinessType.general;
   bool _showGstinOnInvoice = true;
@@ -112,6 +114,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _drugLicenseController.text = config.drugLicenseNumber ?? '';
     _businessType = config.businessType;
     _upiIdController.text = config.upiId ?? '';
+    _gpayNumberController.text = config.gpayNumber ?? '';
+    _showGpayOnInvoice = config.showGpayOnInvoice;
     _tableCountController.text = config.tableCount.toString();
     _showGstinOnInvoice = config.showGstinOnInvoice;
     _showCustomerPhoneOnInvoice = config.showCustomerPhoneOnInvoice;
@@ -149,6 +153,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _invoiceTermsController.dispose();
     _drugLicenseController.dispose();
     _upiIdController.dispose();
+    _gpayNumberController.dispose();
     _tableCountController.dispose();
     super.dispose();
   }
@@ -339,6 +344,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text('Used to generate a QR code at checkout.', style: AppTypography.label.copyWith(color: AppColors.muted, fontSize: 11)),
+                  const SizedBox(height: AppSpacing.medium),
+                  AppTextInput(
+                    label: 'GPay Number',
+                    hint: 'e.g. 9876543210',
+                    controller: _gpayNumberController,
+                    maxLength: 10,
+                  ),
+                  const SizedBox(height: 4),
+                  _switchRow('Show GPay Number on Invoice', _showGpayOnInvoice, (v) => setState(() => _showGpayOnInvoice = v)),
                 ]),
 
                 // ── 4. Invoice & Sharing Card ──────────────────────
@@ -891,6 +905,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       upiId: _upiIdController.text.trim().isNotEmpty
           ? _upiIdController.text.trim()
           : null,
+      gpayNumber: _gpayNumberController.text.trim().isNotEmpty
+          ? _gpayNumberController.text.trim()
+          : null,
+      showGpayOnInvoice: _showGpayOnInvoice,
       tableCount: int.tryParse(_tableCountController.text.trim()) ?? 10,
       appThemeMode: _appThemeMode,
     );
