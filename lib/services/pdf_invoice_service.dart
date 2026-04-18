@@ -542,6 +542,43 @@ class PdfInvoiceService {
             ),
           ),
 
+          // ── UPI QR CODE ─────────────────────────────────────────
+          if (config.upiId != null && config.upiId!.isNotEmpty)
+            pw.Padding(
+              padding: const pw.EdgeInsets.fromLTRB(24, 8, 24, 0),
+              child: pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.end,
+                children: [
+                  pw.Column(
+                    children: [
+                      pw.Text(
+                        'Scan to Pay',
+                        style: pw.TextStyle(
+                          fontSize: 8,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                      pw.SizedBox(height: 4),
+                      pw.BarcodeWidget(
+                        barcode: pw.Barcode.qrCode(),
+                        data: 'upi://pay?pa=${config.upiId}'
+                            '&pn=${Uri.encodeComponent(config.businessName.isNotEmpty ? config.businessName : 'Merchant')}'
+                            '&am=${bill.grandTotal.toStringAsFixed(2)}'
+                            '&cu=INR&tn=Bill+Payment',
+                        width: 80,
+                        height: 80,
+                      ),
+                      pw.SizedBox(height: 2),
+                      pw.Text(
+                        config.upiId!,
+                        style: const pw.TextStyle(fontSize: 7),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
           // ── VISIT NOTES (clinic/salon) ──────────────────────
           if (bill.visitNotes?.isNotEmpty ?? false)
             pw.Padding(
