@@ -24,6 +24,12 @@ import 'supabase_service.dart';
 ///
 /// Schema per table: id (text/uuid) | business_id (uuid) | data (jsonb)
 /// CashBookDay uses a date-string id; all other models use their UUID id field.
+///
+/// #42 JSONB→relational (slice 1): the bills table now also has flat columns
+/// (bill_timestamp, payment_mode, grand_total, customer_id, cgst, sgst, igst)
+/// populated by a DB trigger on every upsert.  New server-side helpers
+/// (loadBillsForDateRange, loadBillsByCustomer) use those columns for
+/// push-down filtering instead of full-table scans.
 class DbService {
   final String businessId;
 
@@ -228,6 +234,76 @@ class DbService {
         .map((m) { try { return Bill.fromJson(m); } catch (_) { return null; } })
         .whereType<Bill>()
         .toList();
+  }
+
+  /// #42 slice 1 — server-side date-range filter using the flat
+  /// [bill_timestamp] column.  Avoids loading all bills and filtering
+  /// on the client.  Falls back to [loadBills] when the column is not
+  /// yet populated (null timestamps from rows written before this
+  /// migration).
+  Future<List<Bill>> loadBillsForDateRange(
+    DateTime from,
+    DateTime to,
+  ) async {
+    try {
+      final fromStr = DateTime(from.year, from.month, from.day)
+          .toUtc()
+          .toIso8601String();
+      final toStr = DateTime(to.year, to.month, to.day, 23, 59, 59, 999)
+          .toUtc()
+          .toIso8601String();
+      final rows = await _retryWithBackoff(
+        () => _client
+            .from('bills')
+            .select('data')
+            .eq('business_id', businessId)
+            .gte('bill_timestamp', fromStr)
+            .lte('bill_timestamp', toStr)
+            .order('bill_timestamp', ascending: false),
+      );
+      return rows
+          .map((r) {
+            try {
+              final m = (r['data'] as Map<String, dynamic>?) ?? {};
+              return Bill.fromJson(m);
+            } catch (_) {
+              return null;
+            }
+          })
+          .whereType<Bill>()
+          .toList();
+    } catch (_) {
+      // Column not yet available — fall back to full load.
+      return loadBills();
+    }
+  }
+
+  /// #42 slice 1 — server-side customer filter using the flat
+  /// [customer_id] column.
+  Future<List<Bill>> loadBillsByCustomer(String customerId) async {
+    try {
+      final rows = await _retryWithBackoff(
+        () => _client
+            .from('bills')
+            .select('data')
+            .eq('business_id', businessId)
+            .eq('customer_id', customerId)
+            .order('bill_timestamp', ascending: false),
+      );
+      return rows
+          .map((r) {
+            try {
+              final m = (r['data'] as Map<String, dynamic>?) ?? {};
+              return Bill.fromJson(m);
+            } catch (_) {
+              return null;
+            }
+          })
+          .whereType<Bill>()
+          .toList();
+    } catch (_) {
+      return loadBills();
+    }
   }
 
   Future<List<Product>> loadProducts() async {
