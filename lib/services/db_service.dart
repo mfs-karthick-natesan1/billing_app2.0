@@ -25,11 +25,12 @@ import 'supabase_service.dart';
 /// Schema per table: id (text/uuid) | business_id (uuid) | data (jsonb)
 /// CashBookDay uses a date-string id; all other models use their UUID id field.
 ///
-/// #42 JSONB→relational (slice 1–2): the bills and products tables now have
-/// flat columns populated by DB triggers on every upsert.  Server-side helpers
+/// #42 JSONB→relational (slice 1–3): bills and products have flat columns
+/// populated by DB triggers.  Slice 3 adds a product_batches relational table
+/// and rewrites complete_bill() to use it.  Server-side helpers
 /// (loadBillsForDateRange, loadBillsByCustomer, loadProductsByCategory,
-/// loadLowStockProducts) use those columns for push-down filtering instead of
-/// full-table scans.
+/// loadLowStockProducts, loadExpiringBatches) use flat columns / views for
+/// push-down filtering.
 class DbService {
   final String businessId;
 
@@ -348,6 +349,22 @@ class DbService {
             .from('low_stock_products')
             .select()
             .eq('business_id', businessId),
+      );
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// #42 slice 3 — returns batches expiring within 90 days or already
+  /// expired, using the [expiring_batches] view.
+  Future<List<Map<String, dynamic>>> loadExpiringBatches() async {
+    try {
+      return await _retryWithBackoff(
+        () => _client
+            .from('expiring_batches')
+            .select()
+            .eq('business_id', businessId)
+            .order('expiry_date'),
       );
     } catch (_) {
       return [];
