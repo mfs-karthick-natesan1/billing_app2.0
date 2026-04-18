@@ -25,11 +25,10 @@ import 'supabase_service.dart';
 /// Schema per table: id (text/uuid) | business_id (uuid) | data (jsonb)
 /// CashBookDay uses a date-string id; all other models use their UUID id field.
 ///
-/// #42 JSONB→relational (slice 1–2): the bills and products tables now have
-/// flat columns populated by DB triggers on every upsert.  Server-side helpers
-/// (loadBillsForDateRange, loadBillsByCustomer, loadProductsByCategory,
-/// loadLowStockProducts) use those columns for push-down filtering instead of
-/// full-table scans.
+/// #42 JSONB→relational (slice 1–4): bills and products have flat columns
+/// populated by DB triggers.  Slice 3 adds a product_batches table and
+/// rewrites complete_bill().  Slice 4 adds bill_line_items for product-level
+/// analytics and HSN tax reporting.
 class DbService {
   final String businessId;
 
@@ -306,6 +305,47 @@ class DbService {
     }
   }
 
+  /// #42 slice 4 — product sales summary from the [product_sales_summary]
+  /// view (total qty, revenue, profit per product).
+  Future<List<Map<String, dynamic>>> loadProductSalesSummary() async {
+    try {
+      return await _retryWithBackoff(
+        () => _client
+            .from('product_sales_summary')
+            .select()
+            .eq('business_id', businessId)
+            .order('total_revenue', ascending: false),
+      );
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// #42 slice 4 — HSN-wise tax summary for GSTR-1 reporting.
+  Future<List<Map<String, dynamic>>> loadHsnTaxSummary(
+    DateTime from,
+    DateTime to,
+  ) async {
+    try {
+      final fromStr = DateTime(from.year, from.month, from.day)
+          .toUtc()
+          .toIso8601String();
+      final toStr = DateTime(to.year, to.month, to.day, 23, 59, 59, 999)
+          .toUtc()
+          .toIso8601String();
+      return await _retryWithBackoff(
+        () => _client
+            .from('hsn_tax_summary')
+            .select()
+            .eq('business_id', businessId)
+            .gte('bill_timestamp', fromStr)
+            .lte('bill_timestamp', toStr),
+      );
+    } catch (_) {
+      return [];
+    }
+  }
+
   Future<List<Product>> loadProducts() async {
     final rows = await _selectAll('products');
     return rows.map((m) { try { return Product.fromJson(m); } catch (_) { return null; } }).whereType<Product>().toList();
@@ -348,6 +388,22 @@ class DbService {
             .from('low_stock_products')
             .select()
             .eq('business_id', businessId),
+      );
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// #42 slice 3 — returns batches expiring within 90 days or already
+  /// expired, using the [expiring_batches] view.
+  Future<List<Map<String, dynamic>>> loadExpiringBatches() async {
+    try {
+      return await _retryWithBackoff(
+        () => _client
+            .from('expiring_batches')
+            .select()
+            .eq('business_id', businessId)
+            .order('expiry_date'),
       );
     } catch (_) {
       return [];

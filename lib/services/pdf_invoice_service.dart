@@ -159,6 +159,14 @@ class PdfInvoiceService {
                           style: const pw.TextStyle(fontSize: 9),
                           textAlign: pw.TextAlign.right,
                         ),
+                      if (config.showGpayOnInvoice &&
+                          config.gpayNumber != null &&
+                          config.gpayNumber!.isNotEmpty)
+                        pw.Text(
+                          'GPay: ${config.gpayNumber}',
+                          style: const pw.TextStyle(fontSize: 9),
+                          textAlign: pw.TextAlign.right,
+                        ),
                       if (config.showGstinOnInvoice &&
                           config.gstEnabled &&
                           (config.gstin?.isNotEmpty ?? false))
@@ -497,6 +505,18 @@ class PdfInvoiceService {
                           'Amount Received',
                           Formatters.currency(bill.amountReceived),
                         ),
+                      if (bill.paymentMode == PaymentMode.split) ...[
+                        if (bill.splitCashAmount != null && bill.splitCashAmount! > 0)
+                          _totalRow(
+                            '  Cash',
+                            Formatters.currency(bill.splitCashAmount!),
+                          ),
+                        if (bill.splitUpiAmount != null && bill.splitUpiAmount! > 0)
+                          _totalRow(
+                            '  UPI',
+                            Formatters.currency(bill.splitUpiAmount!),
+                          ),
+                      ],
                       if (bill.creditAmount > 0)
                         _totalRow(
                           'Balance Due',

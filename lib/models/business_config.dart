@@ -30,6 +30,8 @@ class BusinessConfig {
   final bool enableAdvancePayment;
   // Payment settings
   final String? upiId;
+  final String? gpayNumber;
+  final bool showGpayOnInvoice;
   // Restaurant settings
   final int tableCount;
   final List<String>? tableLabels;
@@ -73,6 +75,8 @@ class BusinessConfig {
     this.showWatermarkOnInvoice = true,
     this.enableAdvancePayment = false,
     this.upiId,
+    this.gpayNumber,
+    this.showGpayOnInvoice = false,
     this.tableCount = 10,
     this.tableLabels,
     this.notifLowStock = true,
@@ -112,6 +116,8 @@ class BusinessConfig {
       showWatermarkOnInvoice: showWatermarkOnInvoice,
       enableAdvancePayment: enableAdvancePayment,
       upiId: upiId,
+      gpayNumber: gpayNumber,
+      showGpayOnInvoice: showGpayOnInvoice,
       tableCount: tableCount,
       tableLabels: tableLabels,
       notifLowStock: notifLowStock,
@@ -147,6 +153,8 @@ class BusinessConfig {
     bool? showWatermarkOnInvoice,
     bool? enableAdvancePayment,
     String? upiId,
+    String? gpayNumber,
+    bool? showGpayOnInvoice,
     int? tableCount,
     List<String>? tableLabels,
     bool? notifLowStock,
@@ -186,6 +194,8 @@ class BusinessConfig {
           showWatermarkOnInvoice ?? this.showWatermarkOnInvoice,
       enableAdvancePayment: enableAdvancePayment ?? this.enableAdvancePayment,
       upiId: upiId ?? this.upiId,
+      gpayNumber: gpayNumber ?? this.gpayNumber,
+      showGpayOnInvoice: showGpayOnInvoice ?? this.showGpayOnInvoice,
       tableCount: tableCount ?? this.tableCount,
       tableLabels: tableLabels ?? this.tableLabels,
       notifLowStock: notifLowStock ?? this.notifLowStock,
@@ -226,6 +236,8 @@ class BusinessConfig {
       'showWatermarkOnInvoice': showWatermarkOnInvoice,
       'enableAdvancePayment': enableAdvancePayment,
       'upiId': upiId,
+      'gpayNumber': gpayNumber,
+      'showGpayOnInvoice': showGpayOnInvoice,
       'tableCount': tableCount,
       'tableLabels': tableLabels,
       'notifLowStock': notifLowStock,
@@ -272,6 +284,8 @@ class BusinessConfig {
       showWatermarkOnInvoice: json['showWatermarkOnInvoice'] as bool? ?? true,
       enableAdvancePayment: json['enableAdvancePayment'] as bool? ?? false,
       upiId: json['upiId'] as String?,
+      gpayNumber: json['gpayNumber'] as String?,
+      showGpayOnInvoice: json['showGpayOnInvoice'] as bool? ?? false,
       tableCount: json['tableCount'] as int? ?? 10,
       tableLabels: (json['tableLabels'] as List<dynamic>?)
           ?.map((e) => e as String)
