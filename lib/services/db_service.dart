@@ -25,12 +25,10 @@ import 'supabase_service.dart';
 /// Schema per table: id (text/uuid) | business_id (uuid) | data (jsonb)
 /// CashBookDay uses a date-string id; all other models use their UUID id field.
 ///
-/// #42 JSONB→relational (slice 1–3): bills and products have flat columns
-/// populated by DB triggers.  Slice 3 adds a product_batches relational table
-/// and rewrites complete_bill() to use it.  Server-side helpers
-/// (loadBillsForDateRange, loadBillsByCustomer, loadProductsByCategory,
-/// loadLowStockProducts, loadExpiringBatches) use flat columns / views for
-/// push-down filtering.
+/// #42 JSONB→relational (slice 1–4): bills and products have flat columns
+/// populated by DB triggers.  Slice 3 adds a product_batches table and
+/// rewrites complete_bill().  Slice 4 adds bill_line_items for product-level
+/// analytics and HSN tax reporting.
 class DbService {
   final String businessId;
 
@@ -304,6 +302,47 @@ class DbService {
           .toList();
     } catch (_) {
       return loadBills();
+    }
+  }
+
+  /// #42 slice 4 — product sales summary from the [product_sales_summary]
+  /// view (total qty, revenue, profit per product).
+  Future<List<Map<String, dynamic>>> loadProductSalesSummary() async {
+    try {
+      return await _retryWithBackoff(
+        () => _client
+            .from('product_sales_summary')
+            .select()
+            .eq('business_id', businessId)
+            .order('total_revenue', ascending: false),
+      );
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// #42 slice 4 — HSN-wise tax summary for GSTR-1 reporting.
+  Future<List<Map<String, dynamic>>> loadHsnTaxSummary(
+    DateTime from,
+    DateTime to,
+  ) async {
+    try {
+      final fromStr = DateTime(from.year, from.month, from.day)
+          .toUtc()
+          .toIso8601String();
+      final toStr = DateTime(to.year, to.month, to.day, 23, 59, 59, 999)
+          .toUtc()
+          .toIso8601String();
+      return await _retryWithBackoff(
+        () => _client
+            .from('hsn_tax_summary')
+            .select()
+            .eq('business_id', businessId)
+            .gte('bill_timestamp', fromStr)
+            .lte('bill_timestamp', toStr),
+      );
+    } catch (_) {
+      return [];
     }
   }
 
