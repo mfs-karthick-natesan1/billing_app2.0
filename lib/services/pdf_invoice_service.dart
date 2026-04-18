@@ -388,6 +388,7 @@ class PdfInvoiceService {
                 if (showHsn) 'HSN',
                 'Qty',
                 'Rate',
+                if (showHsn) 'GST%',
                 'Gross',
                 'Discount',
                 'Net Amount',
@@ -403,6 +404,7 @@ class PdfInvoiceService {
                   if (showHsn) item.product.hsnCode ?? '',
                   UomConstants.display(item.product.displayUom, item.quantity),
                   Formatters.currency(item.product.sellingPrice),
+                  if (showHsn) '${item.gstRate.toStringAsFixed(item.gstRate == item.gstRate.roundToDouble() ? 0 : 1)}%',
                   Formatters.currency(gross),
                   discountAmt > 0
                       ? '-${Formatters.currency(discountAmt)}'
@@ -417,14 +419,15 @@ class PdfInvoiceService {
               ),
               columnWidths: showHsn
                   ? {
-                      0: const pw.FixedColumnWidth(25),
+                      0: const pw.FixedColumnWidth(22),
                       1: const pw.FlexColumnWidth(3),
-                      2: const pw.FixedColumnWidth(40),
-                      3: const pw.FixedColumnWidth(35),
-                      4: const pw.FixedColumnWidth(48),
-                      5: const pw.FixedColumnWidth(48),
-                      6: const pw.FixedColumnWidth(58),
-                      7: const pw.FixedColumnWidth(68),
+                      2: const pw.FixedColumnWidth(38),
+                      3: const pw.FixedColumnWidth(32),
+                      4: const pw.FixedColumnWidth(44),
+                      5: const pw.FixedColumnWidth(32),
+                      6: const pw.FixedColumnWidth(44),
+                      7: const pw.FixedColumnWidth(50),
+                      8: const pw.FixedColumnWidth(62),
                     }
                   : {
                       0: const pw.FixedColumnWidth(25),
@@ -523,12 +526,58 @@ class PdfInvoiceService {
                           Formatters.currency(bill.creditAmount),
                           valueColor: PdfColors.red700,
                         ),
+                      if (bill.customer != null &&
+                          bill.customer!.outstandingBalance > 0)
+                        _totalRow(
+                          'Total Outstanding',
+                          Formatters.currency(
+                            bill.customer!.outstandingBalance,
+                          ),
+                          valueColor: PdfColors.red700,
+                        ),
                     ],
                   ),
                 ),
               ],
             ),
           ),
+
+          // ── UPI QR CODE ─────────────────────────────────────────
+          if (config.upiId != null && config.upiId!.isNotEmpty)
+            pw.Padding(
+              padding: const pw.EdgeInsets.fromLTRB(24, 8, 24, 0),
+              child: pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.end,
+                children: [
+                  pw.Column(
+                    children: [
+                      pw.Text(
+                        'Scan to Pay',
+                        style: pw.TextStyle(
+                          fontSize: 8,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                      pw.SizedBox(height: 4),
+                      pw.BarcodeWidget(
+                        barcode: pw.Barcode.qrCode(),
+                        data: 'upi://pay?pa=${config.upiId}'
+                            '&pn=${Uri.encodeComponent(config.businessName.isNotEmpty ? config.businessName : 'Merchant')}'
+                            '&am=${bill.grandTotal.toStringAsFixed(2)}'
+                            '&cu=INR&tn=Bill+Payment',
+                        width: 80,
+                        height: 80,
+                      ),
+                      pw.SizedBox(height: 2),
+                      pw.Text(
+                        config.upiId!,
+                        style: const pw.TextStyle(fontSize: 7),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
 
           // ── VISIT NOTES (clinic/salon) ──────────────────────
           if (bill.visitNotes?.isNotEmpty ?? false)

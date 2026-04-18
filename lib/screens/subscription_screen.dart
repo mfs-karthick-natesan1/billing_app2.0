@@ -41,7 +41,7 @@ class SubscriptionScreen extends StatelessWidget {
                     const SizedBox(height: AppSpacing.small),
                     _PlanCard(
                       name: 'Pro',
-                      price: '₹100',
+                      price: '₹200',
                       period: '/month',
                       color: AppColors.primary,
                       current: sub.tier == SubscriptionTier.pro,
@@ -57,7 +57,7 @@ class SubscriptionScreen extends StatelessWidget {
                     const SizedBox(height: AppSpacing.small),
                     _PlanCard(
                       name: 'Pro Max',
-                      price: '₹200',
+                      price: '₹300',
                       period: '/month',
                       color: const Color(0xFF7C3AED),
                       current: sub.tier == SubscriptionTier.proMax,
@@ -75,7 +75,7 @@ class SubscriptionScreen extends StatelessWidget {
                     const SizedBox(height: AppSpacing.small),
                     _PlanCard(
                       name: 'Enterprise',
-                      price: '₹500',
+                      price: '₹700',
                       period: '/month',
                       color: const Color(0xFFB45309),
                       current: sub.tier == SubscriptionTier.enterprise,

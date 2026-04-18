@@ -67,6 +67,8 @@ class InvoiceService {
       ],
       if (bill.paymentMode == PaymentMode.credit && bill.creditAmount > 0)
         '*BALANCE DUE: ${Formatters.currency(bill.creditAmount)}*',
+      if (bill.customer != null && bill.customer!.outstandingBalance > 0)
+        'Total Outstanding: ${Formatters.currency(bill.customer!.outstandingBalance)}',
       if (config.invoiceTermsText.trim().isNotEmpty)
         config.invoiceTermsText.trim(),
       if (config.invoiceFooterText.trim().isNotEmpty)
