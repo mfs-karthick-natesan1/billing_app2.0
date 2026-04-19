@@ -85,10 +85,10 @@ class _JobCardListScreenState extends State<JobCardListScreen> {
               onChanged: (v) => setState(() => _query = v),
               decoration: InputDecoration(
                 hintText: AppStrings.searchJobCards,
-                prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                prefixIcon: Icon(Icons.search, color: AppColors.muted),
                 suffixIcon: _query.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: AppColors.muted),
+                        icon: Icon(Icons.clear, color: AppColors.muted),
                         onPressed: () {
                           _searchController.clear();
                           setState(() => _query = '');

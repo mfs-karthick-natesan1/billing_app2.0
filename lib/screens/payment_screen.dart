@@ -136,7 +136,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.edit, size: 16, color: AppColors.primary),
+                    Icon(Icons.edit, size: 16, color: AppColors.primary),
                     const SizedBox(width: 8),
                     Text(
                       'Editing Bill #${billProvider.editingBillNumber}',
@@ -821,7 +821,7 @@ class _UpiSection extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(Icons.info_outline, color: AppColors.primary, size: 18),
+            Icon(Icons.info_outline, color: AppColors.primary, size: 18),
             const SizedBox(width: 8),
             Expanded(
               child: Text(

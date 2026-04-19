@@ -184,7 +184,7 @@ class _AddEditSupplierSheetState extends State<AddEditSupplierSheet> {
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.add_circle, color: AppColors.primary),
+                  icon: Icon(Icons.add_circle, color: AppColors.primary),
                   onPressed: () => _addCategory(_categoryController.text),
                 ),
               ],

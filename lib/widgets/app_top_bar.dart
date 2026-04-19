@@ -52,7 +52,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       scrolledUnderElevation: 2,
       automaticallyImplyLeading: showBack,
       leading: leading,
-      iconTheme: const IconThemeData(color: AppColors.onSurface),
+      iconTheme: IconThemeData(color: AppColors.onSurface),
       actions: mergedActions.isEmpty ? null : mergedActions,
     );
   }

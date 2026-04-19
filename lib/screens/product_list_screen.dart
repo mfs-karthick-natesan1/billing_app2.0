@@ -77,7 +77,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.delete_outline, color: AppColors.error),
+              leading: Icon(Icons.delete_outline, color: AppColors.error),
               title: Text(
                 AppStrings.deleteProduct,
                 style: AppTypography.body.copyWith(color: AppColors.error),
@@ -120,7 +120,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         title: AppStrings.productsTitle,
         actions: [
           PopupMenuButton<_ProductSort>(
-            icon: const Icon(Icons.sort, color: AppColors.onSurface),
+            icon: Icon(Icons.sort, color: AppColors.onSurface),
             initialValue: _sort,
             onSelected: (s) => setState(() => _sort = s),
             itemBuilder: (_) => const [
@@ -133,7 +133,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
             ],
           ),
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: AppColors.onSurface),
+            icon: Icon(Icons.more_vert, color: AppColors.onSurface),
             onSelected: (value) {
               if (value == 'csv') {
                 Navigator.pushNamed(context, '/csv-import');
@@ -169,10 +169,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
               decoration: InputDecoration(
                 hintText: AppStrings.searchProducts,
                 hintStyle: AppTypography.body.copyWith(color: AppColors.muted),
-                prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                prefixIcon: Icon(Icons.search, color: AppColors.muted),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: AppColors.muted),
+                        icon: Icon(Icons.clear, color: AppColors.muted),
                         onPressed: () {
                           _searchController.clear();
                           setState(() => _searchQuery = '');

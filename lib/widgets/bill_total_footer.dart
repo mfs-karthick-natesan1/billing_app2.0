@@ -261,7 +261,7 @@ class _BillTotalFooterState extends State<BillTotalFooter> {
           ),
         ),
         IconButton(
-          icon: const Icon(Icons.close, size: 20, color: AppColors.muted),
+          icon: Icon(Icons.close, size: 20, color: AppColors.muted),
           onPressed: () {
             _discountController.clear();
             setState(() => _showDiscountField = false);

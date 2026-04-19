@@ -916,7 +916,7 @@ class _ProductSearchSheetState extends State<_ProductSearchSheet> {
             autofocus: true,
             decoration: InputDecoration(
               hintText: AppStrings.searchProducts,
-              prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+              prefixIcon: Icon(Icons.search, color: AppColors.muted),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),

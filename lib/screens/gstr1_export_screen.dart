@@ -98,7 +98,7 @@ class _Gstr1ExportScreenState extends State<Gstr1ExportScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const Icon(Icons.calendar_month, color: AppColors.primary),
+                    Icon(Icons.calendar_month, color: AppColors.primary),
                   ],
                 ),
               ),

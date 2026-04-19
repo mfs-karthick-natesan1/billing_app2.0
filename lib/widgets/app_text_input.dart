@@ -120,7 +120,7 @@ class AppTextInput extends StatelessWidget {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-              borderSide: const BorderSide(color: AppColors.error, width: 2),
+              borderSide: BorderSide(color: AppColors.error, width: 2),
             ),
             suffixIcon: errorText != null
                 ? const Icon(

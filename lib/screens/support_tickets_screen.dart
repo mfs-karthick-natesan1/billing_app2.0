@@ -471,7 +471,7 @@ class _CommentBubble extends StatelessWidget {
             CircleAvatar(
               radius: 14,
               backgroundColor: AppColors.muted.withValues(alpha: 0.15),
-              child: const Icon(Icons.person, size: 16, color: AppColors.muted),
+              child: Icon(Icons.person, size: 16, color: AppColors.muted),
             ),
           ],
         ],
