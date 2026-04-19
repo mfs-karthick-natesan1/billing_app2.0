@@ -216,7 +216,7 @@ class _EmptyUsersState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.group_off, size: 48, color: AppColors.muted),
+            Icon(Icons.group_off, size: 48, color: AppColors.muted),
             const SizedBox(height: AppSpacing.small),
             Text(
               AppStrings.noUsersConfigured,

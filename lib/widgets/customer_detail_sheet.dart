@@ -384,7 +384,7 @@ class _CustomerDetailSheetState extends State<CustomerDetailSheet> {
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
-              leading: const Icon(Icons.two_wheeler, color: AppColors.primary),
+              leading: Icon(Icons.two_wheeler, color: AppColors.primary),
               title: Text(
                 v.reg,
                 style: AppTypography.body.copyWith(fontWeight: FontWeight.bold),
@@ -422,7 +422,7 @@ class _CustomerDetailSheetState extends State<CustomerDetailSheet> {
                       return ListTile(
                         dense: true,
                         onTap: () => BillDetailSheet.show(context, bill),
-                        leading: const Icon(Icons.build_outlined, size: 18, color: AppColors.muted),
+                        leading: Icon(Icons.build_outlined, size: 18, color: AppColors.muted),
                         title: Text(
                           '$itemSummary$more',
                           style: AppTypography.label,
@@ -819,7 +819,7 @@ class _CustomerDetailSheetState extends State<CustomerDetailSheet> {
         if (services.isNotEmpty) ...[
           Row(
             children: [
-              const Icon(Icons.content_cut, size: 12, color: AppColors.primary),
+              Icon(Icons.content_cut, size: 12, color: AppColors.primary),
               const SizedBox(width: 4),
               Text(
                 AppStrings.servicesAvailed,

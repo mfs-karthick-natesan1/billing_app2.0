@@ -123,7 +123,7 @@ class _PendingChequeCard extends StatelessWidget {
                   label: const Text('Bounce'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.error,
-                    side: const BorderSide(color: AppColors.error),
+                    side: BorderSide(color: AppColors.error),
                     shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(AppSpacing.buttonRadius),

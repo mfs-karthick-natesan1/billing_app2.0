@@ -48,6 +48,10 @@ class BillReadyApp extends StatelessWidget {
       themeMode: themeMode,
       theme: _buildLightTheme(),
       darkTheme: _buildDarkTheme(),
+      builder: (context, child) {
+        AppColors.setBrightness(Theme.of(context).brightness);
+        return child!;
+      },
       routes: {
         '/': (_) => const SplashScreen(),
         '/onboarding': (_) => const OnboardingScreen(),
@@ -86,8 +90,8 @@ class BillReadyApp extends StatelessWidget {
 }
 
 ThemeData _buildLightTheme() {
-  const primary = AppColors.primary;
-  const onSurface = AppColors.onSurface;
+  final primary = AppColors.primary;
+  final onSurface = AppColors.onSurface;
 
   final cs = ColorScheme.fromSeed(
     seedColor: primary,
@@ -117,13 +121,13 @@ ThemeData _buildLightTheme() {
       elevation: 0,
       scrolledUnderElevation: 1,
       shadowColor: Colors.black.withValues(alpha: 0.08),
-      titleTextStyle: const TextStyle(
+      titleTextStyle: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w700,
         color: onSurface,
         letterSpacing: -0.3,
       ),
-      iconTheme: const IconThemeData(color: onSurface),
+      iconTheme: IconThemeData(color: onSurface),
     ),
 
     // Cards
@@ -153,7 +157,7 @@ ThemeData _buildLightTheme() {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: primary,
-        side: const BorderSide(color: primary, width: 1.5),
+        side: BorderSide(color: primary, width: 1.5),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
@@ -183,14 +187,14 @@ ThemeData _buildLightTheme() {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: primary, width: 2),
+        borderSide: BorderSide(color: primary, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: AppColors.error),
+        borderSide: BorderSide(color: AppColors.error),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-      labelStyle: const TextStyle(color: AppColors.muted, fontSize: 14),
+      labelStyle: TextStyle(color: AppColors.muted, fontSize: 14),
       hintStyle: TextStyle(color: AppColors.muted.withValues(alpha: 0.6), fontSize: 14),
     ),
 
@@ -198,18 +202,18 @@ ThemeData _buildLightTheme() {
     chipTheme: ChipThemeData(
       backgroundColor: AppColors.background,
       selectedColor: AppColors.primaryLight(0.15),
-      labelStyle: const TextStyle(fontSize: 13, color: onSurface),
+      labelStyle: TextStyle(fontSize: 13, color: onSurface),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       side: BorderSide(color: AppColors.muted.withValues(alpha: 0.2)),
     ),
 
     // Floating action button
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: primary,
       foregroundColor: Colors.white,
       elevation: 3,
-      shape: CircleBorder(),
+      shape: const CircleBorder(),
     ),
 
     // Divider
@@ -220,10 +224,10 @@ ThemeData _buildLightTheme() {
     ),
 
     // BottomSheet
-    bottomSheetTheme: const BottomSheetThemeData(
+    bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: AppColors.surface,
       surfaceTintColor: AppColors.surface,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       showDragHandle: true,
@@ -255,7 +259,7 @@ ThemeData _buildLightTheme() {
       elevation: 8,
       shadowColor: Colors.black.withValues(alpha: 0.12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      textStyle: const TextStyle(fontSize: 14, color: onSurface),
+      textStyle: TextStyle(fontSize: 14, color: onSurface),
     ),
 
     // Snackbar
@@ -264,37 +268,206 @@ ThemeData _buildLightTheme() {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 4,
     ),
+
+    // Dialog
+    dialogTheme: DialogThemeData(
+      backgroundColor: AppColors.surface,
+      surfaceTintColor: AppColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
+
+    // Switch
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected) ? primary : AppColors.muted),
+      trackColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected)
+              ? primary.withValues(alpha: 0.4)
+              : AppColors.muted.withValues(alpha: 0.2)),
+    ),
   );
 }
 
 ThemeData _buildDarkTheme() {
-  const primary = AppColors.primary;
+  const primary = Color(0xFF2DD4BF);   // teal-300
+  const surface = Color(0xFF1E293B);   // slate-800
+  const background = Color(0xFF0F172A); // slate-900
+  const onSurface = Color(0xFFE2E8F0); // slate-200
+  const muted = Color(0xFF94A3B8);     // slate-400
+  const error = Color(0xFFF87171);     // red-400
 
-  final cs = ColorScheme.fromSeed(
-    seedColor: primary,
-    brightness: Brightness.dark,
-    primary: const Color(0xFF2DD4BF), // teal-300 for dark mode
+  final cs = ColorScheme.dark(
+    primary: primary,
+    onPrimary: const Color(0xFF0F172A),
+    secondary: const Color(0xFF60A5FA),
+    surface: surface,
+    onSurface: onSurface,
+    error: error,
+    onError: const Color(0xFF0F172A),
+    outline: muted,
+    surfaceContainerLowest: background,
+    surfaceContainer: surface,
+    surfaceContainerHighest: const Color(0xFF334155), // slate-700
   );
 
   return ThemeData(
     useMaterial3: true,
     colorScheme: cs,
+    scaffoldBackgroundColor: background,
     fontFamily: 'Roboto',
-    appBarTheme: const AppBarTheme(elevation: 0, scrolledUnderElevation: 1),
-    cardTheme: CardThemeData(
+
+    // AppBar
+    appBarTheme: AppBarTheme(
+      backgroundColor: surface,
+      surfaceTintColor: surface,
+      foregroundColor: onSurface,
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      scrolledUnderElevation: 1,
+      shadowColor: Colors.black.withValues(alpha: 0.3),
+      titleTextStyle: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        color: onSurface,
+        letterSpacing: -0.3,
+      ),
+      iconTheme: const IconThemeData(color: onSurface),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: cs.primary,
-      foregroundColor: cs.onPrimary,
-      shape: const CircleBorder(),
+
+    // Cards
+    cardTheme: CardThemeData(
+      color: surface,
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
     ),
+
+    // Elevated buttons
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primary,
+        foregroundColor: const Color(0xFF0F172A),
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+      ),
+    ),
+
+    // Outlined buttons
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: primary,
+        side: BorderSide(color: primary, width: 1.5),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+      ),
+    ),
+
+    // Text buttons
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: primary,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+      ),
+    ),
+
+    // Input fields
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: const Color(0xFF334155), // slate-700
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: muted.withValues(alpha: 0.3)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: muted.withValues(alpha: 0.3)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: primary, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: error),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      labelStyle: const TextStyle(color: muted, fontSize: 14),
+      hintStyle: TextStyle(color: muted.withValues(alpha: 0.6), fontSize: 14),
+    ),
+
+    // Chips
+    chipTheme: ChipThemeData(
+      backgroundColor: const Color(0xFF334155),
+      selectedColor: primary.withValues(alpha: 0.2),
+      labelStyle: const TextStyle(fontSize: 13, color: onSurface),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      side: BorderSide(color: muted.withValues(alpha: 0.2)),
+    ),
+
+    // FAB
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: primary,
+      foregroundColor: Color(0xFF0F172A),
+      elevation: 3,
+      shape: CircleBorder(),
+    ),
+
+    // Divider
+    dividerTheme: DividerThemeData(
+      color: muted.withValues(alpha: 0.15),
+      thickness: 1,
+      space: 1,
+    ),
+
+    // BottomSheet
     bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: surface,
+      surfaceTintColor: surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       showDragHandle: true,
+    ),
+
+    // Popup menu
+    popupMenuTheme: PopupMenuThemeData(
+      color: surface,
+      elevation: 8,
+      shadowColor: Colors.black.withValues(alpha: 0.3),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      textStyle: const TextStyle(fontSize: 14, color: onSurface),
+    ),
+
+    // Snackbar
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: const Color(0xFF334155),
+      contentTextStyle: const TextStyle(color: onSurface),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 4,
+    ),
+
+    // Dialog
+    dialogTheme: DialogThemeData(
+      backgroundColor: surface,
+      surfaceTintColor: surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
+
+    // Switch
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected) ? primary : muted),
+      trackColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected)
+              ? primary.withValues(alpha: 0.4)
+              : muted.withValues(alpha: 0.2)),
     ),
   );
 }

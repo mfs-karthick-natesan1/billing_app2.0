@@ -138,7 +138,7 @@ class _CreateBillScreenState extends State<CreateBillScreen> {
                   );
                   if (confirm) billProvider.clearActiveBill();
                 },
-                icon: const Icon(Icons.clear_all, color: AppColors.muted),
+                icon: Icon(Icons.clear_all, color: AppColors.muted),
                 tooltip: 'Clear all',
               ),
             // For non-quotation bills: show customer chip/button in app bar
@@ -879,7 +879,7 @@ class _QuotationCustomerCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.person, size: 16, color: AppColors.primary),
+                Icon(Icons.person, size: 16, color: AppColors.primary),
                 const SizedBox(width: 6),
                 Text(
                   'Customer (Optional)',
@@ -892,7 +892,7 @@ class _QuotationCustomerCard extends StatelessWidget {
                 if (existingCustomer != null)
                   GestureDetector(
                     onTap: onClearExisting,
-                    child: const Icon(Icons.close, size: 18, color: AppColors.muted),
+                    child: Icon(Icons.close, size: 18, color: AppColors.muted),
                   )
                 else if (useNewCustomer)
                   GestureDetector(

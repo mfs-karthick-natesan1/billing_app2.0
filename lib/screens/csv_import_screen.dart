@@ -53,7 +53,7 @@ class _CsvImportScreenState extends State<CsvImportScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.upload_file, size: 48, color: AppColors.primary),
+          Icon(Icons.upload_file, size: 48, color: AppColors.primary),
           const SizedBox(height: AppSpacing.medium),
           Text(
             'Import products from a CSV file',
@@ -71,7 +71,7 @@ class _CsvImportScreenState extends State<CsvImportScreen> {
             onPressed: _downloadTemplate,
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
-              side: const BorderSide(color: AppColors.primary),
+              side: BorderSide(color: AppColors.primary),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
               ),
@@ -250,7 +250,7 @@ class _CsvImportScreenState extends State<CsvImportScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.check_circle, size: 48, color: AppColors.success),
+          Icon(Icons.check_circle, size: 48, color: AppColors.success),
           const SizedBox(height: AppSpacing.medium),
           Text(
             '$_importedCount ${AppStrings.productsImported}',

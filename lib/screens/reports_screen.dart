@@ -67,7 +67,7 @@ class _ReportsScreenState extends State<ReportsScreen>
         surfaceTintColor: AppColors.surface,
         elevation: 0,
         scrolledUnderElevation: 2,
-        iconTheme: const IconThemeData(color: AppColors.onSurface),
+        iconTheme: IconThemeData(color: AppColors.onSurface),
         automaticallyImplyLeading: true,
         actions: [
           TextButton.icon(

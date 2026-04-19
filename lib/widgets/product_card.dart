@@ -103,7 +103,7 @@ class ProductCard extends StatelessWidget {
               style: AppTypography.currency,
             ),
             const SizedBox(width: AppSpacing.small),
-            const Icon(Icons.chevron_right, size: 20, color: AppColors.muted),
+            Icon(Icons.chevron_right, size: 20, color: AppColors.muted),
           ],
         ),
       ),
@@ -115,7 +115,7 @@ class ProductCard extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.content_cut, size: 14, color: AppColors.primary),
+        Icon(Icons.content_cut, size: 14, color: AppColors.primary),
         const SizedBox(width: 4),
         Text(
           product.durationMinutes != null
@@ -136,7 +136,7 @@ class ProductCard extends StatelessWidget {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.block, size: 13, color: AppColors.error),
+          Icon(Icons.block, size: 13, color: AppColors.error),
           const SizedBox(width: 3),
           Text(
             'Out of Stock',

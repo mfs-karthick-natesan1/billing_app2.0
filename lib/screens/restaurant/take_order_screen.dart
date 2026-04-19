@@ -438,7 +438,7 @@ class _ProductCard extends StatelessWidget {
   Widget _buildImage(String? url) {
     Widget placeholder = Container(
       color: AppColors.muted.withValues(alpha: 0.08),
-      child: const Icon(Icons.restaurant, color: AppColors.muted, size: 28),
+      child: Icon(Icons.restaurant, color: AppColors.muted, size: 28),
     );
     if (url == null || url.isEmpty) return placeholder;
     if (url.startsWith('http')) {

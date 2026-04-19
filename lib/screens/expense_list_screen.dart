@@ -201,7 +201,7 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
               color: AppColors.errorLight(0.12),
               borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
-            child: const Icon(Icons.delete_outline, color: AppColors.error),
+            child: Icon(Icons.delete_outline, color: AppColors.error),
           ),
           confirmDismiss: (_) => _confirmDelete(expense),
           onDismissed: (_) {

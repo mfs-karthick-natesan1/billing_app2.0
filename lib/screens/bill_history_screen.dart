@@ -108,7 +108,7 @@ class _BillHistoryScreenState extends State<BillHistoryScreen> {
             ],
           ),
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: AppColors.onSurface),
+            icon: Icon(Icons.more_vert, color: AppColors.onSurface),
             onSelected: (v) {
               if (v == 'csv') _exportCsv(filtered);
             },
@@ -135,10 +135,10 @@ class _BillHistoryScreenState extends State<BillHistoryScreen> {
               decoration: InputDecoration(
                 hintText: AppStrings.searchBills,
                 hintStyle: AppTypography.body.copyWith(color: AppColors.muted),
-                prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                prefixIcon: Icon(Icons.search, color: AppColors.muted),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: AppColors.muted),
+                        icon: Icon(Icons.clear, color: AppColors.muted),
                         onPressed: () {
                           _searchController.clear();
                           setState(() => _searchQuery = '');

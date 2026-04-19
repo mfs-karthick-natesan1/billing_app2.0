@@ -210,7 +210,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
           actions: _isEditing
               ? [
                   IconButton(
-                    icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                    icon: Icon(Icons.delete_outline, color: AppColors.error),
                     tooltip: AppStrings.deleteProduct,
                     onPressed: _deleteProduct,
                   ),
@@ -854,7 +854,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.edit, size: 18, color: AppColors.muted),
+            icon: Icon(Icons.edit, size: 18, color: AppColors.muted),
             onPressed: onEdit,
           ),
           IconButton(

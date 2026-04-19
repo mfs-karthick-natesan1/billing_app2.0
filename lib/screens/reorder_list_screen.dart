@@ -263,7 +263,7 @@ class _ReorderListScreenState extends State<ReorderListScreen> {
               label: const Text('Message'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary),
+                side: BorderSide(color: AppColors.primary),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
                 ),

@@ -260,7 +260,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 borderRadius: BorderRadius.circular(AppSpacing.cardRadius - 1),
                                 child: Image.memory(base64Decode(_logoBase64!), fit: BoxFit.contain),
                               )
-                            : const Icon(Icons.business, color: AppColors.muted, size: 28),
+                            : Icon(Icons.business, color: AppColors.muted, size: 28),
                       ),
                       const SizedBox(width: AppSpacing.medium),
                       Column(
@@ -540,14 +540,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onPressed: () => Navigator.pushNamed(context, '/suppliers'),
                       icon: const Icon(Icons.local_shipping_outlined, size: 18),
                       label: const Text(AppStrings.suppliersTitle),
-                      style: OutlinedButton.styleFrom(foregroundColor: AppColors.primary, side: const BorderSide(color: AppColors.primary)),
+                      style: OutlinedButton.styleFrom(foregroundColor: AppColors.primary, side: BorderSide(color: AppColors.primary)),
                     ))),
                     const SizedBox(width: AppSpacing.small),
                     Expanded(child: SizedBox(height: 44, child: OutlinedButton.icon(
                       onPressed: () => Navigator.pushNamed(context, '/purchases'),
                       icon: const Icon(Icons.shopping_cart_outlined, size: 18),
                       label: const Text(AppStrings.purchasesTitle),
-                      style: OutlinedButton.styleFrom(foregroundColor: AppColors.primary, side: const BorderSide(color: AppColors.primary)),
+                      style: OutlinedButton.styleFrom(foregroundColor: AppColors.primary, side: BorderSide(color: AppColors.primary)),
                     ))),
                   ]),
                 ]),
