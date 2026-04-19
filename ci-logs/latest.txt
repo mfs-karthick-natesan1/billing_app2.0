@@ -16,9 +16,7 @@ lib/widgets/barcode_scanner_sheet.dart:113:25: Error: Constant evaluation error:
 lib/widgets/barcode_scanner_sheet.dart:114:26: Context: The invocation of 'surface' is not allowed in a constant expression.
         color: AppColors.surface,
                          ^
-00:02 +22: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — rendering shows empty state when no products
-00:02 +23: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — rendering shows product cards for each product
-00:02 +23 -1: loading /home/runner/work/billing_app2.0/billing_app2.0/test/create_bill_barcode_scan_test.dart [E]
+00:00 +22 -1: loading /home/runner/work/billing_app2.0/billing_app2.0/test/create_bill_barcode_scan_test.dart [E]
   Failed to load "/home/runner/work/billing_app2.0/billing_app2.0/test/create_bill_barcode_scan_test.dart":
   Compilation failed for testPath=/home/runner/work/billing_app2.0/billing_app2.0/test/create_bill_barcode_scan_test.dart: lib/screens/create_bill_screen.dart:173:31: Error: Constant evaluation error:
                     icon: const Icon(
@@ -87,37 +85,39 @@ lib/widgets/barcode_scanner_sheet.dart:114:26: Context: The invocation of 'surfa
           color: AppColors.surface,
                            ^
   .
-00:03 +24 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — rendering shows product count in list
-00:03 +25 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — search search filters products by name
-00:03 +26 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — search clearing search shows all products again
-00:03 +27 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — search search with no match shows empty state
-00:03 +28 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — low stock filter low stock filter shows only low-stock products
-00:05 +29 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/persistence_serialization_test.dart: PersistedAppState serialization round-trips config, product, customer and bill data
-00:05 +30 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/persistence_serialization_test.dart: BillNumberService hydration continues sequence from current FY max bill number
-00:05 +31 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/persistence_serialization_test.dart: Provider persistence callbacks product/customer/bill providers trigger onChanged on state mutation
-00:05 +32 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider starts with empty customer list
-00:05 +33 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addCustomer creates a new customer
-00:05 +34 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addCustomer with duplicate name returns existing customer
-00:05 +35 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addCredit increases outstandingBalance
-00:05 +36 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addCredit sets lastCreditDate
-00:05 +37 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider recordPayment reduces outstandingBalance and adds payment entry
-00:05 +38 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider recordPayment clamps balance to 0
-00:05 +39 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addAdvance and deductAdvance manage advanceBalance correctly
-00:05 +40 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider deductAdvance clamps to 0
-00:05 +41 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider getPaymentHistory returns entries for specific customer sorted desc
-00:05 +42 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider getTotalPayments sums all payments for a customer
-00:05 +43 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider totalOutstanding sums across all customers
-00:05 +44 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider searchCustomers returns matching customers
-00:05 +45 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider initialCustomers are loaded in constructor
-00:05 +46 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider getPaymentEntriesByDateRange filters by date range
-00:05 +47 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider getCashReceivedInDateRange filters by cash payment mode
+00:01 +22 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — rendering shows empty state when no products
+00:02 +23 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — rendering shows product cards for each product
+00:02 +24 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — rendering shows product count in list
+00:02 +25 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — search search filters products by name
+00:02 +26 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — search clearing search shows all products again
+00:02 +27 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — search clearing search shows all products again
+00:02 +28 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — search clearing search shows all products again
+00:02 +29 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — search clearing search shows all products again
+00:02 +30 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — search search with no match shows empty state
+00:02 +31 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/product_list_screen_test.dart: ProductListScreen — low stock filter low stock filter shows only low-stock products
+00:03 +32 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider starts with empty customer list
+00:03 +33 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addCustomer creates a new customer
+00:03 +34 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addCustomer with duplicate name returns existing customer
+00:03 +35 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addCredit increases outstandingBalance
+00:03 +36 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addCredit sets lastCreditDate
+00:03 +37 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider recordPayment reduces outstandingBalance and adds payment entry
+00:03 +38 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider recordPayment clamps balance to 0
+00:03 +39 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider addAdvance and deductAdvance manage advanceBalance correctly
+00:03 +40 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider deductAdvance clamps to 0
+00:03 +41 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider getPaymentHistory returns entries for specific customer sorted desc
+00:03 +42 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider getTotalPayments sums all payments for a customer
+00:03 +43 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider totalOutstanding sums across all customers
+00:03 +44 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider searchCustomers returns matching customers
+00:03 +45 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider initialCustomers are loaded in constructor
+00:03 +46 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider getPaymentEntriesByDateRange filters by date range
+00:03 +47 -1: /home/runner/work/billing_app2.0/billing_app2.0/test/customer_provider_test.dart: CustomerProvider getCashReceivedInDateRange filters by cash payment mode
 lib/widgets/app_text_input.dart:126:25: Error: Constant evaluation error:
                 ? const Icon(
                         ^
 lib/widgets/app_text_input.dart:128:38: Context: The invocation of 'error' is not allowed in a constant expression.
                     color: AppColors.error,
                                      ^
-00:08 +48 -2: loading /home/runner/work/billing_app2.0/billing_app2.0/test/settings_logout_sample_data_test.dart [E]
+00:05 +48 -2: loading /home/runner/work/billing_app2.0/billing_app2.0/test/settings_logout_sample_data_test.dart [E]
   Failed to load "/home/runner/work/billing_app2.0/billing_app2.0/test/settings_logout_sample_data_test.dart":
   Compilation failed for testPath=/home/runner/work/billing_app2.0/billing_app2.0/test/settings_logout_sample_data_test.dart: lib/widgets/app_text_input.dart:126:25: Error: Constant evaluation error:
                   ? const Icon(
@@ -126,133 +126,135 @@ lib/widgets/app_text_input.dart:128:38: Context: The invocation of 'error' is no
                       color: AppColors.error,
                                        ^
   .
-00:10 +48 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=false excludes GST from grand total
-00:10 +49 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=true includes GST in grand total
-00:10 +50 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag default gstEnabled=true includes GST (backward compatibility)
-00:10 +51 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=false with zero-GST product — total equals price
-00:10 +52 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=true with zero-GST product — total still equals price
-00:10 +53 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=false ignores GST even with high-rate product (28%)
-00:10 +54 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=true with 28% product — total = 1000 + 280
-00:10 +55 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag inter-state + gstEnabled=true → IGST (not CGST+SGST)
-00:10 +56 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=false with bill discount — total is subtotal minus discount only
-00:10 +57 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=false stores zero GST fields cgst, sgst, igst all zero when gstEnabled=false
-00:10 +58 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=false stores zero GST fields grandTotal stored as subtotal (no GST) when gstEnabled=false
-00:10 +59 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=false stores zero GST fields grandTotal stored correctly when gstEnabled=false and discount applied
-00:10 +60 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=true stores correct GST fields cgst and sgst calculated for 18% product when gstEnabled=true
-00:10 +61 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=true stores correct GST fields grandTotal = subtotal + cgst + sgst when gstEnabled=true
-00:10 +62 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=true stores correct GST fields inter-state: igst set, cgst and sgst zero when gstEnabled=true
-00:10 +63 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=true stores correct GST fields zero-GST product → cgst=0, sgst=0 even with gstEnabled=true
-00:10 +64 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeCgst returns 0 when product has no GST rate
-00:10 +65 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeCgst returns 9% of subtotal for 18% product
-00:10 +66 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeIgst returns full 18% for inter-state
-00:10 +67 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeCgst returns 0 for inter-state transactions
-00:10 +68 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeIgst returns 0 for intra-state
-00:10 +69 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: amountReceived pre-fill matches stored grandTotal gstEnabled=false: pre-fill equals stored grandTotal (no inflation)
-00:10 +70 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: amountReceived pre-fill matches stored grandTotal gstEnabled=true: pre-fill equals GST-inclusive stored grandTotal
-00:10 +71 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: amountReceived pre-fill matches stored grandTotal gstEnabled=false: amountReceived in bill must NOT exceed grandTotal
-00:10 +72 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: GST rounding — paisa precision CGST and SGST rounded to 2 decimal places
-00:10 +73 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: GST rounding — paisa precision grandTotal with GST rounded to 2 decimal places
-00:10 +74 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/clinic_e2e_test.dart: Clinic — Diagnosis & Visit Notes bill stores diagnosis and visitNotes
-00:10 +75 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/clinic_e2e_test.dart: Clinic — Diagnosis & Visit Notes service products (isService=true) skip stock decrement
-00:10 +76 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/clinic_e2e_test.dart: Clinic — Diagnosis & Visit Notes mix of services and supplies — only supplies decrement stock
-00:10 +77 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/clinic_e2e_test.dart: Clinic — Diagnosis & Visit Notes GST on consultation services calculated correctly
-00:11 +78 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #6 — Negative stock prevention decrementStock with qty > available throws StateError
-00:11 +79 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #6 — Negative stock prevention decrementStock with exact qty succeeds (stock = 0)
-00:11 +80 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #6 — Negative stock prevention decrementStock with qty = 0 is a no-op
-00:11 +81 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:11 +82 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:11 +83 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:11 +84 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:11 +85 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:12 +86 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:12 +87 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:12 +88 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:12 +89 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:12 +90 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:12 +91 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:12 +92 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:12 +93 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:12 +94 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
-00:13 +95 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:13 +96 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:13 +97 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:13 +98 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:13 +99 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:14 +100 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:14 +101 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:14 +102 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:14 +103 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:14 +104 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:14 +105 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
-00:14 +106 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:14 +107 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:14 +108 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:14 +109 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:14 +110 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:14 +111 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:14 +112 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:14 +113 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +114 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +115 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +116 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +117 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +118 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +119 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +120 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +121 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +122 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +123 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +124 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +125 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:15 +126 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
-00:16 +127 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:16 +128 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:16 +129 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:16 +130 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:16 +131 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:16 +132 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:16 +133 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:17 +134 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:17 +135 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:17 +136 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:17 +137 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:17 +138 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:17 +139 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +140 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +141 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +142 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +143 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +144 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +145 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +146 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +147 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +148 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +149 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +150 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +151 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
-00:18 +152 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #9 — Batch not found throws error decrementStock with invalid batchId throws StateError
-00:18 +153 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #9 — Batch not found throws error decrementStock with insufficient batch stock throws StateError
-00:18 +154 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #9 — Batch not found throws error decrementStock with valid batchId succeeds
-00:18 +155 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #11 — GST rounding cgst/sgst/igst rounded to 2 decimals
-00:18 +156 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #11 — GST rounding grandTotal rounded to 2 decimals for high-value items
-00:18 +157 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #11 — GST rounding GstCalculator methods return 2-decimal values
-00:18 +158 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #13 — Return qty validation return qty > original bill qty throws StateError
-00:18 +159 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #13 — Return qty validation cumulative returns exceed original throws StateError
-00:18 +160 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #13 — Return qty validation return qty = remaining returnable qty succeeds
-00:18 +161 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #18 — _resetActiveState completeBill clears all active state
-00:18 +162 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #18 — _resetActiveState clearActiveBill clears all active state
-00:18 +163 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/app_fab_test.dart: AppFab disables hero animation by default
-00:19 +164 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/app_fab_test.dart: AppFab supports explicit hero tag when provided
-00:19 +165 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/sprint1_regression_test.dart: Sprint 1 #9 — return GST proration partial return pro-rates CGST/SGST from original bill
-00:19 +166 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/sprint1_regression_test.dart: Sprint 1 #3 — PBKDF2 PIN hashing hashPin produces pbkdf2-prefixed hash with random salt
-00:20 +167 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/sprint1_regression_test.dart: Sprint 1 #3 — PBKDF2 PIN hashing verifyPin accepts correct pin and rejects wrong pin
-00:21 +168 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/sprint1_regression_test.dart: Sprint 1 #3 — PBKDF2 PIN hashing verifyPin still accepts legacy sha256(phone|pin|billmaster)
-00:21 +169 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/sprint1_regression_test.dart: Sprint 1 #21 — BillProvider pendingSave chain pendingSave chains serial saves without dropping earlier ones
-00:22 +170 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceService builds whatsapp invoice text with credit due and customer phone
-00:22 +171 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceService hides customer phone and includes pharmacy batch details
-00:22 +172 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceService shows UPI payment label for UPI bills
-00:22 +173 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceShareService buildWhatsappUri includes normalized Indian phone and encoded text
-00:22 +174 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceShareService buildWhatsappUri omits phone when not available
+00:07 +48 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=false excludes GST from grand total
+00:07 +49 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=true includes GST in grand total
+00:07 +50 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag default gstEnabled=true includes GST (backward compatibility)
+00:07 +51 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=false with zero-GST product — total equals price
+00:07 +52 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=true with zero-GST product — total still equals price
+00:07 +53 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=false ignores GST even with high-rate product (28%)
+00:07 +54 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=true with 28% product — total = 1000 + 280
+00:07 +55 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag inter-state + gstEnabled=true → IGST (not CGST+SGST)
+00:07 +56 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeGrandTotal — gstEnabled flag gstEnabled=false with bill discount — total is subtotal minus discount only
+00:07 +57 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=false stores zero GST fields cgst, sgst, igst all zero when gstEnabled=false
+00:07 +58 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=false stores zero GST fields grandTotal stored as subtotal (no GST) when gstEnabled=false
+00:07 +59 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=false stores zero GST fields grandTotal stored correctly when gstEnabled=false and discount applied
+00:07 +60 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=true stores correct GST fields cgst and sgst calculated for 18% product when gstEnabled=true
+00:07 +61 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=true stores correct GST fields grandTotal = subtotal + cgst + sgst when gstEnabled=true
+00:07 +62 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=true stores correct GST fields inter-state: igst set, cgst and sgst zero when gstEnabled=true
+00:07 +63 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: completeBill — gstEnabled=true stores correct GST fields zero-GST product → cgst=0, sgst=0 even with gstEnabled=true
+00:07 +64 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeCgst returns 0 when product has no GST rate
+00:07 +65 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeCgst returns 9% of subtotal for 18% product
+00:07 +66 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeIgst returns full 18% for inter-state
+00:07 +67 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeCgst returns 0 for inter-state transactions
+00:07 +68 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: activeCgst / activeSgst / activeIgst activeIgst returns 0 for intra-state
+00:07 +69 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: amountReceived pre-fill matches stored grandTotal gstEnabled=false: pre-fill equals stored grandTotal (no inflation)
+00:07 +70 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: amountReceived pre-fill matches stored grandTotal gstEnabled=true: pre-fill equals GST-inclusive stored grandTotal
+00:07 +71 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: amountReceived pre-fill matches stored grandTotal gstEnabled=false: amountReceived in bill must NOT exceed grandTotal
+00:07 +72 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: GST rounding — paisa precision CGST and SGST rounded to 2 decimal places
+00:07 +73 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/gst_enabled_bill_test.dart: GST rounding — paisa precision grandTotal with GST rounded to 2 decimal places
+00:07 +74 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/clinic_e2e_test.dart: Clinic — Diagnosis & Visit Notes bill stores diagnosis and visitNotes
+00:07 +75 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/clinic_e2e_test.dart: Clinic — Diagnosis & Visit Notes service products (isService=true) skip stock decrement
+00:07 +76 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/clinic_e2e_test.dart: Clinic — Diagnosis & Visit Notes mix of services and supplies — only supplies decrement stock
+00:07 +77 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/clinic_e2e_test.dart: Clinic — Diagnosis & Visit Notes GST on consultation services calculated correctly
+00:08 +78 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #6 — Negative stock prevention decrementStock with qty > available throws StateError
+00:08 +79 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #6 — Negative stock prevention decrementStock with exact qty succeeds (stock = 0)
+00:08 +80 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #6 — Negative stock prevention decrementStock with qty = 0 is a no-op
+00:08 +81 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +82 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +83 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +84 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +85 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +86 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +87 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +88 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +89 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +90 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +91 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +92 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +93 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:08 +94 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +95 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +96 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +97 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +98 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +99 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +100 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +101 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +102 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +103 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:09 +104 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:10 +105 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:10 +106 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:10 +107 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:10 +108 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:10 +109 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:10 +110 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:10 +111 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting 5 failed login attempts → account locked out
+00:10 +112 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +113 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +114 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +115 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +116 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +117 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +118 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +119 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +120 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +121 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +122 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +123 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +124 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +125 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +126 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +127 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +128 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +129 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +130 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:11 +131 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +132 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +133 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +134 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +135 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +136 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +137 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +138 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +139 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +140 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +141 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +142 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +143 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +144 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +145 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +146 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +147 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +148 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:12 +149 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting successful login resets failed attempts
+00:13 +150 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
+00:14 +151 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
+00:14 +152 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting remainingAttempts decreases on each failure
+00:14 +153 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/sprint1_regression_test.dart: Sprint 1 #9 — return GST proration partial return pro-rates CGST/SGST from original bill
+00:14 +154 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
+00:15 +155 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
+00:16 +156 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
+00:16 +157 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
+00:16 +158 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #7 — PIN rate limiting unlockApp also rate-limited
+00:17 +159 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #9 — Batch not found throws error decrementStock with invalid batchId throws StateError
+00:17 +160 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #9 — Batch not found throws error decrementStock with insufficient batch stock throws StateError
+00:17 +161 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #9 — Batch not found throws error decrementStock with valid batchId succeeds
+00:17 +162 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #11 — GST rounding cgst/sgst/igst rounded to 2 decimals
+00:17 +163 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #11 — GST rounding grandTotal rounded to 2 decimals for high-value items
+00:17 +164 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #11 — GST rounding GstCalculator methods return 2-decimal values
+00:17 +165 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #13 — Return qty validation return qty > original bill qty throws StateError
+00:17 +166 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #13 — Return qty validation cumulative returns exceed original throws StateError
+00:17 +167 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #13 — Return qty validation return qty = remaining returnable qty succeeds
+00:17 +168 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #18 — _resetActiveState completeBill clears all active state
+00:17 +169 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/e2e/regression_e2e_test.dart: Issue #18 — _resetActiveState clearActiveBill clears all active state
+00:19 +170 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceService builds whatsapp invoice text with credit due and customer phone
+00:19 +171 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceService hides customer phone and includes pharmacy batch details
+00:19 +172 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceService shows UPI payment label for UPI bills
+00:19 +173 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceShareService buildWhatsappUri includes normalized Indian phone and encoded text
+00:19 +174 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_service_test.dart: InvoiceShareService buildWhatsappUri omits phone when not available
+00:19 +175 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider single-user mode allows actions by default
+00:19 +176 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider create owner enables user management and logs owner in
 lib/screens/create_bill_screen.dart:173:31: Error: Constant evaluation error:
                   icon: const Icon(
                               ^
@@ -319,10 +321,7 @@ lib/widgets/barcode_scanner_sheet.dart:113:25: Error: Constant evaluation error:
 lib/widgets/barcode_scanner_sheet.dart:114:26: Context: The invocation of 'surface' is not allowed in a constant expression.
         color: AppColors.surface,
                          ^
-00:23 +175 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider single-user mode allows actions by default
-00:23 +176 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider create owner enables user management and logs owner in
-00:23 +177 -2: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider addUser rejects duplicate phone and owner role
-00:23 +177 -3: loading /home/runner/work/billing_app2.0/billing_app2.0/test/create_bill_workflow_test.dart [E]
+00:20 +176 -3: loading /home/runner/work/billing_app2.0/billing_app2.0/test/create_bill_workflow_test.dart [E]
   Failed to load "/home/runner/work/billing_app2.0/billing_app2.0/test/create_bill_workflow_test.dart":
   Compilation failed for testPath=/home/runner/work/billing_app2.0/billing_app2.0/test/create_bill_workflow_test.dart: lib/screens/create_bill_screen.dart:173:31: Error: Constant evaluation error:
                     icon: const Icon(
@@ -391,15 +390,15 @@ lib/widgets/barcode_scanner_sheet.dart:114:26: Context: The invocation of 'surfa
           color: AppColors.surface,
                            ^
   .
-00:23 +178 -3: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider switchUser validates PIN and role permissions update
+00:20 +177 -3: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider addUser rejects duplicate phone and owner role
+00:20 +178 -3: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider switchUser validates PIN and role permissions update
 lib/widgets/app_text_input.dart:126:25: Error: Constant evaluation error:
                 ? const Icon(
                         ^
 lib/widgets/app_text_input.dart:128:38: Context: The invocation of 'error' is not allowed in a constant expression.
                     color: AppColors.error,
                                      ^
-00:25 +179 -3: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider owner cannot be deactivated
-00:25 +179 -4: loading /home/runner/work/billing_app2.0/billing_app2.0/test/add_edit_user_sheet_test.dart [E]
+00:21 +178 -4: loading /home/runner/work/billing_app2.0/billing_app2.0/test/add_edit_user_sheet_test.dart [E]
   Failed to load "/home/runner/work/billing_app2.0/billing_app2.0/test/add_edit_user_sheet_test.dart":
   Compilation failed for testPath=/home/runner/work/billing_app2.0/billing_app2.0/test/add_edit_user_sheet_test.dart: lib/widgets/app_text_input.dart:126:25: Error: Constant evaluation error:
                   ? const Icon(
@@ -408,94 +407,95 @@ lib/widgets/app_text_input.dart:128:38: Context: The invocation of 'error' is no
                       color: AppColors.error,
                                        ^
   .
-00:27 +180 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants standardUnits contains all expected units
-00:27 +181 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants label returns full label for known UOM
-00:27 +182 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants label returns code itself for unknown UOM
-00:27 +183 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants display formats integer quantities cleanly
-00:27 +184 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants display formats decimal quantities cleanly
-00:27 +185 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants display handles null UOM
-00:27 +186 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants display handles empty UOM
-00:27 +187 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants formatQty strips trailing zeroes
-00:27 +188 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants isDecimalUnit identifies weight/volume units
-00:27 +189 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Units all includes custom option
-00:27 +190 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Units label delegates to UomConstants
-00:27 +191 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields default values for new product
-00:27 +192 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields displayUom returns unit for standard units
-00:27 +193 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields displayUom returns customUomLabel for custom unit
-00:27 +194 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields displayUom falls back to unit when custom but no label
-00:27 +195 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields copyWith preserves UOM fields
-00:27 +196 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields toJson/fromJson round-trips UOM fields
-00:27 +197 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields fromJson defaults for missing UOM fields
-00:27 +198 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: LineItem with double quantity subtotal with decimal quantity
-00:27 +199 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: LineItem with double quantity default quantity is 1.0
-00:27 +200 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: LineItem with double quantity toJson/fromJson round-trips double quantity
-00:27 +201 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: LineItem with double quantity fromJson handles int quantity from old data
-00:28 +202 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider starts with empty supplier list
-00:28 +203 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider addSupplier creates a new supplier
-00:28 +204 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider updateSupplier modifies supplier fields
-00:28 +205 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider updateSupplier returns false for non-existent id
-00:28 +206 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider deleteSupplier soft-deletes (sets isActive false)
-00:28 +207 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider reactivateSupplier restores supplier
-00:28 +208 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider searchSuppliers matches name
-00:28 +209 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider searchSuppliers matches product categories
-00:28 +210 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider searchSuppliers excludes inactive suppliers
-00:28 +211 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider addPayable increases outstanding
-00:28 +212 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider recordPayment reduces outstanding
-00:28 +213 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider recordPayment does not go below zero
-00:28 +214 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider getTotalPayable sums active suppliers only
-00:28 +215 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider clearAllData removes all suppliers
-00:28 +216 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider replaceAllData swaps supplier list
-00:28 +217 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider initialSuppliers are loaded
-00:28 +218 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider onChanged callback fires on mutations
-00:28 +219 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: Supplier model toJson and fromJson round-trip
-00:28 +220 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: Supplier model fromJson handles missing fields gracefully
-00:28 +221 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: Supplier model copyWith preserves unchanged fields
-00:29 +222 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
-00:29 +223 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
-00:29 +224 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
-00:29 +225 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
-00:29 +226 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows CGST and SGST rows when GST enabled
-00:29 +227 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows IGST row for inter-state when GST enabled
-00:29 +228 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display hides CGST/SGST rows when GST disabled
-00:29 +229 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows line discount row when lineDiscount > 0
-00:29 +230 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display hides line discount row when lineDiscount == 0
-00:29 +231 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display custom button label shown
-00:29 +232 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display default button label is Proceed to Payment
-00:29 +233 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — proceed button button enabled when hasItems=true
-00:30 +234 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — proceed button button disabled when hasItems=false
-00:30 +235 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction Add Discount button appears when no discount set
-00:30 +236 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
-00:30 +237 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction discount field hidden when discountValue > 0 on init
-00:30 +238 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction clearing discount calls onClearDiscount
-00:30 +239 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction toggling % → Rs. switches discount type
-00:30 +240 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/expense_provider_test.dart: ExpenseProvider add/update/delete expense
-00:30 +241 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/expense_provider_test.dart: ExpenseProvider today and this month totals are computed correctly
-00:30 +242 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/expense_provider_test.dart: ExpenseProvider date range and category breakdown work
-00:30 +243 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/expense_provider_test.dart: ExpenseProvider search and combined filters work together
-00:30 +244 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/expense_provider_test.dart: ExpenseProvider custom category names are collected from expenses
+00:22 +179 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/user_provider_test.dart: UserProvider owner cannot be deactivated
+00:23 +180 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants standardUnits contains all expected units
+00:23 +181 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants label returns full label for known UOM
+00:23 +182 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants label returns code itself for unknown UOM
+00:23 +183 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants display formats integer quantities cleanly
+00:23 +184 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants display formats decimal quantities cleanly
+00:23 +185 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants display handles null UOM
+00:23 +186 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants display handles empty UOM
+00:23 +187 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants formatQty strips trailing zeroes
+00:23 +188 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: UomConstants isDecimalUnit identifies weight/volume units
+00:23 +189 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Units all includes custom option
+00:23 +190 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Units label delegates to UomConstants
+00:23 +191 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields default values for new product
+00:23 +192 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields displayUom returns unit for standard units
+00:23 +193 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields displayUom returns customUomLabel for custom unit
+00:23 +194 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields displayUom falls back to unit when custom but no label
+00:23 +195 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields copyWith preserves UOM fields
+00:23 +196 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields toJson/fromJson round-trips UOM fields
+00:23 +197 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: Product UOM fields fromJson defaults for missing UOM fields
+00:23 +198 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: LineItem with double quantity subtotal with decimal quantity
+00:23 +199 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: LineItem with double quantity default quantity is 1.0
+00:23 +200 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: LineItem with double quantity toJson/fromJson round-trips double quantity
+00:23 +201 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/uom_test.dart: LineItem with double quantity fromJson handles int quantity from old data
+00:23 +202 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider starts with empty supplier list
+00:23 +203 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider addSupplier creates a new supplier
+00:23 +204 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider updateSupplier modifies supplier fields
+00:23 +205 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider updateSupplier returns false for non-existent id
+00:23 +206 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider deleteSupplier soft-deletes (sets isActive false)
+00:23 +207 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider reactivateSupplier restores supplier
+00:23 +208 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider searchSuppliers matches name
+00:23 +209 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider searchSuppliers matches product categories
+00:23 +210 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider searchSuppliers excludes inactive suppliers
+00:23 +211 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider addPayable increases outstanding
+00:23 +212 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider recordPayment reduces outstanding
+00:23 +213 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider recordPayment does not go below zero
+00:23 +214 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider getTotalPayable sums active suppliers only
+00:23 +215 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider clearAllData removes all suppliers
+00:23 +216 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider replaceAllData swaps supplier list
+00:23 +217 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider initialSuppliers are loaded
+00:23 +218 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: SupplierProvider onChanged callback fires on mutations
+00:23 +219 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: Supplier model toJson and fromJson round-trip
+00:23 +220 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: Supplier model fromJson handles missing fields gracefully
+00:23 +221 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/supplier_provider_test.dart: Supplier model copyWith preserves unchanged fields
+00:24 +222 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
+00:24 +223 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
+00:24 +224 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
+00:24 +225 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
+00:24 +226 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
+00:24 +227 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
+00:24 +228 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
+00:24 +229 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
+00:24 +230 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows subtotal and grand total
+00:25 +231 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows CGST and SGST rows when GST enabled
+00:25 +232 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows IGST row for inter-state when GST enabled
+00:25 +233 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display hides CGST/SGST rows when GST disabled
+00:25 +234 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display shows line discount row when lineDiscount > 0
+00:25 +235 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display hides line discount row when lineDiscount == 0
+00:25 +236 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display custom button label shown
+00:25 +237 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — display default button label is Proceed to Payment
+00:25 +238 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — proceed button button enabled when hasItems=true
+00:25 +239 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — proceed button button disabled when hasItems=false
+00:25 +240 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction Add Discount button appears when no discount set
+00:25 +241 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +242 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +243 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +244 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +245 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +246 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +247 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +248 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +249 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +250 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +251 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +252 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +253 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +254 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +255 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +256 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +257 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction tapping Add Discount shows discount input field
+00:25 +258 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction discount field hidden when discountValue > 0 on init
+00:25 +259 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction clearing discount calls onClearDiscount
 lib/screens/eod_summary_screen.dart:369:27: Error: Constant evaluation error:
                     const Icon(Icons.check_circle,
                           ^
 lib/screens/eod_summary_screen.dart:370:42: Context: The invocation of 'success' is not allowed in a constant expression.
                         color: AppColors.success, size: 20),
                                          ^
-00:31 +245 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider starts with empty quotation list
-00:31 +246 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider addQuotation adds a quotation
-00:31 +247 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider updateQuotation modifies quotation
-00:31 +248 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider deleteQuotation removes quotation
-00:31 +249 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider updateStatus changes quotation status
-00:31 +250 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider getActiveQuotations returns draft, sent, approved
-00:31 +251 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider getExpiredQuotations returns only expired
-00:31 +252 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider getByStatus filters correctly
-00:31 +253 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider convertToBill returns null if not approved
-00:31 +254 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider convertToBill works for approved quotation
-00:31 +255 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider expireOverdueQuotations marks overdue as expired
-00:31 +256 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider expireOverdueQuotations skips approved and rejected
-00:31 +257 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider generateQuotationNumber returns unique numbers
-00:31 +258 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider onChanged callback fires on mutations
-00:31 +259 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider initialQuotations hydrates provider
-00:31 +260 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/quotation_provider_test.dart: QuotationProvider clearAllData empties the list
-00:31 +261 -5: loading /home/runner/work/billing_app2.0/billing_app2.0/test/eod_summary_test.dart [E]
+00:25 +260 -4: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_total_footer_test.dart: BillTotalFooter — discount interaction toggling % → Rs. switches discount type
+00:25 +260 -5: loading /home/runner/work/billing_app2.0/billing_app2.0/test/eod_summary_test.dart [E]
   Failed to load "/home/runner/work/billing_app2.0/billing_app2.0/test/eod_summary_test.dart":
   Compilation failed for testPath=/home/runner/work/billing_app2.0/billing_app2.0/test/eod_summary_test.dart: lib/screens/eod_summary_screen.dart:369:27: Error: Constant evaluation error:
                       const Icon(Icons.check_circle,
@@ -504,41 +504,41 @@ lib/screens/eod_summary_screen.dart:370:42: Context: The invocation of 'success'
                           color: AppColors.success, size: 20),
                                            ^
   .
-00:33 +261 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment adjustStock updates product stock quantity
-00:33 +262 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment adjustStock adds to adjustments list
-00:33 +263 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment getAdjustments returns sorted by date desc
-00:33 +264 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment getAdjustments filters by productId
-00:33 +265 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment adjustStock ignores unknown product
-00:33 +266 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment clearProducts also clears adjustments
-00:33 +267 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment onChanged callback fires on adjustStock
-00:33 +268 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment initialAdjustments are loaded
-00:33 +269 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: StockAdjustment model adjustmentQty defaults to newStock - previousStock
-00:33 +270 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: StockAdjustment model toJson and fromJson round-trip
-00:33 +271 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: StockAdjustment model fromJson handles missing fields
-00:33 +272 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: StockAdjustment model reason label returns readable string
-00:34 +273 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +274 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +275 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +276 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +277 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +278 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +279 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +280 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +281 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +282 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +283 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +284 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +285 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +286 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +287 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +288 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +289 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +290 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +291 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +292 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +293 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +294 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
-00:35 +295 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:27 +261 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment adjustStock updates product stock quantity
+00:27 +262 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment adjustStock adds to adjustments list
+00:27 +263 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment getAdjustments returns sorted by date desc
+00:27 +264 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment getAdjustments filters by productId
+00:27 +265 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment adjustStock ignores unknown product
+00:27 +266 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment clearProducts also clears adjustments
+00:27 +267 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment onChanged callback fires on adjustStock
+00:27 +268 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: Stock Adjustment initialAdjustments are loaded
+00:27 +269 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: StockAdjustment model adjustmentQty defaults to newStock - previousStock
+00:27 +270 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: StockAdjustment model toJson and fromJson round-trip
+00:27 +271 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: StockAdjustment model fromJson handles missing fields
+00:27 +272 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/stock_adjustment_test.dart: StockAdjustment model reason label returns readable string
+00:27 +273 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +274 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +275 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +276 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +277 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +278 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +279 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +280 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +281 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +282 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +283 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +284 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +285 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +286 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +287 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +288 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +289 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +290 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +291 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +292 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +293 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +294 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
+00:28 +295 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: logs in selected user with valid PIN
 lib/widgets/add_expense_sheet.dart:155:37: Error: Constant evaluation error:
                         icon: const Icon(
                                     ^
@@ -557,8 +557,7 @@ lib/widgets/app_text_input.dart:126:25: Error: Constant evaluation error:
 lib/widgets/app_text_input.dart:128:38: Context: The invocation of 'error' is not allowed in a constant expression.
                     color: AppColors.error,
                                      ^
-00:36 +296 -5: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: shows wrong PIN error on invalid PIN
-00:36 +296 -6: loading /home/runner/work/billing_app2.0/billing_app2.0/test/expense_list_screen_test.dart [E]
+00:28 +295 -6: loading /home/runner/work/billing_app2.0/billing_app2.0/test/expense_list_screen_test.dart [E]
   Failed to load "/home/runner/work/billing_app2.0/billing_app2.0/test/expense_list_screen_test.dart":
   Compilation failed for testPath=/home/runner/work/billing_app2.0/billing_app2.0/test/expense_list_screen_test.dart: lib/widgets/add_expense_sheet.dart:155:37: Error: Constant evaluation error:
                           icon: const Icon(
@@ -579,13 +578,14 @@ lib/widgets/app_text_input.dart:128:38: Context: The invocation of 'error' is no
                       color: AppColors.error,
                                        ^
   .
+00:30 +296 -6: /home/runner/work/billing_app2.0/billing_app2.0/test/user_login_screen_test.dart: shows wrong PIN error on invalid PIN
 lib/screens/bill_done_screen.dart:28:23: Error: Constant evaluation error:
                 const Icon(
                       ^
 lib/screens/bill_done_screen.dart:31:36: Context: The invocation of 'success' is not allowed in a constant expression.
                   color: AppColors.success,
                                    ^
-00:40 +297 -7: loading /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_actions_widget_test.dart [E]
+00:33 +297 -7: loading /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_actions_widget_test.dart [E]
   Failed to load "/home/runner/work/billing_app2.0/billing_app2.0/test/invoice_actions_widget_test.dart":
   Compilation failed for testPath=/home/runner/work/billing_app2.0/billing_app2.0/test/invoice_actions_widget_test.dart: lib/screens/bill_done_screen.dart:28:23: Error: Constant evaluation error:
                   const Icon(
@@ -594,186 +594,186 @@ lib/screens/bill_done_screen.dart:31:36: Context: The invocation of 'success' is
                     color: AppColors.success,
                                      ^
   .
-00:45 +297 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
-00:45 +298 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
-00:45 +299 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
-00:45 +300 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
-00:45 +301 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows search bar and filter chips
-00:45 +302 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows bills when provider has data
-00:45 +303 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
-00:46 +304 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping filter chip changes active filter
-00:46 +305 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +306 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +307 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +308 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +309 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +310 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +311 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +312 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +313 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +314 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +315 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +316 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +317 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +318 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +319 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +320 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +321 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +322 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +323 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +324 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:46 +325 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
-00:47 +326 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerPaymentEntry enhancements notes and billReference fields default to null
-00:47 +327 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerPaymentEntry enhancements notes and billReference can be set
-00:47 +328 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerPaymentEntry enhancements toJson includes notes and billReference
-00:47 +329 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerPaymentEntry enhancements fromJson reads notes and billReference
-00:47 +330 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerPaymentEntry enhancements fromJson handles missing notes and billReference
-00:47 +331 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerPaymentEntry enhancements copyWith preserves notes and billReference
-00:47 +332 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerPaymentEntry enhancements copyWith can override notes and billReference
-00:47 +333 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerPaymentEntry enhancements toJson/fromJson round-trip preserves all fields
-00:47 +334 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement recordPayment with notes and billReference
-00:47 +335 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement recordPayment reduces outstanding balance
-00:47 +336 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement recordPayment clamps balance to zero
-00:47 +337 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement getPaymentHistory returns sorted by date desc
-00:47 +338 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement getPaymentHistory returns empty for unknown customer
-00:47 +339 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement getTotalPayments accumulates correctly
-00:47 +340 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement getTotalPayments returns 0 for unknown customer
-00:47 +341 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement recordPayment with different payment modes
-00:47 +342 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement multiple partial settlements reduce balance correctly
-00:47 +343 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement recordPayment notifies listeners and persists
-00:47 +344 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement clearAllData clears payment entries
-00:47 +345 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement getPaymentEntriesByDateRange filters correctly
-00:47 +346 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerProvider credit settlement getPaymentEntriesByDateRange filters by payment mode
-00:47 +347 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnLineItem computes refundAmount from qty * price
-00:47 +348 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnLineItem accepts explicit refundAmount
-00:47 +349 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnLineItem toJson and fromJson round-trip
-00:47 +350 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnLineItem fromJson handles missing fields gracefully
-00:47 +351 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: SalesReturn auto-generates id and date
-00:47 +352 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: SalesReturn computes totalRefundAmount from items
-00:47 +353 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: SalesReturn accepts explicit totalRefundAmount
-00:47 +354 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: SalesReturn toJson and fromJson round-trip
-00:47 +355 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: SalesReturn fromJson handles unknown refundMode gracefully
-00:47 +356 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: SalesReturn RefundMode enum values
-00:47 +357 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider starts empty
-00:47 +358 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider addReturn adds and notifies
-00:47 +359 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider getReturnsByBill filters correctly
-00:47 +360 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider hasReturnForBill returns correct boolean
-00:47 +361 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider getReturnedQuantity accumulates across returns
-00:47 +362 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider generateReturnNumber increments
-00:47 +363 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider generateReturnNumber uses financial year prefix
-00:47 +364 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider getReturnsByDateRange filters by date
-00:47 +365 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider getTodayReturns returns only today
-00:47 +366 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider todayRefundTotal sums today refunds
-00:47 +367 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider clearAllData resets everything
-00:47 +368 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider replaceAllData replaces and hydrates counter
-00:47 +369 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_refund_test.dart: ReturnProvider initialReturns hydrates counter correctly
-00:48 +370 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: navigates to home when setup is completed
-00:49 +371 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: logged-in user with setup not completed goes to setup (skips onboarding)
-00:49 +372 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: no session + onboarding not done navigates to onboarding
-00:49 +373 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: no session + onboarding done navigates to auth-login
-00:49 +374 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/purchase_provider_db_call_test.dart: deletePurchase — DB persistence calls dbService.deleteRecord with table=purchases and correct id
-00:49 +375 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/purchase_provider_db_call_test.dart: deletePurchase — DB persistence does NOT call deleteRecord when purchase id not found
-00:49 +376 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/purchase_provider_db_call_test.dart: deletePurchase — DB persistence local list is updated AND DB call is made together
-00:49 +377 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/purchase_provider_db_call_test.dart: deletePurchase — stock reversal with dbService attached still reverses stock when dbService is attached
-00:49 +378 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/purchase_provider_db_call_test.dart: deletePurchase — stock reversal with dbService attached full cycle: add purchase then delete → stock and DB both consistent
-00:49 +379 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/purchase_provider_db_call_test.dart: deletePurchase — onChanged callback fires onChanged when purchase deleted
-00:50 +380 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: (setUpAll)
-00:50 +380 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: PdfInvoiceService returns non-empty PDF bytes
+00:37 +297 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:37 +298 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:37 +299 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:37 +300 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +301 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +302 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +303 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +304 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +305 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +306 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +307 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +308 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +309 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +310 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +311 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +312 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +313 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +314 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +315 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +316 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +317 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +318 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +319 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +320 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows empty state when no bills exist
+00:38 +321 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows search bar and filter chips
+00:38 +322 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen shows bills when provider has data
+00:38 +323 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/credit_settlement_test.dart: CustomerPaymentEntry enhancements notes and billReference fields default to null
+00:38 +324 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +325 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +326 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +327 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +328 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +329 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +330 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +331 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +332 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +333 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +334 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +335 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +336 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +337 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +338 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +339 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +340 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +341 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +342 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +343 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +344 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen search filters bills
+00:38 +345 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping filter chip changes active filter
+00:39 +346 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +347 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +348 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +349 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +350 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +351 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +352 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +353 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +354 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +355 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +356 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +357 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +358 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +359 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +360 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +361 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +362 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +363 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +364 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +365 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +366 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +367 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +368 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:39 +369 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_history_screen_test.dart: BillHistoryScreen tapping bill card opens detail sheet
+00:40 +370 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/purchase_provider_db_call_test.dart: deletePurchase — DB persistence calls dbService.deleteRecord with table=purchases and correct id
+00:40 +371 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: navigates to home when setup is completed
+00:40 +372 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: navigates to home when setup is completed
+00:40 +373 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: navigates to home when setup is completed
+00:40 +374 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: navigates to home when setup is completed
+00:40 +375 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: navigates to home when setup is completed
+00:40 +376 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: navigates to home when setup is completed
+00:40 +377 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: (setUpAll)
+00:40 +378 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: (setUpAll)
+00:40 +378 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/splash_navigation_persistence_test.dart: no session + onboarding not done navigates to onboarding
+00:40 +379 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: PdfInvoiceService returns non-empty PDF bytes
+00:40 +380 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: PdfInvoiceService returns non-empty PDF bytes
 Helvetica has no Unicode support see https://github.com/DavBfr/dart_pdf/wiki/Fonts-Management
 Helvetica-Bold has no Unicode support see https://github.com/DavBfr/dart_pdf/wiki/Fonts-Management
-00:50 +381 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: ImageInvoiceService returns PNG bytes
+00:41 +381 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: ImageInvoiceService returns PNG bytes
   Skip: Requires platform channel (printing package uses MethodChannel.invokeMethod)
-00:50 +381 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: (tearDownAll)
-00:50 +381 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — list management removes bill from bills list
-00:50 +382 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — list management no-op when bill number not found
-00:50 +383 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — list management fires onChanged callback when bill is deleted
-00:50 +384 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — stock restoration restores stock for non-service product after bill deleted
-00:50 +385 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — stock restoration full cycle: create bill then delete → stock equals original
-00:50 +386 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — stock restoration does NOT restore stock for service products
-00:50 +387 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — stock restoration restores stock for non-service but ignores service in mixed bill
-00:50 +388 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — DB persistence calls dbService.deleteRecord with correct table and bill id
-00:50 +389 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — DB persistence does not call deleteRecord when bill number not found
-00:51 +390 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/sample_data_billing_history_test.dart: sample billing history includes 50 customers and 100 invoices
-00:51 +391 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/sample_data_billing_history_test.dart: sample invoices are generated within last three months
-00:51 +392 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/sample_data_billing_history_test.dart: credit outstanding totals align with generated customer balances
-00:51 +393 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/sample_data_billing_history_test.dart: sample products include barcodes for scan-to-add flow
-00:51 +394 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider starts empty
-00:51 +395 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider addReturn adds a return
-00:51 +396 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider getReturnsByBill returns only matching returns
-00:51 +397 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider hasReturnForBill returns correct boolean
-00:51 +398 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider todayRefundTotal sums todays returns
-00:51 +399 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider todayRefundTotal excludes past returns
-00:51 +400 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider getReturnedQuantity sums previously returned qty per product
-00:51 +401 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider generateReturnNumber is sequential
-00:51 +402 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider clearAllData empties returns and resets counter
-00:51 +403 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider getReturnsByDateRange filters correctly
-00:51 +404 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider initialReturns are loaded in constructor
-00:52 +405 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: BillNumberService generates correct FY format
-00:52 +406 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: BillNumberService increments sequentially
-00:52 +407 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: BillNumberService correct FY for current date
-00:52 +408 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: GstCalculator calculates CGST and SGST correctly
-00:52 +409 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: GstCalculator handles 0% GST
-00:52 +410 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: GstCalculator grandTotal with discount
-00:52 +411 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: Product model isLowStock when stock <= threshold
-00:52 +412 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: Product model isOutOfStock when stock is 0
-00:52 +413 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: LineItem model calculates subtotal correctly
-00:52 +414 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: LineItem model calculates GST correctly for 18% slab
-00:54 +415 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +416 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +417 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +418 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +419 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +420 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +421 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +422 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +423 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +424 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +425 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +426 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +427 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +428 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +429 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +430 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +431 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +432 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +433 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +434 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +435 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +436 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +437 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +438 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +439 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +440 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +441 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +442 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
-00:54 +443 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen opens cash entry sheet when tapping add cash in
-00:55 +444 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense autoCreate and lastCreatedAt fields default autoCreate is false
-00:55 +445 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense autoCreate and lastCreatedAt fields copyWith updates autoCreate and lastCreatedAt
-00:55 +446 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense autoCreate and lastCreatedAt fields clearLastCreatedAt resets to null
-00:55 +447 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense autoCreate and lastCreatedAt fields toJson includes autoCreate and lastCreatedAt
-00:55 +448 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense autoCreate and lastCreatedAt fields fromJson parses autoCreate and lastCreatedAt
-00:55 +449 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense autoCreate and lastCreatedAt fields fromJson defaults autoCreate to false when missing
-00:55 +450 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense autoCreate and lastCreatedAt fields toJson -> fromJson round trip
-00:55 +451 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense nextDueDate returns null for non-recurring expense
-00:55 +452 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense nextDueDate returns today if due date is today
-00:55 +453 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense nextDueDate computes next monthly occurrence from past date
-00:55 +454 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense nextDueDate computes next weekly occurrence
-00:55 +455 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Expense nextDueDate computes next daily occurrence
-00:55 +456 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: ExpenseProvider getUpcomingRecurring returns expenses due within given days
-00:55 +457 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: ExpenseProvider getUpcomingRecurring excludes non-recurring expenses
-00:55 +458 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: ExpenseProvider processDueRecurringExpenses creates entry for due autoCreate expense
-00:55 +459 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: ExpenseProvider processDueRecurringExpenses does not create for non-autoCreate expenses
-00:55 +460 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: ExpenseProvider processDueRecurringExpenses does not double-create if already processed today
-00:55 +461 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: ExpenseProvider processDueRecurringExpenses does not create for future due dates
-00:55 +462 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: ExpenseProvider processDueRecurringExpenses returns 0 when no recurring expenses exist
-00:55 +463 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/recurring_expense_auto_create_test.dart: Recurring expense strings exist auto-create strings defined
+00:41 +381 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/invoice_rendering_services_test.dart: (tearDownAll)
+00:41 +381 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — list management removes bill from bills list
+00:41 +382 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — list management no-op when bill number not found
+00:41 +383 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — list management fires onChanged callback when bill is deleted
+00:41 +384 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — stock restoration restores stock for non-service product after bill deleted
+00:41 +385 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — stock restoration full cycle: create bill then delete → stock equals original
+00:41 +386 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — stock restoration does NOT restore stock for service products
+00:41 +387 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — stock restoration restores stock for non-service but ignores service in mixed bill
+00:41 +388 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — DB persistence calls dbService.deleteRecord with correct table and bill id
+00:41 +389 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/bill_provider_delete_test.dart: deleteBill — DB persistence does not call deleteRecord when bill number not found
+00:41 +390 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/sample_data_billing_history_test.dart: sample billing history includes 50 customers and 100 invoices
+00:41 +391 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/sample_data_billing_history_test.dart: sample invoices are generated within last three months
+00:41 +392 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/sample_data_billing_history_test.dart: credit outstanding totals align with generated customer balances
+00:41 +393 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/sample_data_billing_history_test.dart: sample products include barcodes for scan-to-add flow
+00:42 +394 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider starts empty
+00:42 +395 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider addReturn adds a return
+00:42 +396 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider getReturnsByBill returns only matching returns
+00:42 +397 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider hasReturnForBill returns correct boolean
+00:42 +398 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider todayRefundTotal sums todays returns
+00:42 +399 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider todayRefundTotal excludes past returns
+00:42 +400 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider getReturnedQuantity sums previously returned qty per product
+00:42 +401 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider generateReturnNumber is sequential
+00:42 +402 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider clearAllData empties returns and resets counter
+00:42 +403 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider getReturnsByDateRange filters correctly
+00:42 +404 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/return_provider_test.dart: ReturnProvider initialReturns are loaded in constructor
+00:42 +405 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: BillNumberService generates correct FY format
+00:42 +406 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: BillNumberService increments sequentially
+00:42 +407 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: BillNumberService correct FY for current date
+00:42 +408 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: GstCalculator calculates CGST and SGST correctly
+00:42 +409 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: GstCalculator handles 0% GST
+00:42 +410 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: GstCalculator grandTotal with discount
+00:42 +411 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: Product model isLowStock when stock <= threshold
+00:42 +412 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: Product model isOutOfStock when stock is 0
+00:42 +413 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: LineItem model calculates subtotal correctly
+00:42 +414 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/widget_test.dart: LineItem model calculates GST correctly for 18% slab
+00:42 +415 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +416 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +417 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +418 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +419 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +420 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +421 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +422 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +423 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +424 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +425 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +426 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +427 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +428 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +429 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +430 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +431 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +432 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +433 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +434 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +435 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +436 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +437 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +438 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +439 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +440 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +441 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:42 +442 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +443 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +444 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +445 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +446 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +447 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +448 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +449 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +450 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +451 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +452 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +453 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +454 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +455 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +456 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +457 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +458 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +459 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +460 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +461 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +462 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen renders core sections
+00:43 +463 ~1 -7: /home/runner/work/billing_app2.0/billing_app2.0/test/cash_book_screen_test.dart: CashBookScreen opens cash entry sheet when tapping add cash in
 lib/widgets/app_text_input.dart:126:25: Error: Constant evaluation error:
                 ? const Icon(
                         ^
 lib/widgets/app_text_input.dart:128:38: Context: The invocation of 'error' is not allowed in a constant expression.
                     color: AppColors.error,
                                      ^
-00:56 +464 ~1 -8: loading /home/runner/work/billing_app2.0/billing_app2.0/test/payment_screen_test.dart [E]
+00:44 +463 ~1 -8: loading /home/runner/work/billing_app2.0/billing_app2.0/test/payment_screen_test.dart [E]
   Failed to load "/home/runner/work/billing_app2.0/billing_app2.0/test/payment_screen_test.dart":
   Compilation failed for testPath=/home/runner/work/billing_app2.0/billing_app2.0/test/payment_screen_test.dart: lib/widgets/app_text_input.dart:126:25: Error: Constant evaluation error:
                   ? const Icon(
@@ -788,7 +788,7 @@ lib/widgets/app_text_input.dart:126:25: Error: Constant evaluation error:
 lib/widgets/app_text_input.dart:128:38: Context: The invocation of 'error' is not allowed in a constant expression.
                     color: AppColors.error,
                                      ^
-00:58 +464 ~1 -9: loading /home/runner/work/billing_app2.0/billing_app2.0/test/notification_service_test.dart [E]
+00:46 +464 ~1 -9: loading /home/runner/work/billing_app2.0/billing_app2.0/test/notification_service_test.dart [E]
   Failed to load "/home/runner/work/billing_app2.0/billing_app2.0/test/notification_service_test.dart":
   Compilation failed for testPath=/home/runner/work/billing_app2.0/billing_app2.0/test/notification_service_test.dart: lib/widgets/app_text_input.dart:126:25: Error: Constant evaluation error:
                   ? const Icon(
@@ -797,4 +797,4 @@ lib/widgets/app_text_input.dart:128:38: Context: The invocation of 'error' is no
                       color: AppColors.error,
                                        ^
   .
-00:58 +464 ~1 -9: Some tests failed.
+00:46 +464 ~1 -9: Some tests failed.
