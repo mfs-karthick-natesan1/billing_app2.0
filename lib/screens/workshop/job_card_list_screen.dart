@@ -277,7 +277,7 @@ class _JobCardListTile extends StatelessWidget {
                       fontSize: 11,
                     ),
                   ),
-                  const Icon(
+                  Icon(
                     Icons.arrow_forward_ios,
                     size: 14,
                     color: AppColors.muted,

@@ -152,7 +152,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                     if (_isEditing)
                       IconButton(
                         onPressed: _deleteExpense,
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.delete_outline,
                           color: AppColors.error,
                         ),
@@ -367,7 +367,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.calendar_today,
                           size: 18,
                           color: AppColors.muted,

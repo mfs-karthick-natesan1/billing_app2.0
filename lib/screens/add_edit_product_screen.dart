@@ -278,7 +278,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                 onTap: () => setState(() => _imageUrl = null),
                                 child: Container(
                                   padding: const EdgeInsets.all(4),
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppColors.error,
                                     shape: BoxShape.circle,
                                   ),
@@ -858,7 +858,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
             onPressed: onEdit,
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.delete_outline,
               size: 18,
               color: AppColors.error,

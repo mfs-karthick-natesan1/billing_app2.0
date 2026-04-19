@@ -316,7 +316,7 @@ class _SalesTab extends StatelessWidget {
   }
 
   static Color _modeColor(String mode) {
-    const colors = [
+    final colors = [
       AppColors.primary,
       AppColors.warning,
       AppColors.error,

@@ -175,7 +175,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget>
               hintStyle: AppTypography.body.copyWith(
                 color: _isListening ? AppColors.error : AppColors.muted,
               ),
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.search,
                 color: AppColors.muted,
                 size: 24,
@@ -186,7 +186,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget>
                       children: [
                         if (_controller.text.isNotEmpty)
                           IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.clear,
                               color: AppColors.muted,
                               size: 24,
@@ -222,7 +222,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget>
                           ),
                         if (widget.onScanBarcode != null)
                           IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.qr_code_scanner,
                               color: AppColors.primary,
                               size: 24,
@@ -256,7 +256,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget>
               ],
             ),
             child: _results.isEmpty
-                ? const Padding(
+                ? Padding(
                     padding: EdgeInsets.all(AppSpacing.medium),
                     child: Text(
                       AppStrings.noProductsFound,

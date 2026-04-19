@@ -25,7 +25,7 @@ class BillDoneScreen extends StatelessWidget {
             child: Column(
               children: [
                 const Spacer(flex: 2),
-                const Icon(
+                Icon(
                   Icons.check_circle,
                   size: 64,
                   color: AppColors.success,

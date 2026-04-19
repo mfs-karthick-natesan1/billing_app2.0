@@ -358,7 +358,7 @@ class _CustomerDetailSheetState extends State<CustomerDetailSheet> {
   Widget _buildVehiclesTab(List<Bill> allBills, ScrollController scrollController) {
     final customer = widget.customer;
     if (customer.vehicles.isEmpty) {
-      return const Center(
+      return Center(
         child: Text('No vehicles recorded yet', style: TextStyle(color: AppColors.muted)),
       );
     }
@@ -405,7 +405,7 @@ class _CustomerDetailSheetState extends State<CustomerDetailSheet> {
                   : null,
               children: vehicleBills.isEmpty
                   ? [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(AppSpacing.medium),
                         child: Text('No service history', style: TextStyle(color: AppColors.muted)),
                       ),
@@ -596,7 +596,7 @@ class _CustomerDetailSheetState extends State<CustomerDetailSheet> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(
+              Icon(
                 Icons.medical_services_outlined,
                 size: 12,
                 color: AppColors.primary,
@@ -887,7 +887,7 @@ class _CustomerDetailSheetState extends State<CustomerDetailSheet> {
           if (services.isNotEmpty) const SizedBox(height: 4),
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.shopping_bag_outlined,
                 size: 12,
                 color: AppColors.muted,

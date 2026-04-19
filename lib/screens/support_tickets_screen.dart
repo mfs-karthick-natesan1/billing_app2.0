@@ -66,7 +66,7 @@ class _SupportTicketsScreenState extends State<SupportTicketsScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.error_outline,
+                      Icon(Icons.error_outline,
                           size: 48, color: AppColors.error),
                       const SizedBox(height: 12),
                       Text('Failed to load tickets',
@@ -286,7 +286,7 @@ class _TicketCardState extends State<_TicketCard> {
                             ),
                             if (t.comments.isNotEmpty) ...[
                               const SizedBox(width: 8),
-                              const Icon(Icons.chat_bubble_outline,
+                              Icon(Icons.chat_bubble_outline,
                                   size: 13, color: AppColors.muted),
                               const SizedBox(width: 3),
                               Text(
@@ -408,7 +408,7 @@ class _CommentBubble extends StatelessWidget {
             CircleAvatar(
               radius: 14,
               backgroundColor: AppColors.primaryLight(0.15),
-              child: const Icon(Icons.support_agent,
+              child: Icon(Icons.support_agent,
                   size: 16, color: AppColors.primary),
             ),
             const SizedBox(width: 8),

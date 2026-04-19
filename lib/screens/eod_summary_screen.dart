@@ -366,7 +366,7 @@ class EodSummaryScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.check_circle,
+                    Icon(Icons.check_circle,
                         color: AppColors.success, size: 20),
                     const SizedBox(width: 8),
                     Text(

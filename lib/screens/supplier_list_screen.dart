@@ -67,13 +67,13 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
                     onChanged: (v) => setState(() => _query = v),
                     decoration: InputDecoration(
                       hintText: AppStrings.searchSuppliers,
-                      prefixIcon: const Icon(
+                      prefixIcon: Icon(
                         Icons.search,
                         color: AppColors.muted,
                       ),
                       suffixIcon: _query.isNotEmpty
                           ? IconButton(
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.clear,
                                 color: AppColors.muted,
                               ),

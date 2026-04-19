@@ -302,7 +302,7 @@ class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.info_outline,
                       size: 16,
                       color: AppColors.primary,

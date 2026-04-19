@@ -202,7 +202,7 @@ class _AddPurchaseSheetState extends State<AddPurchaseSheet> {
                               DateFormat('dd MMM yyyy').format(_selectedDate),
                               style: AppTypography.body,
                             ),
-                            const Icon(
+                            Icon(
                               Icons.calendar_today,
                               size: 18,
                               color: AppColors.primary,

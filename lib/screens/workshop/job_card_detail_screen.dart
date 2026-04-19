@@ -441,7 +441,7 @@ class _JobItemsList extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             IconButton(
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.delete_outline,
                                 color: AppColors.error,
                                 size: 20,

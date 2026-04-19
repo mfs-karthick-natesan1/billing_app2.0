@@ -170,7 +170,7 @@ class _CreateBillScreenState extends State<CreateBillScreen> {
                       setState(() => _selectedVehicleId = null);
                     }
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.person_add,
                     size: 24,
                     color: AppColors.muted,
@@ -364,7 +364,7 @@ class _CreateBillScreenState extends State<CreateBillScreen> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.medical_information_outlined,
                                   size: 18,
                                   color: AppColors.primary,
@@ -1299,7 +1299,7 @@ class _ProductGridCard extends StatelessWidget {
     final url = product.imageUrl;
     Widget placeholder = Container(
       color: AppColors.mutedLight(0.12),
-      child: const Center(
+      child: Center(
         child: Icon(Icons.image_outlined, color: AppColors.muted, size: 28),
       ),
     );
@@ -1402,7 +1402,7 @@ class _ProductGridCard extends StatelessWidget {
                                 child: Container(
                                   width: 22,
                                   height: 22,
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppColors.primary,
                                     shape: BoxShape.circle,
                                   ),
@@ -1502,7 +1502,7 @@ class _CircleBtn extends StatelessWidget {
       child: Container(
         width: 20,
         height: 20,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.primary,
           shape: BoxShape.circle,
         ),

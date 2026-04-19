@@ -64,7 +64,7 @@ class AppDropdown<T> extends StatelessWidget {
           }).toList(),
           onChanged: onChanged,
           style: AppTypography.body.copyWith(color: AppColors.onSurface),
-          icon: const Icon(
+          icon: Icon(
             Icons.keyboard_arrow_down,
             color: AppColors.muted,
             size: 24,

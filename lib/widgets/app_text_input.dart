@@ -123,7 +123,7 @@ class AppTextInput extends StatelessWidget {
               borderSide: BorderSide(color: AppColors.error, width: 2),
             ),
             suffixIcon: errorText != null
-                ? const Icon(
+                ? Icon(
                     Icons.error_outline,
                     color: AppColors.error,
                     size: 16,

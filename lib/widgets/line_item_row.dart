@@ -79,7 +79,7 @@ class LineItemRow extends StatelessWidget {
                 height: 48,
                 child: IconButton(
                   onPressed: onDelete,
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.close,
                     size: 20,
                     color: AppColors.error,

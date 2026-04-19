@@ -268,7 +268,7 @@ class DashboardScreen extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.nightlight_round,
+                            Icon(Icons.nightlight_round,
                                 color: AppColors.primary, size: 20),
                             const SizedBox(width: 8),
                             Expanded(
@@ -280,7 +280,7 @@ class DashboardScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const Icon(Icons.arrow_forward_ios,
+                            Icon(Icons.arrow_forward_ios,
                                 size: 14, color: AppColors.primary),
                           ],
                         ),

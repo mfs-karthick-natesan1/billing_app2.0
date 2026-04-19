@@ -76,7 +76,7 @@ class _CustomerTabScreenState extends State<CustomerTabScreen> {
                     top: -4,
                     child: Container(
                       padding: const EdgeInsets.all(2),
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppColors.error,
                         shape: BoxShape.circle,
                       ),
@@ -136,13 +136,13 @@ class _CustomerTabScreenState extends State<CustomerTabScreen> {
                     onChanged: (v) => setState(() => _query = v),
                     decoration: InputDecoration(
                       hintText: 'Search customers...',
-                      prefixIcon: const Icon(
+                      prefixIcon: Icon(
                         Icons.search,
                         color: AppColors.muted,
                       ),
                       suffixIcon: _query.isNotEmpty
                           ? IconButton(
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.clear,
                                 color: AppColors.muted,
                               ),
