@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'app.dart';
 import 'app_bootstrap.dart';
+import 'constants/app_colors.dart';
 import 'data/repositories/supabase_bill_repository.dart';
 import 'domain/usecases/complete_bill_usecase.dart';
 import 'domain/usecases/create_purchase_usecase.dart';
@@ -115,13 +116,13 @@ class _AppRootState extends State<_AppRoot> {
       builder: (context, snapshot) {
         if (snapshot.hasData) return snapshot.data!;
         // Shown while providers are loading (initial start or after restart)
-        return const MaterialApp(
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Scaffold(
-            backgroundColor: Color(0xFFF1F5F9),
+            backgroundColor: AppColors.background,
             body: Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0D9488)),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
               ),
             ),
           ),
@@ -441,7 +442,7 @@ class _ForceUpdateScreen extends StatelessWidget {
                 const SizedBox(height: 12),
                 const Text(
                   'A new version of the app is available. Please update to continue.',
-                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                  style: TextStyle(fontSize: 16, color: AppColors.muted),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),

@@ -176,14 +176,14 @@ class _TicketCardState extends State<_TicketCard> {
   }
 
   Color get _statusColor {
-    if (widget.ticket.isInProgress) return const Color(0xFF2563EB); // blue
+    if (widget.ticket.isInProgress) return AppColors.info;
     if (widget.ticket.isResolved) return AppColors.success;
     return AppColors.warning; // open = orange
   }
 
   Color get _statusBg {
     if (widget.ticket.isInProgress)
-      return const Color(0xFF2563EB).withValues(alpha: 0.10);
+      return AppColors.info.withValues(alpha: 0.10);
     if (widget.ticket.isResolved) return AppColors.success.withValues(alpha: 0.10);
     return AppColors.warning.withValues(alpha: 0.10);
   }

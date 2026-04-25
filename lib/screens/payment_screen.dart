@@ -843,7 +843,7 @@ class _UpiSection extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: Border.all(
               color: AppColors.muted.withValues(alpha: 0.2),

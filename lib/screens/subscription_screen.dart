@@ -303,7 +303,7 @@ class _PlanCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: current ? color.withValues(alpha: 0.05) : Colors.white,
+        color: current ? color.withValues(alpha: 0.05) : AppColors.surface,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(
           color: current ? color : AppColors.muted.withValues(alpha: 0.2),

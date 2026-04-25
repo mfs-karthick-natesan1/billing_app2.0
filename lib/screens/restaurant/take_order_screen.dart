@@ -352,7 +352,7 @@ class _ProductCard extends StatelessWidget {
           ),
           color: hasQty
               ? AppColors.success.withValues(alpha: 0.04)
-              : Colors.white,
+              : AppColors.surface,
         ),
         child: Stack(
           children: [

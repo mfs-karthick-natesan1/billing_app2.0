@@ -553,9 +553,9 @@ class _AddJobItemSheetState extends State<_AddJobItemSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         ),
         padding: const EdgeInsets.all(AppSpacing.medium),
         child: Column(
